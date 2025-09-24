@@ -1,0 +1,26 @@
+﻿Column name,Description
+SortID,An internal ID code
+Order,"Taxonomic order, according to the Handbook of the Birds of the World Alive taxonomy (BirdLife International) circa 2017"
+Family,"Taxonomic family, according to the Handbook of the Birds of the World Alive taxonomy (BirdLife International) circa 2017"
+Species common name,"Species English common name, according to the Handbook of the Birds of the World Alive taxonomy (BirdLife International) circa 2017"
+Species scientific name,"Taxonomic genus and species, according to the Handbook of the Birds of the World Alive taxonomy (BirdLife International) circa 2017"
+Source,Source of the scores. HBW = Handbook of the Birds of the World Alive; NBO = Neotropical Birds Online; BNA = Birds of North America.
+Raw nest info,The species-level nest information copy and pasted from the source.
+Nest structure,Coded nest structure(s) for that source's species entry. For more information please see the supplementary material.
+Nest location,Coded nest location(s) for that source's species entry. For more information please see the supplementary material.
+Veg type,"For species that nest in vegetation, whether that vegetation can be categorised as 'bush', 'tree', and/or 'reeds'. For more information please see the supplementary material."
+Nest height min (m),"The minimum nest height, in meters."
+Nest height max (m),"The maximum nest height, in meters."
+Nest materials,"A list of recorded nest materials, separated by commas."
+Who builds,The source's raw information about which parent builds the nest.
+Building time min (days),"The minimal nest building time, in days."
+Building time max (days),"The maximum nest building time, in days."
+Building time average (days),"Any average (e.g., mean, median, or mode) nest building time, in days. If no measure of central tendency is specified, the average of the minimum and maximum building times are taken."
+Nest size,The source's raw information about nest dimensions.
+Captivity,1 if the nest information coded was based wholly or in part on captive records; 0 if not
+Coder notes,"Any additional information the coder thought might be relevant, including information drawn from family-level descriptions, explanations of or further thoughts on uncertainty scores, and descriptions of photos or videos provided in the entries"
+Checker notes,Any additional information the coder thought might be relevant to add
+Coder,Initials of the coder(s)
+Checker,Initials of the checker(s)
+Coder date,Date entry coded
+Checker date,Date entry checked

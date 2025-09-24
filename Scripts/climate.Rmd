@@ -1,0 +1,129 @@
+---
+title: "climate_data"
+author: "JL"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ncdf4)
+library(tidyverse)
+library(bcmaps)
+library(terra)
+#climate_data <- read.csv(here("Data", "ClimateDataCanada", "climate.csv"))
+```
+
+```{r}
+t <- terra::rast("C:/Users/Jenna/OneDrive - The University Of British Columbia/Data Projects/BCBirdsandFire/Data/ClimateDataCanada/Fire_Season_Length__RCP2.6_1991-2020_.nc") # for terra package
+print(t)
+plot(t)
+
+# nc <- nc_open("C:/Users/Jenna/OneDrive - The University Of British Columbia/Data Projects/BCBirdsandFire/Data/ClimateDataCanada/Fire_Season_Length__RCP2.6_1991-2020_.nc")
+# print(nc)
+
+# attributes(nc$var)
+# attributes(nc$dim)
+# # Get latitude and longitude with the ncvar_get function and store each into their own object:
+# lat <- ncvar_get(nc, "lat")
+# nlat <- dim(lat) #to check it matches the metadata: 23
+# lon <- ncvar_get(nc, "lon")
+# nlon <- dim(lon) #to check, should be 24
+# # Check your lat lon dimensions match the information in the metadata we explored before:
+# print(c(nlon, nlat))
+# t <- terra::rast("nc") # for terra package
+
+```
+
+
+```{r how to clip to bc}
+
+# 
+bc <- bcmaps::bc_bound() %>%
+  vect()
+# 
+ bc_projjed <- bc %>% project(t)
+# 
+ to_layer_bc <- crop(t, bc_projjed)
+
+plot(to_layer_bc)
+lines(bc_proj, col = "black", lwd = 2)
+
+# Load BC boundary and convert to terra format
+bc <- bcmaps::bc_bound()
+bc_vect <- vect(bc)  # convert sf to SpatVector
+
+# Reproject BC boundary to match raster CRS
+bc_proj <- project(bc_vect, crs(t))
+
+# Crop raster to BC boundary
+t_bc <- crop(t, bc_proj)
+
+# Optionally, mask to keep only values inside BC (not just bounding box crop)
+t_bc_masked <- mask(t_bc, bc_proj)
+
+# Plot result to confirm
+plot(t_bc_masked, main = "Fire Season Length (RCP2.6, 1991–2020) with BC Boundary")
+
+# Add BC boundary as lines
+lines(bc_proj, col = "black", lwd = 2)
+
+project(t_bc_masked, bc) %>%
+  plot()
+
+```
+
+```{r}
+t.26 <- terra::rast("C:/Users/Jenna/OneDrive - The University Of British Columbia/Data Projects/BCBirdsandFire/Data/ClimateDataCanada/May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050_.nc") # for terra package
+#print(t.26)
+#plot(t.26)
+bc_proj <- project(bc_vect, t.26)
+t.26bc <- mask(crop(t.26, bc_proj), bc_proj)
+t.26bc <- project(t.26bc, crs(bc)) #turns it back to the BC specific projection
+plot(t.26bc, main = "BC May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050")
+lines(bc, col = "black", lwd = 2)
+
+t.45 <- terra::rast("C:/Users/Jenna/OneDrive - The University Of British Columbia/Data Projects/BCBirdsandFire/Data/ClimateDataCanada/May_to_September_95th_percentile_of_FWI_RCP4.5_2021-2050_.nc") # for terra package
+print(t.45)
+plot(t.45)
+bc_proj <- project(bc_vect, crs(t.45))
+t.45bc <- mask(crop(t.45, bc_proj), bc_proj)
+t.45bc <- project(t.45bc, crs(bc)) #turns it back to the BC specific projection
+plot(t.45bc, main = "BC May_to_September FWI_RCP4.5_2021-2050")
+lines(bc, col = "black", lwd = 2)
+
+t.85 <- terra::rast("C:/Users/Jenna/OneDrive - The University Of British Columbia/Data Projects/BCBirdsandFire/Data/ClimateDataCanada/May_to_September_95th_percentile_of_FWI_RCP8.5_2021-2050_.nc") # for terra package
+print(t.85)
+plot(t.85)
+bc_proj <- project(bc_vect, crs(t.85))
+t.85bc <- mask(crop(t.85, bc_proj), bc_proj)
+t.85bc <- project(t.85bc, crs(bc)) #turns it back to the BC specific projection
+plot(t.85bc, main = "BC May_to_September FWI_RCP8.5_2021-2050")
+lines(bc, col = "black", lwd = 2)
+
+options(scipen = 999)
+png("C:/Users/Jenna/OneDrive - The University Of British Columbia/Data Projects/BCBirdsandFire/Figures/BC_FWI_MultiPanel.png", width = 1200, height = 1000)
+par(mfrow = c(2, 2))
+plot(t.26bc, main = "BC May_to_September_FWI_RCP2.6_2021-2050",
+  xlim = terra::ext(bc)[1:2] + c(-1, 1),  # expand x by 1 degree
+  ylim = terra::ext(bc)[3:4] + c(-1, 1),
+  cex.main = 1.5,     # Title text size
+  cex.axis = 1.5)    # Axis tick label size)
+lines(bc, col = "black", lwd = 2)
+plot(t.45bc, main = "BC May_to_September_FWI_RCP4.5_2021-2050",
+  xlim = terra::ext(bc)[1:2] + c(-1, 1),  # expand x by 1 degree
+  ylim = terra::ext(bc)[3:4] + c(-1, 1),
+  cex.main = 1.5,     # Title text size
+  cex.axis = 1.5)    # Axis tick label size)
+lines(bc, col = "black", lwd = 2)
+plot(t.85bc, main = "BC May_to_September_FWI_RCP8.5_2021-2050",
+  xlim = terra::ext(bc)[1:2] + c(-1, 1),  # expand x by 1 degree
+  ylim = terra::ext(bc)[3:4] + c(-1, 1),
+  cex.main = 1.5,     # Title text size
+  cex.axis = 1.5)    # Axis tick label size)
+lines(bc, col = "black", lwd = 2)
+```
+

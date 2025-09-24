@@ -1,0 +1,158 @@
+---
+title: "bird_data"
+author: "JL"
+date: "`r Sys.Date()`"
+output: html_document
+---
+_to do:_
+-pivot longer the reproduction dfs
+-check in with jenny about the best wya to fill in the small gaps
+-check in about the traits weve found (ie, could they be coarser?)
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here) 
+library(tidyverse)
+
+```
+
+_Traits we discussed:_
+nest type (ground, open-cup, cavity), nest location (ground, mid-canopy, canopy), foraging height (ground, mid-canopy, canopy), horizontal foraging strategy (ground, edge, core), diet (herbivore, invertivore, omnivore), morphological attributes (body mass, wing length, bill size), and migratory behaviour (resident/short-distance migrants, long-distance migrants)
+Plus: Range size, population estimate, nest type, specialization to habitat, migration
+
+```{r read in bc bird list}
+birdlist <- read.csv(here("Data", "BirdLists", "bc_birds_checklist.csv"))
+#test <- read.csv(here("Data", "BirdLists", "bc_birds_avibase_clements_2025.csv"))
+birdlist <- birdlist%>%
+  filter(if_any(everything(), ~ . != "" & !is.na(.)))
+duplicated(birdlist$common_name)#no duplicated, 567 birds
+
+#setdiff(birdlist$sci_name, test$sci_name)
+
+```
+
+```{r read in trait data base available databases}
+dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk_trait_database.csv"))
+dtrait <- dtrait %>% 
+  ##ask jenny about this for nesting location:
+  mutate(nesting.location = if_else(nsgroun>60|nsgrass>60, "ground", if_else(nsshru>60, "shrub", if_else(nsdeci>60|nsconi>60, "tree", if_else(nssnag>60, "snag", if_else(nsbank>60|nstang>60|nsfloat>60, "aquatic", NA)))))) %>% 
+  select(name, proj_id, synonyms, mlife, matage,naggr,brsys,nest, nesting.location) %>% 
+  rename(sci_name = name, dub_ID = proj_id, lifespan = mlife, ReproAge = matage, nesting.aggre = naggr, breed.sys = brsys, nest.type = nest)
+  
+dtrait$nesting.aggre[dtrait$nesting.aggre == 1] <- "solitary"
+dtrait$nesting.aggre[dtrait$nesting.aggre == 2] <- "familygroup"
+dtrait$nesting.aggre[dtrait$nesting.aggre == 3] <- "colonial"
+
+#they have perc for nesting substrate BUT maybe unhelpful for this project
+##which traits do we want here?
+# this database has" 23 functional traits were used that can be partitioned into categories of ecological influence and importance within habitat filtering: metadata at https://zenodo.org/records/13351162
+#filter to just get the BC species:
+bctraits1 <- left_join(birdlist, dtrait, by = "sci_name")
+#how many of the bc birds have overlap: 
+sum(is.na(bctraits1$proj_id))
+#182 of the BC birds dont have functional traits in the Dubovyk trait database
+
+############################
+#Ecology data paper - ELTON TRAITS
+eco_t <- read.delim(here("Data", "TraitDatabases", "Ecology_BirdFuncDat.txt"), sep = "\t", header = T)
+eco_t <- eco_t %>% 
+  rename(sci_name = Scientific,
+         Elton_ID = SpecID) %>% 
+  select(Elton_ID, sci_name, Diet.5Cat, Diet.Certainty, BodyMass.Value)
+#here just filtering to get traits were interested in. They have % of diet and then the majority diet, keeping the latter. And have percetnage of time spent in each habitat type but no majority column. For now, filtering these out because they seem difficult to compare to other data sources.
+#filter to just get the BC species:
+bctraits2 <- left_join(birdlist, eco_t, by = "sci_name")
+sum(is.na(bctraits2$Elton_ID))
+## guide for certainty column: A – Highly certain that the source is reliable and has provided accurate diet information. B – Reasonably confident that source is reliable, however information on relative proportion of each diet category making up the whole diet is possibly uncertain. C – Quality of source diet estimate unclear or inferred from a specific congeneric species with good sources. D1, D2 – Species-level information missing and value is that typical for genus (D1) or family (D2).
+
+#131 of the BC birds dont have functional traits in the Wilman database
+
+############################
+#Avonet database
+avtrait <- read.csv(here("Data", "TraitDatabases", "ELEData", "TraitData", "AVONET1_BirdLife.csv"))
+avtrait <- avtrait %>% 
+  rename(sci_name = Species1,
+         AV_ID = Sequence) %>% 
+  select(AV_ID, sci_name, Mass, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Min.Latitude, Max.Latitude, Centroid.Latitude, Centroid.Longitude, Range.Size)
+#changing some of the codes to something more readable:
+avtrait$Habitat.Density[avtrait$Habitat.Density == 1] <- "dense"
+avtrait$Habitat.Density[avtrait$Habitat.Density == 2] <- "semiopen"
+avtrait$Habitat.Density[avtrait$Habitat.Density == 3] <- "open"
+
+avtrait$Migration[avtrait$Migration == 1] <- "sedentary"
+avtrait$Migration[avtrait$Migration == 2] <- "partial"
+avtrait$Migration[avtrait$Migration == 3] <- "migratory"
+
+#filter to just get the BC species:
+bctraits3 <- left_join(birdlist, avtrait, by = "sci_name")
+sum(is.na(bctraits3$AV_ID))
+#33 of the BC birds dont have functional traits in the AVONET database
+
+#############################################
+#global_nest_data from catherine heard
+##this has a lot of information but isnt easily sortable/able to be used in coding. May have to go through by hand for some of the species.
+# nest <- read.csv(here("Data", "TraitDatabases", "catherinesheard-global-nest-data", "global_nest_data.csv"))
+# nest <- nest %>%
+#   mutate(across(where(is.character), ~na_if(., "no info"))) %>% 
+#   rename(sci_name = Species.scientific.name) %>% 
+#   select(sci_name, Raw.nest.info, Nest.structure, Nest.location) %>% 
+#   group_by(sci_name) %>% 
+#   slice(1) %>% 
+#   mutate(across(everything(), ~ ifelse(grepl(",|uncertain|artificial|\\b|\\bnone\\b", ., ignore.case = TRUE), NA, .)))#there are multiple records for each species, just look at the first entry
+
+############################################
+nest.trait <- read.csv(here("Data", "TraitDatabases", "chia", "NestTrait_v2.csv"))
+nest.trait <- nest.trait %>% 
+  rename(sci_name = Scientific_name) %>% 
+  select(sci_name, )
+###########################################
+
+## Combine the ecology data paper and the avonet database, as they cover different things:
+
+bctraits <- left_join(bctraits2, bctraits3)
+#there are a couple of spp where the eco db has mass values vut avonet does,just coalesce those over where its NA in the avonet db
+bctraits <- bctraits %>% 
+  mutate(Mass = if_else(is.na(Mass), coalesce(BodyMass.Value), Mass),
+         Mass = round(Mass, 1)) %>% 
+  select(-BodyMass.Value)
+#both of those df have values fo rmass and sometimes dont overlap - make a column that is a combination of the two.
+
+#add in the dtraits
+bctraits <- left_join(bctraits, bctraits1)
+
+bctraits <- left_join(bctraits, nest, by = "sci_name")
+bctraits <- bctraits %>% 
+  mutate(nest.type = if_else(is.na(nest.type), coalesce(Nest.structure), nest.type),
+         nesting.location = if_else(is.na(nesting.location), coalesce(Nest.location), nesting.location)) %>% 
+  select(-c(Raw.nest.info, Nest.structure, Nest.location))
+
+###################################################################################
+#which species do we still need nesting info for?
+nest.na <- bctraits %>% 
+  filter(is.na(nest.type))
+#
+remove(avtrait, bctraits1,bctraits2,bctraits3,dtrait,eco_t,nest)
+```
+
+```{r}
+#do we need to scope out the literature?
+#https://www.researchgate.net/publication/253246028_Breeding_biology_and_nest_characteristics_of_the_Eurasian_Kestrel_in_different_environments_on_an_Atlantic_island
+```
+
+
+```{r}
+#update spp names
+# https://ecoinfor.shinyapps.io/UTaxonstandOnline/
+
+# data(spExample)
+# data(databaseExample)
+# 
+# library(openxlsx)
+# dat1 <- read.xlsx("Birds_ITIS_database.xlsx")
+# 
+# res <- nameMatch(spList=birdlist, spSource=databaseExample, author = TRUE, max.distance= 1)
+# head(res)
+```
+

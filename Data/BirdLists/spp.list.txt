@@ -1,0 +1,775 @@
+
+ 
+ANSERIFORMES: Anatidae
+
+Fulvous Whistling-Duck	Dendrocygna bicolor	Rare/Accidental
+Emperor Goose	Anser canagicus	Rare/Accidental
+Snow Goose	Anser caerulescens	
+Ross's Goose	Anser rossii	
+Greater White-fronted Goose	Anser albifrons	
+Lesser White-fronted Goose	Anser erythropus	Uncertain origin Vulnerable
+Taiga Bean-Goose	Anser fabalis	Rare/Accidental
+Pink-footed Goose	Anser brachyrhynchus	Uncertain origin
+Brant	Branta bernicla	
+Cackling Goose	Branta hutchinsii	Rare/Accidental
+Canada Goose	Branta canadensis	
+Mute Swan	Cygnus olor	Introduced species
+Trumpeter Swan	Cygnus buccinator	
+Tundra Swan	Cygnus columbianus	
+Whooper Swan	Cygnus cygnus	Rare/Accidental
+Wood Duck	Aix sponsa	
+Baikal Teal	Sibirionetta formosa	Rare/Accidental
+Garganey	Spatula querquedula	Rare/Accidental
+Blue-winged Teal	Spatula discors	
+Cinnamon Teal	Spatula cyanoptera	
+Northern Shoveler	Spatula clypeata	
+Gadwall	Mareca strepera	
+Falcated Duck	Mareca falcata	Rare/Accidental
+Eurasian Wigeon	Mareca penelope	
+American Wigeon	Mareca americana	
+Mallard	Anas platyrhynchos	
+American Black Duck	Anas rubripes	Rare/Accidental
+Northern Pintail	Anas acuta	
+Green-winged Teal	Anas crecca	
+Canvasback	Aythya valisineria	
+Redhead	Aythya americana	
+Common Pochard	Aythya ferina	Rare/Accidental Vulnerable
+Ring-necked Duck	Aythya collaris	
+Tufted Duck	Aythya fuligula	Rare/Accidental
+Greater Scaup	Aythya marila	Rare/Accidental
+Lesser Scaup	Aythya affinis	
+Steller's Eider	Polysticta stelleri	Rare/Accidental Vulnerable
+Spectacled Eider	Somateria fischeri	Rare/Accidental Near-threatened
+King Eider	Somateria spectabilis	Rare/Accidental
+Common Eider	Somateria mollissima	Rare/Accidental Near-threatened
+Harlequin Duck	Histrionicus histrionicus	
+Surf Scoter	Melanitta perspicillata	
+White-winged Scoter	Melanitta deglandi	
+Black Scoter	Melanitta americana	Near-threatened
+Long-tailed Duck	Clangula hyemalis	Vulnerable
+Bufflehead	Bucephala albeola	
+Common Goldeneye	Bucephala clangula	
+Barrow's Goldeneye	Bucephala islandica	
+Smew	Mergellus albellus	Rare/Accidental
+Hooded Merganser	Lophodytes cucullatus	
+Common Merganser	Mergus merganser	
+Red-breasted Merganser	Mergus serrator	
+Ruddy Duck	Oxyura jamaicensis	
+ 
+GALLIFORMES: Odontophoridae
+
+Mountain Quail	Oreortyx pictus	Introduced species
+California Quail	Callipepla californica	Introduced species
+ 
+GALLIFORMES: Phasianidae
+
+Wild Turkey	Meleagris gallopavo	Introduced species
+Ruffed Grouse	Bonasa umbellus	
+Greater Sage-Grouse	Centrocercus urophasianus	Extirpated Near-threatened
+Dusky Grouse	Dendragapus obscurus	
+Sooty Grouse	Dendragapus fuliginosus	
+Sharp-tailed Grouse	Tympanuchus phasianellus	
+White-tailed Ptarmigan	Lagopus leucura	
+Willow Ptarmigan	Lagopus lagopus	
+Rock Ptarmigan	Lagopus muta	
+Spruce Grouse	Canachites canadensis	
+Gray Partridge	Perdix perdix	Introduced species
+Ring-necked Pheasant	Phasianus colchicus	Introduced species
+Green Pheasant	Phasianus versicolor	Extirpated
+Silver Pheasant	Lophura nycthemera	Introduced species
+Chukar	Alectoris chukar	Introduced species
+ 
+COLUMBIFORMES: Columbidae
+
+Rock Pigeon	Columba livia	Introduced species
+Band-tailed Pigeon	Patagioenas fasciata	
+Passenger Pigeon	Ectopistes migratorius	Rare/Accidental Extinct
+Oriental Turtle-Dove	Streptopelia orientalis	Rare/Accidental
+Eurasian Collared-Dove	Streptopelia decaocto	Introduced species
+White-winged Dove	Zenaida asiatica	Rare/Accidental
+Mourning Dove	Zenaida macroura	
+ 
+CUCULIFORMES: Cuculidae
+
+Yellow-billed Cuckoo	Coccyzus americanus	Rare/Accidental
+Black-billed Cuckoo	Coccyzus erythropthalmus	Rare/Accidental
+Common Cuckoo	Cuculus canorus	Rare/Accidental
+ 
+CAPRIMULGIFORMES: Caprimulgidae
+
+Lesser Nighthawk	Chordeiles acutipennis	Rare/Accidental
+Common Nighthawk	Chordeiles minor	
+Common Poorwill	Phalaenoptilus nuttallii	
+Eastern Whip-poor-will	Antrostomus vociferus	Rare/Accidental Near-threatened
+ 
+APODIFORMES: Apodidae
+
+Black Swift	Cypseloides niger	Vulnerable
+Chimney Swift	Chaetura pelagica	Rare/Accidental Vulnerable
+Vaux's Swift	Chaetura vauxi	
+House Swift	Apus nipalensis	Uncertain origin
+White-throated Swift	Aeronautes saxatalis	
+ 
+APODIFORMES: Trochilidae
+
+Mexican Violetear	Colibri thalassinus	Rare/Accidental
+Rivoli's Hummingbird	Eugenes fulgens	Rare/Accidental
+Ruby-throated Hummingbird	Archilochus colubris	Rare/Accidental
+Black-chinned Hummingbird	Archilochus alexandri	
+Anna's Hummingbird	Calypte anna	
+Costa's Hummingbird	Calypte costae	Rare/Accidental
+Calliope Hummingbird	Selasphorus calliope	
+Rufous Hummingbird	Selasphorus rufus	Near-threatened
+Broad-tailed Hummingbird	Selasphorus platycercus	Rare/Accidental
+Xantus's Hummingbird	Basilinna xantusii	Rare/Accidental
+ 
+GRUIFORMES: Rallidae
+
+Virginia Rail	Rallus limicola	
+Sora	Porzana carolina	
+Common Gallinule	Gallinula galeata	Rare/Accidental
+American Coot	Fulica americana	
+Yellow Rail	Coturnicops noveboracensis	
+ 
+GRUIFORMES: Gruidae
+
+Demoiselle Crane	Anthropoides virgo	Uncertain origin
+Sandhill Crane	Antigone canadensis	
+Common Crane	Grus grus	Rare/Accidental
+Whooping Crane	Grus americana	Rare/Accidental Endangered
+ 
+CHARADRIIFORMES: Recurvirostridae
+
+Black-necked Stilt	Himantopus mexicanus	Rare/Accidental
+American Avocet	Recurvirostra americana	
+ 
+CHARADRIIFORMES: Haematopodidae
+
+Black Oystercatcher	Haematopus bachmani	
+ 
+CHARADRIIFORMES: Charadriidae
+
+Black-bellied Plover	Pluvialis squatarola	Vulnerable
+American Golden-Plover	Pluvialis dominica	
+Pacific Golden-Plover	Pluvialis fulva	
+Eurasian Dotterel	Eudromias morinellus	Rare/Accidental
+Killdeer	Charadrius vociferus	Near-threatened
+Common Ringed Plover	Charadrius hiaticula	Rare/Accidental
+Semipalmated Plover	Charadrius semipalmatus	
+Piping Plover	Charadrius melodus	Rare/Accidental Near-threatened
+Siberian Sand-Plover	Anarhynchus mongolus	Rare/Accidental Endangered
+Mountain Plover	Anarhynchus montanus	Rare/Accidental Near-threatened
+Snowy Plover	Anarhynchus nivosus	Rare/Accidental Near-threatened
+ 
+CHARADRIIFORMES: Scolopacidae
+
+Upland Sandpiper	Bartramia longicauda	
+Bristle-thighed Curlew	Numenius tahitiensis	Rare/Accidental Near-threatened
+Whimbrel	Numenius phaeopus	Rare/Accidental
+Long-billed Curlew	Numenius americanus	
+Far Eastern Curlew	Numenius madagascariensis	Rare/Accidental Endangered
+Bar-tailed Godwit	Limosa lapponica	Rare/Accidental Near-threatened
+Black-tailed Godwit	Limosa limosa	Rare/Accidental Near-threatened
+Hudsonian Godwit	Limosa haemastica	Vulnerable
+Marbled Godwit	Limosa fedoa	Vulnerable
+Short-billed Dowitcher	Limnodromus griseus	Vulnerable
+Long-billed Dowitcher	Limnodromus scolopaceus	Near-threatened
+Jack Snipe	Lymnocryptes minimus	Rare/Accidental
+American Woodcock	Scolopax minor	Rare/Accidental
+Wilson's Snipe	Gallinago delicata	
+Wilson's Phalarope	Phalaropus tricolor	
+Red Phalarope	Phalaropus fulicarius	
+Red-necked Phalarope	Phalaropus lobatus	
+Terek Sandpiper	Xenus cinereus	Rare/Accidental
+Spotted Sandpiper	Actitis macularius	
+Solitary Sandpiper	Tringa solitaria	
+Gray-tailed Tattler	Tringa brevipes	Rare/Accidental
+Wandering Tattler	Tringa incana	
+Wood Sandpiper	Tringa glareola	Rare/Accidental
+Lesser Yellowlegs	Tringa flavipes	Vulnerable
+Willet	Tringa semipalmata	Rare/Accidental
+Spotted Redshank	Tringa erythropus	Rare/Accidental
+Common Greenshank	Tringa nebularia	Rare/Accidental
+Greater Yellowlegs	Tringa melanoleuca	Near-threatened
+Ruddy Turnstone	Arenaria interpres	Near-threatened
+Black Turnstone	Arenaria melanocephala	
+Great Knot	Calidris tenuirostris	Rare/Accidental Endangered
+Red Knot	Calidris canutus	Near-threatened
+Surfbird	Calidris virgata	
+Ruff	Calidris pugnax	Rare/Accidental
+Sharp-tailed Sandpiper	Calidris acuminata	Vulnerable
+Curlew Sandpiper	Calidris ferruginea	Rare/Accidental Vulnerable
+Stilt Sandpiper	Calidris himantopus	Near-threatened
+Temminck's Stint	Calidris temminckii	Rare/Accidental
+Red-necked Stint	Calidris ruficollis	Rare/Accidental Near-threatened
+Spoon-billed Sandpiper	Calidris pygmaea	Rare/Accidental Critically endangered
+Buff-breasted Sandpiper	Calidris subruficollis	Vulnerable
+Sanderling	Calidris alba	
+Dunlin	Calidris alpina	Near-threatened
+Purple Sandpiper	Calidris maritima	Rare/Accidental
+Rock Sandpiper	Calidris ptilocnemis	
+Baird's Sandpiper	Calidris bairdii	
+Little Stint	Calidris minuta	Rare/Accidental
+White-rumped Sandpiper	Calidris fuscicollis	Rare/Accidental Vulnerable
+Least Sandpiper	Calidris minutilla	Near-threatened
+Pectoral Sandpiper	Calidris melanotos	
+Western Sandpiper	Calidris mauri	
+Semipalmated Sandpiper	Calidris pusilla	Near-threatened
+ 
+CHARADRIIFORMES: Stercorariidae
+
+Long-tailed Jaeger	Stercorarius longicaudus	
+Parasitic Jaeger	Stercorarius parasiticus	Rare/Accidental
+Pomarine Jaeger	Stercorarius pomarinus	
+South Polar Skua	Stercorarius maccormicki	
+ 
+CHARADRIIFORMES: Alcidae
+
+Rhinoceros Auklet	Cerorhinca monocerata	
+Tufted Puffin	Fratercula cirrhata	
+Horned Puffin	Fratercula corniculata	
+Cassin's Auklet	Ptychoramphus aleuticus	Near-threatened
+Least Auklet	Aethia pusilla	Rare/Accidental
+Crested Auklet	Aethia cristatella	Rare/Accidental
+Parakeet Auklet	Aethia psittacula	Rare/Accidental
+Kittlitz's Murrelet	Brachyramphus brevirostris	Rare/Accidental Near-threatened
+Marbled Murrelet	Brachyramphus marmoratus	Endangered
+Pigeon Guillemot	Cepphus columba	
+Dovekie	Alle alle	Rare/Accidental
+Thick-billed Murre	Uria lomvia	Rare/Accidental
+Common Murre	Uria aalge	
+Ancient Murrelet	Synthliboramphus antiquus	
+Scripps's Murrelet	Synthliboramphus scrippsi	Rare/Accidental Vulnerable
+Guadalupe Murrelet	Synthliboramphus hypoleucus	Rare/Accidental Endangered
+ 
+CHARADRIIFORMES: Laridae
+
+Little Gull	Hydrocoloeus minutus	Rare/Accidental
+Ross's Gull	Rhodostethia rosea	Rare/Accidental
+Black-legged Kittiwake	Rissa tridactyla	Vulnerable
+Red-legged Kittiwake	Rissa brevirostris	Rare/Accidental Vulnerable
+Ivory Gull	Pagophila eburnea	Rare/Accidental Near-threatened
+Sabine's Gull	Xema sabini	
+Bonaparte's Gull	Chroicocephalus philadelphia	
+Black-headed Gull	Chroicocephalus ridibundus	Rare/Accidental
+Laughing Gull	Leucophaeus atricilla	Rare/Accidental
+Franklin's Gull	Leucophaeus pipixcan	
+Black-tailed Gull	Larus crassirostris	Rare/Accidental
+Heermann's Gull	Larus heermanni	Near-threatened
+Common Gull	Larus canus	Rare/Accidental
+Short-billed Gull	Larus brachyrhynchus	
+Ring-billed Gull	Larus delawarensis	
+Western Gull	Larus occidentalis	
+American Herring Gull	Larus smithsonianus	
+Vega Gull	Larus vegae	Rare/Accidental
+Great Black-backed Gull	Larus marinus	Rare/Accidental
+Glaucous Gull	Larus hyperboreus	
+Lesser Black-backed Gull	Larus fuscus	Rare/Accidental
+California Gull	Larus californicus	
+Glaucous-winged Gull	Larus glaucescens	
+Slaty-backed Gull	Larus schistisagus	Rare/Accidental
+Iceland Gull	Larus glaucoides	
+Least Tern	Sternula antillarum	Rare/Accidental
+Caspian Tern	Hydroprogne caspia	
+Black Tern	Chlidonias niger	
+Forster's Tern	Sterna forsteri	
+Arctic Tern	Sterna paradisaea	
+Common Tern	Sterna hirundo	
+Elegant Tern	Thalasseus elegans	Rare/Accidental Near-threatened
+ 
+PODICIPEDIFORMES: Podicipedidae
+
+Pied-billed Grebe	Podilymbus podiceps	
+Horned Grebe	Podiceps auritus	Vulnerable
+Red-necked Grebe	Podiceps grisegena	
+Eared Grebe	Podiceps nigricollis	
+Western Grebe	Aechmophorus occidentalis	
+Clark's Grebe	Aechmophorus clarkii	
+ 
+PHAETHONTIFORMES: Phaethontidae
+
+Red-tailed Tropicbird	Phaethon rubricauda	Rare/Accidental
+ 
+GAVIIFORMES: Gaviidae
+
+Red-throated Loon	Gavia stellata	
+Arctic Loon	Gavia arctica	Rare/Accidental
+Pacific Loon	Gavia pacifica	
+Common Loon	Gavia immer	
+Yellow-billed Loon	Gavia adamsii	Rare/Accidental Near-threatened
+ 
+PROCELLARIIFORMES: Diomedeidae
+
+Laysan Albatross	Phoebastria immutabilis	Near-threatened
+Black-footed Albatross	Phoebastria nigripes	Near-threatened
+Short-tailed Albatross	Phoebastria albatrus	Vulnerable
+ 
+PROCELLARIIFORMES: Hydrobatidae
+
+Fork-tailed Storm-Petrel	Hydrobates furcatus	
+Leach's Storm-Petrel	Hydrobates leucorhous	Vulnerable
+ 
+PROCELLARIIFORMES: Procellariidae
+
+Northern Fulmar	Fulmarus glacialis	Rare/Accidental
+Murphy's Petrel	Pterodroma ultima	Rare/Accidental
+Mottled Petrel	Pterodroma inexpectata	Near-threatened
+Hawaiian Petrel	Pterodroma sandwichensis	Rare/Accidental Endangered
+Cook's Petrel	Pterodroma cookii	Rare/Accidental Vulnerable
+Pink-footed Shearwater	Ardenna creatopus	Vulnerable
+Flesh-footed Shearwater	Ardenna carneipes	Near-threatened
+Great Shearwater	Ardenna gravis	Rare/Accidental
+Buller's Shearwater	Ardenna bulleri	Vulnerable
+Sooty Shearwater	Ardenna grisea	Near-threatened
+Short-tailed Shearwater	Ardenna tenuirostris	
+Manx Shearwater	Puffinus puffinus	Rare/Accidental
+Black-vented Shearwater	Puffinus opisthomelas	Rare/Accidental Near-threatened
+ 
+CICONIIFORMES: Ciconiidae
+
+Wood Stork	Mycteria americana	Rare/Accidental
+ 
+SULIFORMES: Fregatidae
+
+Magnificent Frigatebird	Fregata magnificens	Rare/Accidental
+ 
+SULIFORMES: Sulidae
+
+Red-footed Booby	Sula sula	Rare/Accidental
+Cocos Booby	Sula brewsteri	Rare/Accidental
+Masked Booby	Sula dactylatra	Rare/Accidental
+Nazca Booby	Sula granti	Rare/Accidental
+Blue-footed Booby	Sula nebouxii	Rare/Accidental
+ 
+SULIFORMES: Phalacrocoracidae
+
+Brandt's Cormorant	Urile penicillatus	
+Red-faced Cormorant	Urile urile	Rare/Accidental
+Pelagic Cormorant	Urile pelagicus	
+Double-crested Cormorant	Nannopterum auritum	
+ 
+PELECANIFORMES: Threskiornithidae
+
+White-faced Ibis	Plegadis chihi	Rare/Accidental
+ 
+PELECANIFORMES: Pelecanidae
+
+American White Pelican	Pelecanus erythrorhynchos	
+Brown Pelican	Pelecanus occidentalis	
+ 
+PELECANIFORMES: Ardeidae
+
+American Bittern	Botaurus lentiginosus	
+Least Bittern	Botaurus exilis	Rare/Accidental
+Black-crowned Night Heron	Nycticorax nycticorax	
+Little Blue Heron	Egretta caerulea	Rare/Accidental
+Tricolored Heron	Egretta tricolor	Rare/Accidental
+Snowy Egret	Egretta thula	Rare/Accidental
+Green Heron	Butorides virescens	
+Western Cattle-Egret	Ardea ibis	
+Great Egret	Ardea alba	
+Great Blue Heron	Ardea herodias	
+ 
+CATHARTIFORMES: Cathartidae
+
+California Condor	Gymnogyps californianus	Extirpated Critically endangered
+Black Vulture	Coragyps atratus	Rare/Accidental
+Turkey Vulture	Cathartes aura	
+ 
+ACCIPITRIFORMES: Pandionidae
+
+Osprey	Pandion haliaetus	
+ 
+ACCIPITRIFORMES: Accipitridae
+
+White-tailed Kite	Elanus leucurus	Rare/Accidental
+Golden Eagle	Aquila chrysaetos	
+Sharp-shinned Hawk	Accipiter striatus	
+Cooper's Hawk	Astur cooperii	
+American Goshawk	Astur atricapillus	
+Northern Harrier	Circus hudsonius	
+Bald Eagle	Haliaeetus leucocephalus	
+Mississippi Kite	Ictinia mississippiensis	Rare/Accidental
+Broad-winged Hawk	Buteo platypterus	Rare/Accidental
+Red-shouldered Hawk	Buteo lineatus	Rare/Accidental
+Swainson's Hawk	Buteo swainsoni	
+Red-tailed Hawk	Buteo jamaicensis	
+Rough-legged Hawk	Buteo lagopus	
+Ferruginous Hawk	Buteo regalis	Rare/Accidental
+ 
+STRIGIFORMES: Tytonidae
+
+American Barn Owl	Tyto furcata	
+ 
+STRIGIFORMES: Strigidae
+
+Flammulated Owl	Psiloscops flammeolus	
+Western Screech-Owl	Megascops kennicottii	
+Snowy Owl	Bubo scandiacus	Vulnerable
+Great Horned Owl	Bubo virginianus	
+Northern Hawk Owl	Surnia ulula	
+Northern Pygmy-Owl	Glaucidium gnoma	
+Burrowing Owl	Athene cunicularia	Rare/Accidental
+Spotted Owl	Strix occidentalis	Rare/Accidental Near-threatened
+Barred Owl	Strix varia	
+Great Gray Owl	Strix nebulosa	
+Long-eared Owl	Asio otus	
+Short-eared Owl	Asio flammeus	
+Boreal Owl	Aegolius funereus	
+Northern Saw-whet Owl	Aegolius acadicus	
+ 
+CORACIIFORMES: Alcedinidae
+
+Belted Kingfisher	Megaceryle alcyon	
+ 
+PICIFORMES: Picidae
+
+Williamson's Sapsucker	Sphyrapicus thyroideus	
+Yellow-bellied Sapsucker	Sphyrapicus varius	
+Red-naped Sapsucker	Sphyrapicus nuchalis	
+Red-breasted Sapsucker	Sphyrapicus ruber	
+Lewis's Woodpecker	Melanerpes lewis	
+Red-headed Woodpecker	Melanerpes erythrocephalus	Rare/Accidental
+Acorn Woodpecker	Melanerpes formicivorus	Rare/Accidental
+American Three-toed Woodpecker	Picoides dorsalis	
+Black-backed Woodpecker	Picoides arcticus	
+Downy Woodpecker	Dryobates pubescens	
+Hairy Woodpecker	Dryobates villosus	
+White-headed Woodpecker	Dryobates albolarvatus	Rare/Accidental
+Pileated Woodpecker	Dryocopus pileatus	
+Northern Flicker	Colaptes auratus	
+ 
+FALCONIFORMES: Falconidae
+
+Crested Caracara	Caracara plancus	Rare/Accidental
+Eurasian Kestrel	Falco tinnunculus	Rare/Accidental
+American Kestrel	Falco sparverius	
+Merlin	Falco columbarius	
+Gyrfalcon	Falco rusticolus	
+Peregrine Falcon	Falco peregrinus	
+Prairie Falcon	Falco mexicanus	
+ 
+PASSERIFORMES: Tyrannidae
+
+Olive-sided Flycatcher	Contopus cooperi	Near-threatened
+Western Wood-Pewee	Contopus sordidulus	
+Eastern Wood-Pewee	Contopus virens	Rare/Accidental
+Yellow-bellied Flycatcher	Empidonax flaviventris	
+Acadian Flycatcher	Empidonax virescens	Rare/Accidental
+Alder Flycatcher	Empidonax alnorum	
+Willow Flycatcher	Empidonax traillii	
+Least Flycatcher	Empidonax minimus	
+Hammond's Flycatcher	Empidonax hammondii	
+Gray Flycatcher	Empidonax wrightii	Rare/Accidental
+Dusky Flycatcher	Empidonax oberholseri	
+Western Flycatcher	Empidonax difficilis	Rare/Accidental
+Black Phoebe	Sayornis nigricans	Rare/Accidental
+Eastern Phoebe	Sayornis phoebe	
+Say's Phoebe	Sayornis saya	
+Vermilion Flycatcher	Pyrocephalus rubinus	Rare/Accidental
+Ash-throated Flycatcher	Myiarchus cinerascens	Rare/Accidental
+Great Crested Flycatcher	Myiarchus crinitus	Rare/Accidental
+Tropical Kingbird	Tyrannus melancholicus	
+Thick-billed Kingbird	Tyrannus crassirostris	Rare/Accidental
+Western Kingbird	Tyrannus verticalis	
+Eastern Kingbird	Tyrannus tyrannus	
+Gray Kingbird	Tyrannus dominicensis	Rare/Accidental
+Scissor-tailed Flycatcher	Tyrannus forficatus	Rare/Accidental
+Fork-tailed Flycatcher	Tyrannus savana	Rare/Accidental
+ 
+PASSERIFORMES: Vireonidae
+
+Black-capped Vireo	Vireo atricapilla	Rare/Accidental Near-threatened
+White-eyed Vireo	Vireo griseus	Rare/Accidental
+Bell's Vireo	Vireo bellii	Rare/Accidental
+Hutton's Vireo	Vireo huttoni	
+Cassin's Vireo	Vireo cassinii	
+Blue-headed Vireo	Vireo solitarius	
+Philadelphia Vireo	Vireo philadelphicus	
+Warbling Vireo	Vireo gilvus	
+Red-eyed Vireo	Vireo olivaceus	
+Yellow-green Vireo	Vireo flavoviridis	Rare/Accidental
+ 
+PASSERIFORMES: Laniidae
+
+Red-backed Shrike	Lanius collurio	Rare/Accidental
+Brown Shrike	Lanius cristatus	Rare/Accidental
+Loggerhead Shrike	Lanius ludovicianus	Rare/Accidental Near-threatened
+Northern Shrike	Lanius borealis	
+ 
+PASSERIFORMES: Corvidae
+
+Canada Jay	Perisoreus canadensis	
+Pinyon Jay	Gymnorhinus cyanocephalus	Rare/Accidental Vulnerable
+Steller's Jay	Cyanocitta stelleri	
+Blue Jay	Cyanocitta cristata	
+California Scrub-Jay	Aphelocoma californica	Rare/Accidental
+Black-billed Magpie	Pica hudsonia	
+Clark's Nutcracker	Nucifraga columbiana	
+American Crow	Corvus brachyrhynchos	
+Common Raven	Corvus corax	
+ 
+PASSERIFORMES: Paridae
+
+Black-capped Chickadee	Poecile atricapillus	
+Mountain Chickadee	Poecile gambeli	
+Chestnut-backed Chickadee	Poecile rufescens	
+Boreal Chickadee	Poecile hudsonicus	
+ 
+PASSERIFORMES: Alaudidae
+
+Eurasian Skylark	Alauda arvensis	Introduced species
+Horned Lark	Eremophila alpestris	
+ 
+PASSERIFORMES: Hirundinidae
+
+Bank Swallow	Riparia riparia	
+Tree Swallow	Tachycineta bicolor	
+Violet-green Swallow	Tachycineta thalassina	
+Purple Martin	Progne subis	
+Northern Rough-winged Swallow	Stelgidopteryx serripennis	
+Barn Swallow	Hirundo rustica	
+Western House-Martin	Delichon urbicum	Rare/Accidental
+Cliff Swallow	Petrochelidon pyrrhonota	
+Cave Swallow	Petrochelidon fulva	Rare/Accidental
+ 
+PASSERIFORMES: Phylloscopidae
+
+Yellow-browed Warbler	Phylloscopus inornatus	Rare/Accidental
+ 
+PASSERIFORMES: Aegithalidae
+
+Bushtit	Psaltriparus minimus	
+ 
+PASSERIFORMES: Regulidae
+
+Ruby-crowned Kinglet	Corthylio calendula	
+Golden-crowned Kinglet	Regulus satrapa	
+ 
+PASSERIFORMES: Sittidae
+
+White-breasted Nuthatch	Sitta carolinensis	
+Pygmy Nuthatch	Sitta pygmaea	
+Red-breasted Nuthatch	Sitta canadensis	
+ 
+PASSERIFORMES: Certhiidae
+
+Brown Creeper	Certhia americana	
+ 
+PASSERIFORMES: Polioptilidae
+
+Blue-gray Gnatcatcher	Polioptila caerulea	Rare/Accidental
+ 
+PASSERIFORMES: Troglodytidae
+
+Rock Wren	Salpinctes obsoletus	
+Canyon Wren	Catherpes mexicanus	
+Northern House Wren	Troglodytes aedon	
+Pacific Wren	Troglodytes pacificus	
+Winter Wren	Troglodytes hiemalis	
+Sedge Wren	Cistothorus stellaris	Rare/Accidental
+Marsh Wren	Cistothorus palustris	
+Bewick's Wren	Thryomanes bewickii	
+ 
+PASSERIFORMES: Cinclidae
+
+American Dipper	Cinclus mexicanus	
+ 
+PASSERIFORMES: Sturnidae
+
+European Starling	Sturnus vulgaris	Introduced species
+White-cheeked Starling	Spodiopsar cineraceus	Uncertain origin
+Crested Myna	Acridotheres cristatellus	Extirpated
+ 
+PASSERIFORMES: Mimidae
+
+Gray Catbird	Dumetella carolinensis	
+Curve-billed Thrasher	Toxostoma curvirostre	Rare/Accidental
+Brown Thrasher	Toxostoma rufum	Rare/Accidental
+Sage Thrasher	Oreoscoptes montanus	
+Northern Mockingbird	Mimus polyglottos	
+ 
+PASSERIFORMES: Turdidae
+
+Eastern Bluebird	Sialia sialis	Rare/Accidental
+Western Bluebird	Sialia mexicana	
+Mountain Bluebird	Sialia currucoides	
+Townsend's Solitaire	Myadestes townsendi	
+Varied Thrush	Ixoreus naevius	
+Veery	Catharus fuscescens	
+Gray-cheeked Thrush	Catharus minimus	
+Swainson's Thrush	Catharus ustulatus	
+Hermit Thrush	Catharus guttatus	
+Wood Thrush	Hylocichla mustelina	Rare/Accidental
+Redwing	Turdus iliacus	Rare/Accidental Near-threatened
+American Robin	Turdus migratorius	
+Fieldfare	Turdus pilaris	Rare/Accidental
+Dusky Thrush	Turdus eunomus	Rare/Accidental
+ 
+PASSERIFORMES: Muscicapidae
+
+Red-flanked Bluetail	Tarsiger cyanurus	Rare/Accidental
+Blue Rock-Thrush	Monticola solitarius	Rare/Accidental
+Northern Wheatear	Oenanthe oenanthe	
+ 
+PASSERIFORMES: Bombycillidae
+
+Bohemian Waxwing	Bombycilla garrulus	
+Cedar Waxwing	Bombycilla cedrorum	
+ 
+PASSERIFORMES: Prunellidae
+
+Siberian Accentor	Prunella montanella	Rare/Accidental
+ 
+PASSERIFORMES: Passeridae
+
+House Sparrow	Passer domesticus	Introduced species
+ 
+PASSERIFORMES: Motacillidae
+
+Gray Wagtail	Motacilla cinerea	Rare/Accidental
+Eastern Yellow Wagtail	Motacilla tschutschensis	Rare/Accidental
+Citrine Wagtail	Motacilla citreola	Rare/Accidental
+White Wagtail	Motacilla alba	Rare/Accidental
+Red-throated Pipit	Anthus cervinus	Rare/Accidental
+Siberian Pipit	Anthus japonicus	Rare/Accidental
+American Pipit	Anthus rubescens	
+Sprague's Pipit	Anthus spragueii	Vulnerable
+ 
+PASSERIFORMES: Fringillidae
+
+Brambling	Fringilla montifringilla	Rare/Accidental
+Evening Grosbeak	Coccothraustes vespertinus	Vulnerable
+Pine Grosbeak	Pinicola enucleator	
+Gray-crowned Rosy-Finch	Leucosticte tephrocotis	
+House Finch	Haemorhous mexicanus	
+Purple Finch	Haemorhous purpureus	
+Cassin's Finch	Haemorhous cassinii	
+Oriental Greenfinch	Chloris sinica	Rare/Accidental
+Redpoll	Acanthis flammea	
+Red Crossbill	Loxia curvirostra	
+White-winged Crossbill	Loxia leucoptera	
+Pine Siskin	Spinus pinus	
+Lesser Goldfinch	Spinus psaltria	Rare/Accidental
+American Goldfinch	Spinus tristis	
+ 
+PASSERIFORMES: Calcariidae
+
+Lapland Longspur	Calcarius lapponicus	
+Chestnut-collared Longspur	Calcarius ornatus	Rare/Accidental Vulnerable
+Smith's Longspur	Calcarius pictus	
+Thick-billed Longspur	Rhynchophanes mccownii	Rare/Accidental
+Snow Bunting	Plectrophenax nivalis	
+McKay's Bunting	Plectrophenax hyperboreus	Rare/Accidental
+ 
+PASSERIFORMES: Emberizidae
+
+Pine Bunting	Emberiza leucocephalos	Rare/Accidental
+Pallas's Bunting	Emberiza pallasi	Rare/Accidental
+Little Bunting	Emberiza pusilla	Rare/Accidental
+Rustic Bunting	Emberiza rustica	Rare/Accidental Vulnerable
+ 
+PASSERIFORMES: Passerellidae
+
+Grasshopper Sparrow	Ammodramus savannarum	
+Chipping Sparrow	Spizella passerina	
+Clay-colored Sparrow	Spizella pallida	
+Field Sparrow	Spizella pusilla	Rare/Accidental
+Brewer's Sparrow	Spizella breweri	
+Black-throated Sparrow	Amphispiza bilineata	Rare/Accidental
+Lark Sparrow	Chondestes grammacus	
+Lark Bunting	Calamospiza melanocorys	Rare/Accidental
+American Tree Sparrow	Spizelloides arborea	
+Fox Sparrow	Passerella iliaca	
+Dark-eyed Junco	Junco hyemalis	
+White-crowned Sparrow	Zonotrichia leucophrys	
+Golden-crowned Sparrow	Zonotrichia atricapilla	
+Harris's Sparrow	Zonotrichia querula	Near-threatened
+White-throated Sparrow	Zonotrichia albicollis	
+Sagebrush Sparrow	Artemisiospiza nevadensis	Rare/Accidental
+Bell's Sparrow	Artemisiospiza belli	Rare/Accidental
+Vesper Sparrow	Pooecetes gramineus	
+LeConte's Sparrow	Ammospiza leconteii	
+Nelson's Sparrow	Ammospiza nelsoni	
+Savannah Sparrow	Passerculus sandwichensis	
+Baird's Sparrow	Centronyx bairdii	Rare/Accidental
+Song Sparrow	Melospiza melodia	
+Lincoln's Sparrow	Melospiza lincolnii	
+Swamp Sparrow	Melospiza georgiana	
+Green-tailed Towhee	Pipilo chlorurus	Rare/Accidental
+Spotted Towhee	Pipilo maculatus	
+ 
+PASSERIFORMES: Icteriidae
+
+Yellow-breasted Chat	Icteria virens	
+ 
+PASSERIFORMES: Icteridae
+
+Yellow-headed Blackbird	Xanthocephalus xanthocephalus	
+Bobolink	Dolichonyx oryzivorus	
+Western Meadowlark	Sturnella neglecta	
+Orchard Oriole	Icterus spurius	Rare/Accidental
+Hooded Oriole	Icterus cucullatus	Rare/Accidental
+Bullock's Oriole	Icterus bullockii	
+Baltimore Oriole	Icterus galbula	
+Red-winged Blackbird	Agelaius phoeniceus	
+Brown-headed Cowbird	Molothrus ater	
+Rusty Blackbird	Euphagus carolinus	Vulnerable
+Brewer's Blackbird	Euphagus cyanocephalus	
+Common Grackle	Quiscalus quiscula	Near-threatened
+Great-tailed Grackle	Quiscalus mexicanus	Rare/Accidental
+ 
+PASSERIFORMES: Parulidae
+
+Ovenbird	Seiurus aurocapilla	
+Northern Waterthrush	Parkesia noveboracensis	
+Golden-winged Warbler	Vermivora chrysoptera	Rare/Accidental Near-threatened
+Blue-winged Warbler	Vermivora cyanoptera	Rare/Accidental
+Black-and-white Warbler	Mniotilta varia	
+Prothonotary Warbler	Protonotaria citrea	Rare/Accidental
+Tennessee Warbler	Leiothlypis peregrina	
+Orange-crowned Warbler	Leiothlypis celata	
+Lucy's Warbler	Leiothlypis luciae	Rare/Accidental
+Nashville Warbler	Leiothlypis ruficapilla	
+Connecticut Warbler	Oporornis agilis	
+MacGillivray's Warbler	Geothlypis tolmiei	
+Mourning Warbler	Geothlypis philadelphia	
+Kentucky Warbler	Geothlypis formosa	Rare/Accidental
+Common Yellowthroat	Geothlypis trichas	
+Hooded Warbler	Setophaga citrina	Rare/Accidental
+American Redstart	Setophaga ruticilla	
+Cape May Warbler	Setophaga tigrina	
+Northern Parula	Setophaga americana	Rare/Accidental
+Magnolia Warbler	Setophaga magnolia	
+Bay-breasted Warbler	Setophaga castanea	
+Blackburnian Warbler	Setophaga fusca	Rare/Accidental
+Yellow Warbler	Setophaga petechia	
+Chestnut-sided Warbler	Setophaga pensylvanica	Rare/Accidental
+Blackpoll Warbler	Setophaga striata	Near-threatened
+Black-throated Blue Warbler	Setophaga caerulescens	Rare/Accidental
+Palm Warbler	Setophaga palmarum	
+Pine Warbler	Setophaga pinus	Rare/Accidental
+Yellow-rumped Warbler	Setophaga coronata	
+Yellow-throated Warbler	Setophaga dominica	Rare/Accidental
+Prairie Warbler	Setophaga discolor	Rare/Accidental
+Black-throated Gray Warbler	Setophaga nigrescens	
+Townsend's Warbler	Setophaga townsendi	
+Hermit Warbler	Setophaga occidentalis	Rare/Accidental
+Black-throated Green Warbler	Setophaga virens	
+Canada Warbler	Cardellina canadensis	
+Wilson's Warbler	Cardellina pusilla	
+Painted Redstart	Myioborus pictus	Rare/Accidental
+ 
+PASSERIFORMES: Cardinalidae
+
+Summer Tanager	Piranga rubra	Rare/Accidental
+Scarlet Tanager	Piranga olivacea	Rare/Accidental
+Western Tanager	Piranga ludoviciana	
+Northern Cardinal	Cardinalis cardinalis	Rare/Accidental
+Rose-breasted Grosbeak	Pheucticus ludovicianus	
+Black-headed Grosbeak	Pheucticus melanocephalus	
+Blue Grosbeak	Passerina caerulea	Rare/Accidental
+Lazuli Bunting	Passerina amoena	
+Indigo Bunting	Passerina cyanea	Rare/Accidental
+Painted Bunting	Passerina ciris	Rare/Accidental
+Dickcissel	Spiza americana	Rare/Accidental

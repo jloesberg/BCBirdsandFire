@@ -1,0 +1,1 @@
+Please note that the code for the 'artificial' (nest location) models is annotated; as these models are essentially identical, the code for the other 13 models is not.
