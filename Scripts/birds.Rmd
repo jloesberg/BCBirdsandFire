@@ -27,7 +27,7 @@ birdlist <- read.csv(here("Data", "BirdLists", "bc_birds_checklist.csv"))
 #test <- read.csv(here("Data", "BirdLists", "bc_birds_avibase_clements_2025.csv"))
 birdlist <- birdlist%>%
   filter(if_any(everything(), ~ . != "" & !is.na(.)))
-duplicated(birdlist$common_name)#no duplicated, 567 birds
+#duplicated(birdlist$common_name)#no duplicated, 567 birds
 
 #setdiff(birdlist$sci_name, test$sci_name)
 
@@ -36,46 +36,82 @@ duplicated(birdlist$common_name)#no duplicated, 567 birds
 ```{r read in trait data base available databases}
 dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk_trait_database.csv"))
 dtrait <- dtrait %>% 
-  ##ask jenny about this for nesting location:
-  mutate(nesting.location = if_else(nsgroun>60|nsgrass>60, "ground", if_else(nsshru>60, "shrub", if_else(nsdeci>60|nsconi>60, "tree", if_else(nssnag>60, "snag", if_else(nsbank>60|nstang>60|nsfloat>60, "aquatic", NA)))))) %>% 
-  select(name, proj_id, synonyms, mlife, matage,naggr,brsys,nest, nesting.location) %>% 
-  rename(sci_name = name, dub_ID = proj_id, lifespan = mlife, ReproAge = matage, nesting.aggre = naggr, breed.sys = brsys, nest.type = nest)
-  
-dtrait$nesting.aggre[dtrait$nesting.aggre == 1] <- "solitary"
-dtrait$nesting.aggre[dtrait$nesting.aggre == 2] <- "familygroup"
-dtrait$nesting.aggre[dtrait$nesting.aggre == 3] <- "colonial"
+  mutate(nesting.location = if_else(nsgroun>51|nsgrass>51, "ground", if_else(nsshru>51, "shrub", if_else(nsdeci>51|nsconi>51, "tree", if_else(nssnag>51, "snag", if_else(nsbank>51|nstang>51|nsfloat>51, "aquatic", NA)))))) %>% 
+  select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nesting.location, attem, eng_name) %>% 
+  rename(Elton_ID = et_id,lifespan = mlife, ReproAge = matage,  nest.type = nest, clutches.per.year = attem)
+#correcting some taxonony
+dtrait$synonyms[dtrait$name=="Bubulcus ibis"] <- "Ardea ibis"
+dtrait$synonyms[dtrait$name=="Accipiter cooperii"] <- "Astur cooperii"
+dtrait$synonyms[dtrait$name=="Hylatomus pileatus"] <- "Dryocopus pileatus"
+dtrait$synonyms[dtrait$synonyms=="Anas penelope"] <- "Mareca penelope"
+dtrait$synonyms[dtrait$name=="Melanitta fusca"] <- "Melanitta deglandi"
+dtrait$synonyms[dtrait$name=="Dendragapus canadensis"] <- "Canachites canadensis"
+dtrait$synonyms[dtrait$name=="Larus argentatus"] <- "Larus smithsonianus"
+dtrait$synonyms[dtrait$name=="Nannopterum auritus"] <- "Nannopterum auritum"
+dtrait$synonyms[dtrait$proj_id==3070] <- "Tyto furcata"
+dtrait$Elton_ID[dtrait$proj_id==4680] <- 9750 #this one doesnt have its elton id for some reason..
+dtrait$synonyms[dtrait$proj_id==2920] <- "Astur atricapillus"
+dtrait$synonyms[dtrait$proj_id==2180] <- "Larus brachyrhynchus"
+dtrait$synonyms[dtrait$proj_id=="5240"] <- "NA"
+#making the nest category more broad:
+#gourd, sphere, pendant, saucer, chamber, oven, cup --> MAKE ALL THE SAME... will be similarly affected to cups. VS TREE CAVITY; rockCREVICE/crack; burrow (+/-?) ; open[no, scrape--> combined these into one category] platform[negatively affected]  (tree; burrows; crevice[look at definition]) VS exposed 
+dtrait <- dtrait %>% 
+  mutate(nest.category = if_else(nest.type == "cup"|nest.type == "gourd"|nest.type == "sphere"|nest.type == "gourd"|nest.type == "saucer"|nest.type == "chamber"|nest.type == "oven"|nest.type == "pend", "built.strucutre", if_else(nest.type == "scrape"|nest.type == "no", "open", nest.type)))
+dtrait$eng_name[dtrait$proj_id==3255] <- "White-winged Parakeet"
+dtrait$name[dtrait$proj_id==3255] <- "Brotogeris versicolurus"
 
-#they have perc for nesting substrate BUT maybe unhelpful for this project
-##which traits do we want here?
-# this database has" 23 functional traits were used that can be partitioned into categories of ecological influence and importance within habitat filtering: metadata at https://zenodo.org/records/13351162
-#filter to just get the BC species:
-bctraits1 <- left_join(birdlist, dtrait, by = "sci_name")
-#how many of the bc birds have overlap: 
-sum(is.na(bctraits1$proj_id))
-#182 of the BC birds dont have functional traits in the Dubovyk trait database
 
-############################
 #Ecology data paper - ELTON TRAITS
 eco_t <- read.delim(here("Data", "TraitDatabases", "Ecology_BirdFuncDat.txt"), sep = "\t", header = T)
 eco_t <- eco_t %>% 
-  rename(sci_name = Scientific,
-         Elton_ID = SpecID) %>% 
-  select(Elton_ID, sci_name, Diet.5Cat, Diet.Certainty, BodyMass.Value)
-#here just filtering to get traits were interested in. They have % of diet and then the majority diet, keeping the latter. And have percetnage of time spent in each habitat type but no majority column. For now, filtering these out because they seem difficult to compare to other data sources.
-#filter to just get the BC species:
-bctraits2 <- left_join(birdlist, eco_t, by = "sci_name")
-sum(is.na(bctraits2$Elton_ID))
-## guide for certainty column: A – Highly certain that the source is reliable and has provided accurate diet information. B – Reasonably confident that source is reliable, however information on relative proportion of each diet category making up the whole diet is possibly uncertain. C – Quality of source diet estimate unclear or inferred from a specific congeneric species with good sources. D1, D2 – Species-level information missing and value is that typical for genus (D1) or family (D2).
+  select(SpecID, Scientific, English, Diet.5Cat, BodyMass.Value) %>% 
+  rename(Elton_ID = SpecID, eng_name = English) %>% 
+  filter(!is.na(Elton_ID))
+eco_t$Scientific[eco_t$Elton_ID=="9750"] <- "Troglodytes hiemalis"
 
-#131 of the BC birds dont have functional traits in the Wilman database
+#connect these based on the elton traits et_id
+de.trait <- full_join(eco_t, dtrait, by = c("Elton_ID", "eng_name")) %>% 
+   mutate(
+    Scientific = coalesce(Scientific, name)  # use 'name' only if Scientific is NA
+  )
+
+  
+#get bc birds
+bctrait <- left_join(birdlist ,de.trait, by = c("sci_name" = "Scientific"))
+
+unmatched <- bctrait %>%
+  filter(is.na(Elton_ID)) %>%   # replace with a col you expect after join
+  select(names(birdlist))
+matched_by_common <- unmatched %>%
+  left_join(de.trait, by = c("common_name" = "eng_name"))
+
+bctrait <- bctrait %>%
+  filter(!is.na(Elton_ID)) %>%  # keep the matched ones
+  bind_rows(matched_by_common)
+
+unmatched2 <- bctrait %>%
+  filter(is.na(Elton_ID)) %>%   # replace with a col you expect after join
+  select(names(birdlist))
+matched_by_syn <- unmatched2 %>%
+  left_join(de.trait, by = c("sci_name" = "synonyms"))
+
+bctrait <- bctrait %>%
+  filter(!is.na(Elton_ID)) %>%  # keep the matched ones
+  bind_rows(matched_by_syn)
 
 ############################
 #Avonet database
 avtrait <- read.csv(here("Data", "TraitDatabases", "ELEData", "TraitData", "AVONET1_BirdLife.csv"))
+avtrait3 <- read.csv(here("Data", "TraitDatabases", "ELEData", "TraitData", "AVONET3_BirdTree.csv"))
+
 avtrait <- avtrait %>% 
   rename(sci_name = Species1,
          AV_ID = Sequence) %>% 
-  select(AV_ID, sci_name, Mass, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Min.Latitude, Max.Latitude, Centroid.Latitude, Centroid.Longitude, Range.Size)
+  select(AV_ID, sci_name, Mass, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size)
+
+avtrait3 <- avtrait3 %>% 
+  rename(sci_name = Species3) %>% 
+  select(sci_name, Mass, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size)
 #changing some of the codes to something more readable:
 avtrait$Habitat.Density[avtrait$Habitat.Density == 1] <- "dense"
 avtrait$Habitat.Density[avtrait$Habitat.Density == 2] <- "semiopen"
@@ -85,10 +121,92 @@ avtrait$Migration[avtrait$Migration == 1] <- "sedentary"
 avtrait$Migration[avtrait$Migration == 2] <- "partial"
 avtrait$Migration[avtrait$Migration == 3] <- "migratory"
 
-#filter to just get the BC species:
+avtrait3$Habitat.Density[avtrait3$Habitat.Density == 1] <- "dense"
+avtrait3$Habitat.Density[avtrait3$Habitat.Density == 2] <- "semiopen"
+avtrait3$Habitat.Density[avtrait3$Habitat.Density == 3] <- "open"
+
+avtrait3$Migration[avtrait3$Migration == 1] <- "sedentary"
+avtrait3$Migration[avtrait3$Migration == 2] <- "partial"
+avtrait3$Migration[avtrait3$Migration == 3] <- "migratory"
+
+#fixing taxonomy - there arent many, so doing it by hand (and there are no common names to help out)
+avtrait$sci_name[avtrait$sci_name=="Falcipennis canadensis"] <- "Canachites canadensis"
+avtrait$sci_name[avtrait$sci_name=="Haematopus ater"] <- "Haematopus bachmani"
+avtrait$sci_name[avtrait$sci_name=="Bubulcus ibis"] <- "Ardea ibis"
+avtrait$sci_name[avtrait$sci_name=="Accipiter cooperii"] <- "Astur cooperii"
+avtrait$sci_name[avtrait$sci_name=="Hylatomus pileatus"] <- "Dryocopus pileatus"
+avtrait$sci_name[avtrait$sci_name=="Anas penelope"] <- "Mareca penelope"
+#avtrait$sci_name[avtrait$sci_name=="Melanitta fusca"] <- "Melanitta deglandi"
+#avtrait$sci_name[avtrait$sci_name=="Dendragapus canadensis"] <- "Canachites canadensis"
+#avtrait$sci_name[avtrait$sci_name=="Larus argentatus"] <- "Larus smithsonianus"
+avtrait$sci_name[avtrait$sci_name=="Nannopterum auritus"] <- "Nannopterum auritum"
+avtrait$sci_name[avtrait$sci_name=="Tyto alba"] <- "Tyto furcata"
+avtrait$sci_name[avtrait$sci_name=="Accipiter gentilis"] <- "Astur atricapillus"
+avtrait$sci_name[avtrait$sci_name=="Steganopus tricolor"] <- "Phalaropus tricolor"
+avtrait$sci_name[avtrait$sci_name=="Catharacta maccormicki"] <- "Stercorarius maccormicki"
+avtrait$sci_name[avtrait$sci_name=="Larus philadelphia"] <- "Chroicocephalus philadelphia"
+avtrait$sci_name[avtrait$sci_name=="Larus ridibundus"] <- "Chroicocephalus ridibundus"
+avtrait$sci_name[avtrait$sci_name=="Larus atricilla"] <- "Leucophaeus atricilla"
+avtrait$sci_name[avtrait$sci_name=="Larus argentatus"] <- "Larus vegae" ## these were all one species, double check this!
+avtrait$sci_name[avtrait$sci_name=="Larus pipixcan"] <- "Leucophaeus pipixcan"
+avtrait$sci_name[avtrait$sci_name=="Sula leucogaster"] <- "Sula brewsteri"
+avtrait$sci_name[avtrait$sci_name=="Ixobrychus exilis"] <- "Botaurus exilis"
+avtrait$sci_name[avtrait$sci_name=="Butorides striatus"] <- "Butorides virescens"
+avtrait$sci_name[avtrait$sci_name=="Picoides tridactylus"] <- "Picoides dorsalis"
+avtrait$sci_name[avtrait$sci_name=="Leuconotopicus villosus"] <- "Dryobates villosus" #some taxonomic disagreement it seems, sticking to this one
+#avtrait$sci_name[avtrait$sci_name=="Charadrius mexicanus"] <- "Himantopus mexicanus" #this one not in avonet1
+#avtrait$sci_name[avtrait$sci_name=="Butorides striatus"] <- "Butorides virescens" #this one nt in avonet1
+avtrait$sci_name[avtrait$sci_name=="Leuconotopicus albolarvatus"] <- "Dryobates albolarvatus"
+avtrait$sci_name[avtrait$sci_name=="Regulus calendula"] <- "Corthylio calendula"
+avtrait$sci_name[avtrait$sci_name=="Icterus galbula"] <- "Icterus bullockii"
+avtrait$sci_name[avtrait$sci_name=="Anthus rubescens"] <- "Anthus japonicus"
+avtrait$sci_name[avtrait$sci_name=="Charadrius alexandrinus"] <- "Anarhynchus nivosus"
+avtrait$sci_name[avtrait$sci_name=="Charadrius montanus"] <- "Anarhynchus montanus"
+avtrait$sci_name[avtrait$sci_name=="Charadrius mongolus"] <- "Anarhynchus mongolus"
+
+
+avtrait3$sci_name[avtrait3$sci_name=="Spizella arborea"] <- "Spizelloides arborea"
+avtrait3$sci_name[avtrait3$sci_name=="Ammodramus bairdii"] <- "Centronyx bairdii"
+#avtrait3$sci_name[avtrait3$sci_name=="Larus argentatus"] <- "Larus smithsonianus"
+
+#mew gulls were made into 2 species
+new_row <- avtrait[avtrait$sci_name == "Larus canus", ]
+new_row$sci_name <- "Larus brachyrhynchus"
+avtrait <- rbind(avtrait, new_row)
+	
 bctraits3 <- left_join(birdlist, avtrait, by = "sci_name")
-sum(is.na(bctraits3$AV_ID))
-#33 of the BC birds dont have functional traits in the AVONET database
+
+unmatched_av <- bctraits3 %>%
+  filter(is.na(AV_ID)) %>%   # replace with a col you expect after join
+  select(names(birdlist))
+
+matched_by_ <- unmatched_av %>%
+  left_join(avtrait3, by = "sci_name")
+bctraits3 <- bctraits3 %>%
+  filter(!is.na(AV_ID)) %>%  # keep the matched ones
+  bind_rows(matched_by_)
+
+#duplicated(bctraits3$sci_name)#no duplicated, 567 birds
+#dupes <- bctraits3[duplicated(bctraits3$sci_name) | duplicated(bctraits3$sci_name, fromLast = TRUE), ]
+
+bctraits.all <- left_join(bctraits3, bctrait)
+write.csv(bctraits.all, here("Data", "cleaned", "BC_bird_traits.csv"), row.names = FALSE)
+
+
+
+
+#they have perc for nesting substrate BUT maybe unhelpful for this project
+##which traits do we want here?
+# this database has" 23 functional traits were used that can be partitioned into categories of ecological influence and importance within habitat filtering: metadata at https://zenodo.org/records/13351162
+#filter to just get the BC species:
+##there are differing scientific names and differing common names!
+
+#cleanign it up a bit
+bctraits.all <- bctraits.all %>% 
+  rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific, mass_g= Mass ) %>% 
+  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, Diet.5Cat, lifespan, ReproAge, clutches.per.year, nest.type, nesting.location, nest.category, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name)
+  
+
 
 #############################################
 #global_nest_data from catherine heard
@@ -103,10 +221,12 @@ sum(is.na(bctraits3$AV_ID))
 #   mutate(across(everything(), ~ ifelse(grepl(",|uncertain|artificial|\\b|\\bnone\\b", ., ignore.case = TRUE), NA, .)))#there are multiple records for each species, just look at the first entry
 
 ############################################
-nest.trait <- read.csv(here("Data", "TraitDatabases", "chia", "NestTrait_v2.csv"))
+nest.trait <- read.csv(here("Data", "TraitDatabases", "catherinesheard-global-nest-data", "global_nest_data.csv"))
 nest.trait <- nest.trait %>% 
-  rename(sci_name = Scientific_name) %>% 
-  select(sci_name, )
+  rename(sci_name = Species.scientific.name) %>% 
+  filter(Source == "BNO")
+
+nest.trait <- left_join(birdlist, nest.trait)
 ###########################################
 
 ## Combine the ecology data paper and the avonet database, as they cover different things:
@@ -120,7 +240,7 @@ bctraits <- bctraits %>%
 #both of those df have values fo rmass and sometimes dont overlap - make a column that is a combination of the two.
 
 #add in the dtraits
-bctraits <- left_join(bctraits, bctraits1)
+bctraits <- left_join(bctraits, bctraits.nabirds)
 
 bctraits <- left_join(bctraits, nest, by = "sci_name")
 bctraits <- bctraits %>% 
@@ -156,3 +276,18 @@ remove(avtrait, bctraits1,bctraits2,bctraits3,dtrait,eco_t,nest)
 # head(res)
 ```
 
+
+simplifying categories:
+- nest types: simplify to broader categories (for fire: cup, scape, cavity, [bank/crevice] 
+  change outside structres ie. gourd, sphere, pendant, saucer, chamber, oven, cup --> MAKE ALL THE SAME... will be similarly affected to cups. VS TREE CAVITY; rockCREVICE/crack; burrow (+/-?) ; open[no, scrape--> combined these into one category] platform[negatively affected]  (tree; burrows; crevice[look at definition]) VS exposed )
+- take out lat/long
+- keep Kipp distance and hand wing distance [some direction]
+
+foraging strategy from elton tratis: assign the majoity % for each (>50%)
+
+from Du..: see if there are any extra records for hand wing index
+
+add in number of clutched (but not age of maturity etc)
+
+TODO:
+- make table of tratis and directions in google drive (similar to the FIRE paper)
