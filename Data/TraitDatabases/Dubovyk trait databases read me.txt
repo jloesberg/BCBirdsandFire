@@ -1,1 +1,193 @@
 Dubovyk: https://zenodo.org/records/13351162
+
+The columns in the dataset are coded as following:
+
+1 name [character] : scientific name of taxa {1}
+
+2 proj_id [integer] : project ID
+
+3 et_id [integer] : ID connector to EltonTraits database {1}
+
+4 hbw_id [integer] : ID connector to HBW/BirdLife taxonomic list {2}
+
+5 ebd_id [integer] : ID connector of species to eBird taxonomy (v2019) {3}
+
+6 ebd_sub [regular sequence, i.e., a:b = (a, a+1, a+2, ..., b-2, b-1, b)] : ID connector of subspecies to eBird taxonomy (v2019) {3}
+
+7 ebd_mix [vector, i.e., a;b;c = (a, b, c)] : ID connector of slash/hybrid taxa to eBird taxonomy (v2019) {3}
+
+8 bbs_id [integer] : ID connector of subspecies to BBS species list {4}
+
+9 aou_id [integer] : ID connector of subspecies to AOU taxonomy {4}
+
+10 aou_mix [vector, i.e., a;b;c = (a, b, c)] : ID connector of slash/hybrid/genus taxa to AOU taxonomy
+
+11 hwi [numeric] : hand-wing index {5}, 100×(DK/LW) where LW is the wing length (between the carpal joint and the tip of the longest primary feather) and DK is Kipp's distance (difference between LW and secondary length [i.e., from the carpal joint to the tip of the first secondary feather])
+
+12 order [character] : taxonomic order {1}
+
+13 family [character] : taxonomic family {1}
+
+14 eng_name [character] : English taxa name {1}
+
+15 synonyms [character, may be divided by ";"] : scientific synonyms {2, 3}
+
+16 mlife [numeric] : maximum observed lifespan, years {6}
+
+17 mis_mlife [binary] : is mlife data missing? (if "1", the mean of the sister taxa provided)
+
+18 adsurvival [numeric, (0, 1)] : annual adult survival probability {6}
+
+19 mis_adsrviv [binary] : is adsurvival data missing? (if "1", the mean of the sister taxa provided)
+
+20 matage [numeric] : mean age of the first breeding {6}
+
+21 parasi [numeric, (0, 1)] : nest parasitism (both intra- and interspecific) {7, 6}
+
+22 egglow [integer] : minimum clutch size {7, 6}
+
+23 eggupp [integer] : maximum clutch size {7, 6}
+
+24 nsuc [numeric, (0, 1)] : mean nest success (proportion of breeding attempts that yield at least one fledgling) {6}
+
+25 hatc [numeric, (0, 1)] : hatching probability (per one egg) {6}
+
+26 fled [numeric, (0, 1)] : fledging probability (per one hatchling) {6}
+
+27 ypp [numeric] : mean number of fledgling per nesting attempt {6}
+
+28 suces [numeric, (0, 1)] : overall nesting success (i.e., probability that an egg laid in a nest will yield a fledgling)
+
+29 mis_suces [binary] : is it possible to estimate suces based on the data available? (if "1", the mean of the sister taxa provided)
+
+30 attem [numeric] : mean number of successful nesting attempts a year {6, 7}
+
+31 dev [factor] : development at hatching {7, 6}:    
+pre2 : precocial 2 - mobile, downy, follow parents, find food,    
+pre3 : precocial 3 - mobile, downy, follow parents, are shown food by parents,    
+pre4 : precocial 4 - mobile, downy, follow parents, being fed,    
+semipre : semiprecocial - mobile, remain at rest, being fed,    
+semialt1 : semialtricial 1 - immobile, downy, eyes open, being fed,    
+semialt2 : semialtricial 2 - immobile, downy, eyes closed, being fed,    
+alt : altricial - immobile, downless, eyes closed, being fed.
+
+32 bmass [numeric] : mean biomass, g {7, 6} 
+
+33 naggr [factor] : nesting aggregation (applies to breeding season only) {6}:    
+(1) solitary,    
+(2) may stay in family groups or loose colonies,    
+(3) strongly colonial.
+
+34 brsys [factor] : breeding system {6, 7}:    
+coop : cooperative, two or more females simultaneously breed in the same nest with or without non-breeding helper,    
+polygam : polygynandry, two or more males mate with two or more females exclusively,
+promisc : promiscuity, males and females mate indiscriminately,    
+lek : lekking, females survey the males' competitive displays,    
+polyandr : polyandry, one female mates with more than one male,    
+polygyn : polygyny, one male mates with more than one female,    
+monog : monogamy, one male mates with one female.
+
+35 mis_bree [binary] : is data on mating system missing? (if "1", the most frequent among the sister taxa provided)
+
+36 bpstart [mm-dd] : date of the beginning of breeding season {6}
+
+37 bpstop [mm-dd] : date of the end of breeding season {6}
+
+38 ndepen [numeric, (0, 1)] : nest dependency - to which extent the species relies on other species in terms of nesting site availability {6}
+
+39 nest [factor] : nest type {7, 6}:    
+(1) no : laying eggs on bare ground,    
+(2) parasitism : does not require building a nest, but is dependent on other species' nests presence,    
+(3) scrape : a simple depression with a rim to prevent eggs from rolling,    
+(4) crevice : a crack in a cliff or between rocks,    
+(5) burrow : chamber in the end of a burrowed tunnel,    
+(6) cavity : excavated or natural cavity in a limb or trunk of a tree,    
+(7) platform : structure large enough for a bird to land,    
+(8) saucer : shallow cup with a small rim built of small branches and other materials,    
+(9) cup : hemispherical nest with a large rim,    
+(10) spherical : enclosed with a small entrance,    
+(11) chamber : spherical nest hidden within a substrate,    
+(12) oven : a specific chamber with an explicit roof and small entrance,    
+(13) gourd : a chamber made of clay and saliva, typically attached to a vertical surface,    
+(14) pendant : an elongate sack suspended from a branch.
+
+40...51 Nest substrate group {6, 7}
+40 nsbank [%] : bank
+41 nsground [%] : ground
+42 nsgrass [%] : grass
+43 nsclif [%] : cliff
+44 nsbuild [%] : building, artificial structures (except nestboxes)
+45 nsshru [%] : shrubs
+46 nsdeci [%] : deciduous trees
+47 nsconi [%] : coniferous trees
+48 nssnag [%] : snags, dead limbs
+49 sncact [%] : cacti
+50 nstang [%] : tangle
+51 nsfloat [%] : floating
+
+52...61 Foraging substrate group {1, 6, 7}
+52 fsmud [%] : mud
+53 fswatb [%] : below water level
+54 fswata [%] : around water level
+55 fstimb [%] : timber
+56 fsgroun [%] : ground
+57 fsunder [%] : understory
+58 fsmidhigh [%] : middle to high tree parts
+59 fscanopy [%] : canopy
+60 fsaerial [%] : air
+61 fsdump [%] : dumps
+
+62 fpnoct [binary] : is foraging at night? {7}
+
+63 fpdiur [binary] : is foraging at day? {7} 
+
+64 klepto [numeric, (0, 1)] : kleptoparasitism {7} 
+
+65 fc_categ [factor] : prevalent diet category    
+FruiNect : fruits and nectar,    
+Invertebrate : invertebrates,    
+Omnivore : omnivore,    
+PlantSeed : plants and seeds,    
+VertFishScav : vertebates, fish, or scavenging.
+
+66-76 Foraging categories {1, 6, 7}
+66 fcinvert [%] : invertebrates
+67 fcvend [%] : endothermic (warm-blooded) vertebrates
+68 fcvect [%] : cold-blooded vertebrates
+69 fcfish [%] : fish
+70 fcunk [%] : unknown vertebrates
+71 fcscav [%] : carcasses
+72 fcfruit [%] : fruits
+73 fcnect [%] : nectar
+74 fcseed [%] : seeds
+75 fcgree [%] : green parts of plants
+76 fcleft [%] : leftovers
+
+77-95 Foraging method {6}
+77 fmdig [%] : digging
+78 fmgrgl [%] : ground glean
+79 fmfogl [%] : foliage glean
+80 fmbagl [%] : bark glean
+81 fmhogl [%] : gleaning while hovering
+82 fmhopo [%] : hover and pouncing
+83 fmhawk [%] : hawking
+84 fmaero [%] : aerial foliage
+85 fmapur [%] : aerial pursuit
+86 fmswoo [%] : swoops
+87 fmhipa [%] : high patrol
+88 fmlopa [%] : low patrol
+89 fmhidi [%] : high dives
+90 fmskim [%] : skimming
+91 fmsdiv [%] : surface dives
+92 fmsdip [%] : surface dips
+93 fmdabb [%] : dabbling
+94 fmstal [%] : stalking
+95 fmprob [%] : probing
+
+96 pelagic [binary] : is a pelagic taxa?
+
+97 ebd_id2022 [integer] : ID connector of species to eBird taxonomy (v2022) {3}
+
+98 code [character] : code ID in eBird taxonomy (v2022) {3} 
+
+99 ebd_id2023 [integer] : ID connector of species to eBird taxonomy (v2023) {3}
