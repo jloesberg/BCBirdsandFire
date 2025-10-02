@@ -34,11 +34,15 @@ birdlist <- birdlist%>%
 ```
 
 ```{r read in trait data base available databases}
-dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk_trait_database.csv"))
+dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk_trait_database.csv")) #> nest <- dtrait %>% select(name, eng_name, nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nsdeci, nsconi, nssnag, nsfloat, nscact, nstang, ntree, nesting.location)
+
 dtrait <- dtrait %>% 
-  mutate(nesting.location = if_else(nsgroun>51|nsgrass>51, "ground", if_else(nsshru>51, "shrub", if_else(nsdeci>51|nsconi>51, "tree", if_else(nssnag>51, "snag", if_else(nsbank>51|nstang>51|nsfloat>51, "aquatic", NA)))))) %>% 
-  select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nesting.location, attem, eng_name) %>% 
-  rename(Elton_ID = et_id,lifespan = mlife, ReproAge = matage,  nest.type = nest, clutches.per.year = attem)
+  mutate(ntree = nsdeci+nsconi,
+         nest.tree.use = (ntree+nssnag)/100) %>% #to what scale do they use trees to nest? Essentially adding the % they use deciduous, coniferous, and snags
+  select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nssnag, nscact, nstang, nsfloat, ntree, attem, eng_name,nest.tree.use) %>% 
+  rename(Elton_ID = et_id,lifespan = mlife, ReproAge = matage,  nest.type = nest, clutches.per.year = attem,
+         bank = nsbank, ground = nsgroun, grass = nsgrass, cliff = nsclif, human.structure = nsbuild, shrub = nsshru, snag = nssnag, float = nsfloat, cactus = nscact, tangle = nstang, tree = ntree)
+
 #correcting some taxonony
 dtrait$synonyms[dtrait$name=="Bubulcus ibis"] <- "Ardea ibis"
 dtrait$synonyms[dtrait$name=="Accipiter cooperii"] <- "Astur cooperii"
@@ -56,10 +60,33 @@ dtrait$synonyms[dtrait$proj_id=="5240"] <- "NA"
 #making the nest category more broad:
 #gourd, sphere, pendant, saucer, chamber, oven, cup --> MAKE ALL THE SAME... will be similarly affected to cups. VS TREE CAVITY; rockCREVICE/crack; burrow (+/-?) ; open[no, scrape--> combined these into one category] platform[negatively affected]  (tree; burrows; crevice[look at definition]) VS exposed 
 dtrait <- dtrait %>% 
-  mutate(nest.category = if_else(nest.type == "cup"|nest.type == "gourd"|nest.type == "sphere"|nest.type == "gourd"|nest.type == "saucer"|nest.type == "chamber"|nest.type == "oven"|nest.type == "pend", "built.strucutre", if_else(nest.type == "scrape"|nest.type == "no", "open", nest.type)))
+  mutate(nest.category = if_else(nest.type == "cup"|nest.type == "gourd"|nest.type == "sphere"|nest.type == "gourd"|nest.type == "saucer"|nest.type == "chamber"|nest.type == "oven"|nest.type == "pend", "built.structure", if_else(nest.type == "scrape"|nest.type == "no", "open", nest.type)))
 dtrait$eng_name[dtrait$proj_id==3255] <- "White-winged Parakeet"
 dtrait$name[dtrait$proj_id==3255] <- "Brotogeris versicolurus"
 
+#get nesting substrates
+cols_to_check <- c("bank", "ground", "grass", 'cliff', 'human.structure', "shrub", "float", "snag", 'cactus', "tangle", "tree")
+dtrait <- dtrait %>%
+    mutate(majority.nesting.location = if_else(ground>51, "ground", if_else(grass>51, "grass", if_else(shrub>51, "shrub", if_else(tree>51, "tree", if_else(snag>51, "snag", if_else(bank>51, "bank", if_else(cliff>51, "cliff", if_else(human.structure>51, "human.structure", if_else(tangle>51, "tangle", if_else(float>51, "float", NA))))))))))) %>% #if there is a majority (>51%) of nesting location
+  rowwise() %>%
+  mutate(
+    row_values = list(c_across(all_of(cols_to_check))),
+    sorted_indices = list(order(row_values, decreasing = TRUE)),
+    most.common.nesting.location = cols_to_check[sorted_indices[1]],
+    second.nesting.location = ifelse(
+      # Condition: Is the second highest value equal to 0?
+      row_values[sorted_indices[2]] == 0,
+      
+      # If TRUE: Assign NA (must be type character to match column names)
+      NA_character_, 
+      # If FALSE: Assign the column name
+      cols_to_check[sorted_indices[2]]
+    )
+  ) %>%
+  select(-c(row_values, sorted_indices, bank, ground, grass, cliff, human.structure, shrub, float, snag, cactus, tangle, tree)) %>%
+  ungroup()
+
+###########################################################################################
 
 #Ecology data paper - ELTON TRAITS
 eco_t <- read.delim(here("Data", "TraitDatabases", "Ecology_BirdFuncDat.txt"), sep = "\t", header = T)
@@ -155,7 +182,7 @@ avtrait$sci_name[avtrait$sci_name=="Butorides striatus"] <- "Butorides virescens
 avtrait$sci_name[avtrait$sci_name=="Picoides tridactylus"] <- "Picoides dorsalis"
 avtrait$sci_name[avtrait$sci_name=="Leuconotopicus villosus"] <- "Dryobates villosus" #some taxonomic disagreement it seems, sticking to this one
 #avtrait$sci_name[avtrait$sci_name=="Charadrius mexicanus"] <- "Himantopus mexicanus" #this one not in avonet1
-#avtrait$sci_name[avtrait$sci_name=="Butorides striatus"] <- "Butorides virescens" #this one nt in avonet1
+#avtrait$sci_name[avtrait$sci_name=="Butorides striatus"] <- "Butorides virescens" #this one not in avonet1
 avtrait$sci_name[avtrait$sci_name=="Leuconotopicus albolarvatus"] <- "Dryobates albolarvatus"
 avtrait$sci_name[avtrait$sci_name=="Regulus calendula"] <- "Corthylio calendula"
 avtrait$sci_name[avtrait$sci_name=="Icterus galbula"] <- "Icterus bullockii"
@@ -190,7 +217,48 @@ bctraits3 <- bctraits3 %>%
 #dupes <- bctraits3[duplicated(bctraits3$sci_name) | duplicated(bctraits3$sci_name, fromLast = TRUE), ]
 
 bctraits.all <- left_join(bctraits3, bctrait)
-write.csv(bctraits.all, here("Data", "cleaned", "BC_bird_traits.csv"), row.names = FALSE)
+
+################################################################################
+#IUCN
+redlist <- read.csv(here("Data", "TraitDatabases", "IUCN", "assessments.csv"))
+redlist <- redlist %>% 
+  select(scientificName, redlistCategory, populationTrend)
+#cleaning up some taxonomy so they match:
+redlist$scientificName[redlist$scientificName=="Passerella arborea"] <- "Spizelloides arborea"
+redlist$scientificName[redlist$scientificName=="Haematopus ater"] <- "Haematopus bachmani"
+redlist$scientificName[redlist$scientificName=="Catharacta maccormicki"] <- "Stercorarius maccormicki"
+redlist$scientificName[redlist$scientificName=="Picoides tridactylus"] <- "Picoides dorsalis"
+redlist$scientificName[redlist$scientificName=="Hylatomus pileatus"] <- "Dryocopus pileatus"
+redlist$scientificName[redlist$scientificName=="Icterus bullockiorum"] <- "Icterus bullockii"
+redlist$scientificName[redlist$scientificName=="Butorides striatus"] <- "Butorides virescens" #this
+redlist$scientificName[redlist$scientificName=="Leuconotopicus villosus"] <- "Dryobates villosus" #some taxonomic disagreement it seems, sticking to this one
+
+
+
+bctraits.i <- bctraits.all %>% 
+  select(name, names(birdlist)) %>% 
+            left_join(redlist, by = c("sci_name" = "scientificName"))
+unmatched.i <- bctraits.i %>%
+  filter(is.na(redlistCategory)) %>%   # replace with a col you expect after join
+  select(name, names(birdlist))
+matched_by_i<- unmatched.i %>%
+  left_join(redlist, by = c("name" = "scientificName"))
+
+bctraits.i<- bctraits.i %>%
+  filter(!is.na(redlistCategory)) %>%  # keep the matched ones
+  bind_rows(matched_by_i)
+
+bctraits.all <- left_join(bctraits.all, bctraits.i)
+
+###############################################################################
+#cleanign it up a bit
+bctraits.all <- bctraits.all %>% 
+  rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific, mass_g= Mass ) %>% 
+  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, Diet.5Cat, lifespan, ReproAge, clutches.per.year, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category, redlistCategory, populationTrend, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name)
+  
+
+
+
 
 
 
@@ -200,13 +268,6 @@ write.csv(bctraits.all, here("Data", "cleaned", "BC_bird_traits.csv"), row.names
 # this database has" 23 functional traits were used that can be partitioned into categories of ecological influence and importance within habitat filtering: metadata at https://zenodo.org/records/13351162
 #filter to just get the BC species:
 ##there are differing scientific names and differing common names!
-
-#cleanign it up a bit
-bctraits.all <- bctraits.all %>% 
-  rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific, mass_g= Mass ) %>% 
-  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, Diet.5Cat, lifespan, ReproAge, clutches.per.year, nest.type, nesting.location, nest.category, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name)
-  
-
 
 #############################################
 #global_nest_data from catherine heard
@@ -220,45 +281,163 @@ bctraits.all <- bctraits.all %>%
 #   slice(1) %>% 
 #   mutate(across(everything(), ~ ifelse(grepl(",|uncertain|artificial|\\b|\\bnone\\b", ., ignore.case = TRUE), NA, .)))#there are multiple records for each species, just look at the first entry
 
-############################################
-nest.trait <- read.csv(here("Data", "TraitDatabases", "catherinesheard-global-nest-data", "global_nest_data.csv"))
-nest.trait <- nest.trait %>% 
-  rename(sci_name = Species.scientific.name) %>% 
-  filter(Source == "BNO")
+# ############################################
+# nest.trait <- read.csv(here("Data", "TraitDatabases", "catherinesheard-global-nest-data", "global_nest_data.csv"))
+# nest.trait <- nest.trait %>% 
+#   rename(sci_name = Species.scientific.name) %>% 
+#   filter(Source == "BNO")
+# 
+# nest.trait <- left_join(birdlist, nest.trait)
+# ###########################################
+# 
+# ## Combine the ecology data paper and the avonet database, as they cover different things:
+# 
+# bctraits <- left_join(bctraits2, bctraits3)
+# #there are a couple of spp where the eco db has mass values vut avonet does,just coalesce those over where its NA in the avonet db
+# bctraits <- bctraits %>% 
+#   mutate(Mass = if_else(is.na(Mass), coalesce(BodyMass.Value), Mass),
+#          Mass = round(Mass, 1)) %>% 
+#   select(-BodyMass.Value)
+# #both of those df have values fo rmass and sometimes dont overlap - make a column that is a combination of the two.
+# 
+# #add in the dtraits
+# bctraits <- left_join(bctraits, bctraits.nabirds)
+# 
+# bctraits <- left_join(bctraits, nest, by = "sci_name")
+# bctraits <- bctraits %>% 
+#   mutate(nest.type = if_else(is.na(nest.type), coalesce(Nest.structure), nest.type),
+#          nesting.location = if_else(is.na(nesting.location), coalesce(Nest.location), nesting.location)) %>% 
+#   select(-c(Raw.nest.info, Nest.structure, Nest.location))
+# 
+# ###################################################################################
+#these problems are solved!
+# #which species do we still need nesting info for?
+ # nest.na <- nest %>% 
+ #   filter(is.na(nesting.location)) %>% 
+ #  left_join(birdlist, by = c("eng_name" = "common_name")) %>% 
+ #  filter(!is.na(Order))
+#write.csv(nest.na, here("Data", "cleaned", "BC_missing.nest.location.csv"), row.names = FALSE)
 
-nest.trait <- left_join(birdlist, nest.trait)
-###########################################
+#remove(avtrait, bctraits1,bctraits2,bctraits3,dtrait,eco_t,nest)
 
-## Combine the ecology data paper and the avonet database, as they cover different things:
 
-bctraits <- left_join(bctraits2, bctraits3)
-#there are a couple of spp where the eco db has mass values vut avonet does,just coalesce those over where its NA in the avonet db
-bctraits <- bctraits %>% 
-  mutate(Mass = if_else(is.na(Mass), coalesce(BodyMass.Value), Mass),
-         Mass = round(Mass, 1)) %>% 
-  select(-BodyMass.Value)
-#both of those df have values fo rmass and sometimes dont overlap - make a column that is a combination of the two.
+###A few of these species don't have data in these databases: filling in from other sources
+#lots of missing data for Pacific Golden-Plover
+bctraits.all$lifespan[bctraits.all$common_name=="Pacific Golden-Plover"] <- 6
+bctraits.all$clutches.per.year[bctraits.all$common_name=="Pacific Golden-Plover"] <- 1 #can lay a replacement clutch if first is lost
+bctraits.all$nest.type[bctraits.all$common_name=="Pacific Golden-Plover"] <- "scrape"
+bctraits.all$majority.nesting.location[bctraits.all$common_name=="Pacific Golden-Plover"] <- "ground"
+bctraits.all$nest.category[bctraits.all$common_name=="Pacific Golden-Plover"] <- "open"
 
-#add in the dtraits
-bctraits <- left_join(bctraits, bctraits.nabirds)
+#lots of missing data for South Polar Skua...breed in antartica, so maybe these arent helpful!
+bctraits.all$ReproAge[bctraits.all$common_name=="South Polar Skua"] <- 6 
+bctraits.all$clutches.per.year[bctraits.all$common_name=="South Polar Skua"] <- 1 
+bctraits.all$nest.type[bctraits.all$common_name=="South Polar Skua"] <- "scrape"
+bctraits.all$majority.nesting.location[bctraits.all$common_name=="South Polar Skua"] <- "ground"
+bctraits.all$nest.category[bctraits.all$common_name=="South Polar Skua"] <- "open"
 
-bctraits <- left_join(bctraits, nest, by = "sci_name")
-bctraits <- bctraits %>% 
-  mutate(nest.type = if_else(is.na(nest.type), coalesce(Nest.structure), nest.type),
-         nesting.location = if_else(is.na(nesting.location), coalesce(Nest.location), nesting.location)) %>% 
-  select(-c(Raw.nest.info, Nest.structure, Nest.location))
+#Short-tailed Shearwater - breeds in Australia, summers in Berrings sea
+bctraits.all$lifespan[bctraits.all$common_name=="Short-tailed Shearwater"] <- 30 
+bctraits.all$ReproAge[bctraits.all$common_name=="Short-tailed Shearwater"] <- 6 
+bctraits.all$clutches.per.year[bctraits.all$common_name=="Short-tailed Shearwater"] <- 1 
+#bctraits.all$nest.type[bctraits.all$common_name=="Short-tailed Shearwater"] <- "scrape"
+#bctraits.all$nesting.location[bctraits.all$common_name=="Short-tailed Shearwater"] <- "ground"
+#bctraits.all$nest.category[bctraits.all$common_name=="Short-tailed Shearwater"] <- "open"
 
-###################################################################################
-#which species do we still need nesting info for?
-nest.na <- bctraits %>% 
-  filter(is.na(nest.type))
-#
-remove(avtrait, bctraits1,bctraits2,bctraits3,dtrait,eco_t,nest)
+
+#lots of missing data for Pacific Wren - associated with old growth forests
+bctraits.all$lifespan[bctraits.all$common_name=="Pacific Wren"] <- 4 #making it the same as the winter wren, which it was recently split from
+bctraits.all$clutches.per.year[bctraits.all$common_name=="Pacific Wren"] <- 1 #can lay a replacement clutch if first is lost
+bctraits.all$majority.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "?"
+bctraits.all$nest.type[bctraits.all$common_name=="Pacific Wren"] <- "cavity"
+bctraits.all$nest.category[bctraits.all$common_name=="Pacific Wren"] <- "cavity"
+bctraits.all$Diet.5Cat[bctraits.all$common_name=="Pacific Wren"] <- "Invertebrate"
+
+
+write.csv(bctraits.all, here("Data", "cleaned", "BC_bird_traits.csv"), row.names = FALSE)
 ```
 
+
+
+
 ```{r}
-#do we need to scope out the literature?
-#https://www.researchgate.net/publication/253246028_Breeding_biology_and_nest_characteristics_of_the_Eurasian_Kestrel_in_different_environments_on_an_Atlantic_island
+
+
+
+#	Pink-footed Shearwater
+
+#we figured out these problems
+# ### NESTING LOCATION ONLY
+# #these guys dopnt have a nesting location from dtraits because there wasnt a nesting % >50%
+# #wood duck nesting location: needs mature large trees with preformed cavities
+# bctraits.all$nesting.location[bctraits.all$common_name=="Wood Duck"] <- "tree"
+# # 
+# # #Bufflehead nesting location: use woodpacker cavities
+# # bctraits.all$nesting.location[bctraits.all$common_name=="Bufflehead"] <- "tree"
+# 
+# #Common Goldeneye nesting location: nests in TREE and SNAG, majority in snag
+# bctraits.all$nesting.location[bctraits.all$common_name=="Common Goldeneye"] <- "snag"
+# 
+# #Barrow's Goldeneye nesting location: nests in TREE and SNAG
+# bctraits.all$nesting.location[bctraits.all$common_name=="Barrow's Goldeneye"] <- "snag"
+# 
+# #Common Merganser nesting location: nests in TREE and SNAG, 50% snag
+# bctraits.all$nesting.location[bctraits.all$common_name=="Common Merganser"] <- "snag"
+# 
+# #Black-chinned Hummingbird - 50% shrub and tree, BoW says mostly tree and >2 m high. could check this
+# bctraits.all$nesting.location[bctraits.all$common_name=="Black-chinned Hummingbird"] <- "tree"
+# 
+# #Double-crested Cormorant
+# bctraits.all$nesting.location[bctraits.all$common_name=="Double-crested Cormorant"] <- "?" #only 30% ground nesting
+# 
+# #Brown Pelican
+# bctraits.all$nesting.location[bctraits.all$common_name=="Brown Pelican"] <- "?" # cliff or tree, BoW says cliff, 50% ground in dtrait
+# 
+# # Western Cattle-Egret
+# bctraits.all$nesting.location[bctraits.all$common_name=="Western Cattle-Egret"] <- "?" # 50% tree
+# 
+# #	American Barn Owl
+# bctraits.all$nesting.location[bctraits.all$common_name=="American Barn Owl"] <- "?" # cliff, building , snag
+# 
+# #	Western Screech-Owl
+# bctraits.all$nesting.location[bctraits.all$common_name=="Western Screech-Owl"] <- "?" # tree, snag, cactus
+# 
+# #	Great Horned Owl
+# bctraits.all$nesting.location[bctraits.all$common_name=="Great Horned Owl"] <- "?" # mixed
+# 
+# #Northern Hawk Owl
+# bctraits.all$nesting.location[bctraits.all$common_name=="Northern Hawk Owl"] <- "?" # mixed
+# 
+# #	Rough-legged Hawk
+# bctraits.all$nesting.location[bctraits.all$common_name=="Rough-legged Hawk"] <- "?" # mixed
+# 
+# #	Northern Saw-whet Owl
+# bctraits.all$nesting.location[bctraits.all$common_name=="Northern Saw-whet Owl"] <- "?" # mixed
+# 
+# #	Boreal Owl
+# bctraits.all$nesting.location[bctraits.all$common_name=="Boreal Owl"] <- "?" # mixed
+# 
+# #	Eastern Phoebe
+# bctraits.all$nesting.location[bctraits.all$common_name=="Eastern Phoebe"] <- "?" # mixed
+# #	Say's Phoebe
+# bctraits.all$nesting.location[bctraits.all$common_name=="Say's Phoebe"] <- "?" # mixed
+# 
+# #	Tropical Kingbird
+# bctraits.all$nesting.location[bctraits.all$common_name =="Tropical Kingbird"] <- "?" # mixed
+# #	Western Kingbird
+# bctraits.all$nesting.location[bctraits.all$common_name == "Western Kingbird"] <- "?" # mixed
+# #	Eastern Kingbird
+# bctraits.all$nesting.location[bctraits.all$common_name == "Eastern Kingbird"] <- "tree" # mixed
+# 
+# #Blue-headed Vireo
+# bctraits.all$nesting.location[bctraits.all$common_name == "Blue-headed Vireo"] <- "?" # mixed
+# 
+# #	Black-billed Magpie
+# bctraits.all$nesting.location[bctraits.all$common_name == "Black-billed Magpie"] <- "?" # mixed
+
+
+
+
 ```
 
 
