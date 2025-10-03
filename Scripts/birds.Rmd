@@ -399,7 +399,7 @@ birdbase <- birdbase %>%
   clean_names()
 birdbase <- birdbase %>% 
   rename(iucn.2024 = x2024_iucn_red_list_category, forest.use = 33, habitat.breadth = hb, diet.breadth =db, Eco.Spec.Index = esi, latin = 3, former.latin = 5, common.name = 2) %>% 
-  select(1:7, iucn.2024, rr, average_mass, elevational_range, forest.use, primary_habitat, habitat.breadth, primary_diet, Eco.Spec.Index)
+  select(1:7, iucn.2024, rr, average_mass, elevational_range, forest.use, primary_habitat, habitat.breadth, primary_diet,diet.breadth, Eco.Spec.Index)
 ##ESI: Ecological Specialization Index: log10 (100/[dietary breadth x habitat breadth]), with a maximum of 2 for the most specialized species that only feed on one major food group and live in one major type of habitat (e.g., forest frugivore; Sekercioglu, 2011)
 #just get BC birds
 birdbase.bc <- left_join(birdlist, birdbase, by = c("sci_name" = "latin"))

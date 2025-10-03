@@ -1,0 +1,151 @@
+
+Read me:
+
+"order" - [BC bird list]
+"family" - [BC bird list]
+"sci_name" - [BC bird list]
+"common_name" - [BC bird list]
+"status" - status in BC, including rare/accidental [BC bird list]
+
+"iucn_2024" - 2024 IUCN status [Birdbase]
+    EX	Extinct
+    CR	Critically Endangered
+    EN	Endangered
+    VU	Vulnerable
+    NT	Near-threatened
+    LC	Least Concern
+    DD	Data Deficient
+    
+"primary_lifestyle" - [avonet]
+    Aerial = species spends much of the time in flight, and hunts or forages predominantly on the wing; 
+    Terrestrial = species spends majority of its time on the ground, where it obtains food while either walking or hopping (note this includes species that also wade in water with their body raised above the water); 
+    Insessorial = species spends much of the time perching above the ground, either in branches of trees and other vegetation (i.e. arboreal), or on other raised substrates including rocks, buildings, posts, and wires; 
+    Aquatic = species spends much of the time sitting on water, and obtains  food while afloat or when diving under the water's surface; Generalist = species has no primary lifestyle because it spends time in different lifestyle classes"
+
+"primary_habitat" - The main habitat type utilized by a species [birdbase]
+    Forest, secondary forest, swamp forest, tree-fall gaps, taiga, igapo, varzea
+    Shrubland, scrub, secondary growth (with few trees), cerrado, campo, karoo, thickets, roadside growth, heaths, copses, hedgerow, vine tangle, caatinga, chaco
+    Savanna, arid plains, wooded grassland, pampas, campos,
+    Grasslands, high altitude flats, puna, altiplano, tundra, tussock, pastures, steppe, paramo, moorland, plateaus, open vegetation
+    Plains, dry & open areas, semi-desert, steppe, tundra, arid and semi-arid grassland
+    Rocky areas, cliffs, outcrop, inselberg, koppi, escarpment
+    Desert, sand dune (not coastal)
+    Artificial, agricultural, farms, plantations, suburban, quarry, mine, excavation, dams and man-made lakes
+    Sea coast, mangrove, estuary, bays, shores, fjords (only sea coast), coastal dune
+    Riparian, riverine, gallery forest, stream, running water, wooded ravines
+    Wetlands, lakes, salt lakes, marsh, reedbed
+    Open sea, pelagic
+    
+"habitat_density" - [avonet]
+    1 = Dense habitats. Species primarily lives in the lower or middle storey of forest, or in dense thickets, dense shrubland etc.
+    2 = Semi-open habitats. Species primarily lives in open shrubland, scattered bushes, parkland, low dry or deciduous forest, thorn forest. 
+    3 = Open habitats. Species primarily lives in desert, grassland, open water, low shrubs, rocky habitats, seashores, cities. Also applies to species living mainly on top of forest canopy (i.e. mostly in the open)
+    
+"forest_use" - extent to which forest is prefered as a habitat. Ranges from 1-6, where 1 = forest is most prefered, 6 = least prefered. NA indicates forest not used at all [birdbase]
+
+"habitat_breadth" - the number of major habitats used. Lower = more habitat specialized, higher = broader habitat use [birdbase]
+
+"primary_diet" - Majority of diet. Else, if none of the weighted categories area majority, used "Carnivore" if the species primarily eat a variety of animal matter, or ''Herbivore' if it eats a variety of plant matter. If a combination of animal and plant, assigned 'Omnivore.' [birdbase]
+
+"diet_breadth" - Diet breadth, the number of major food types consumed [birdbase]
+
+"eco_spec_index" - Ecological Specialization Index: log10 (100/[dietary breadth x habitat breadth]), with a maximum of 2 for the most specialized species that only feed on one major food group and live in one major type of habitat (e.g., forest frugivore; Sekercioglu, 2011) [birdbase]
+
+"trophic_level" - [avonet]
+    Herbivore = species obtaining at least 70% of food resources from plants; 
+    Carnivore = species obtaining at least 70% of food resources by consuming live invertebrate or vertebrate animals; 
+    Scavenger = species obtaining at least 70% of food resources from carrion or refuse; 
+    Omnivore = species obtaining resources from multiple trophic level in roughly equal proportion
+
+"trophic_niche" - [avonet]
+    "Frugivore = species obtaining at least 60% of food resources from fruit; 
+    Granivore = species obtaining at least 60% of food resources from seeds or nuts; 
+    Nectarivore =  species obtaining at least 60% of food resources from nectar; 
+    Herbivore = species obtaining at least 60% of food resources from other plant materials in non-aquatic systems, including leaves, buds, whole flowers etc.; 
+    Herbivore aquatic = species obtaining at least 60% of food resources from plant materials in aquatic systems, including algae and aquatic plant leaves; 
+    Invertivore = species obtaining at least 60% of food resources from invertebrates in terrestrial systems, including insects, worms, arachnids, etc.; 
+    Vertivore = species obtaining at least 60% of food resources from vertebrate animals in terrestrial systems, including mammals, birds, reptiles etc.; 
+    Aquatic Predator = species obtaining at least 60% of food resources from vertebrate and invertebrate animals in aquatic systems, including fish, crustacea, molluscs, etc; 
+    Scavenger = species obtaining at least 60% of food resources from carrion, offal or refuse; Omnivore = Species using multiple niches, within or across trophic levels, in relatively equal proportions "
+
+
+"migration" - [avonet]
+    1 = Sedentary. 
+    2 = Partially migratory, i.e. minority of population migrates long distances, or most of population undergoes short-distance migration, nomadic movements, distinct altitudinal migration, etc.
+    3 = Migratory, i.e. majority of population undertakes long-distance migration"
+    
+"range_size" - ""The total area of the mapped range of the species (not the Extent of Occurrence [EOO]). We used maps shared by BirdLife International and restricted our analysis to areas of the range coded as Presence = 1 (Extant only), Origin = 1 & 2 (Native & Reintroduced),
+    Seasonal = 1 & 2 (Resident and breeding). We calculated the total combined mapped area of these parts of the range using the areaPolygon function from the R package geosphere (Hijmans et al., 2011). This function accurately calculates the area in the World Geodetic System (WGS84) projection using spherical                distances" [avonet]
+
+"elevational_range" - The difference between a species' normal lowest and highest elevational extents [birdbase]
+
+"lifespan" - maximum observed lifespan, years [dubovyk]
+
+"repro_age" - mean age of first breeding [dubovyk]
+
+"average_mass" - the average value across males, females, and unsexed individuals in the dataset [birdbase]
+
+"kipps_distance" - Length from the tip of the first secondary feather to the tip of the longest primary in mm [avonet]
+
+"hand_wing_index" - 100*DK/Lw, where DK is Kipp’s distance and Lw is wing length (i.e., Kipp’s distance corrected for wing size) [avonet]
+
+"clutches_per_year" - mean number of successful nesting  attempts a year [dubovyk]
+
+"nest_tree_use" - % of total nesting preference (ntree+nssnag)/100) %>% #to what scale do they use trees to nest? Essentially adding the % they use deciduous, coniferous, and snags, so out of 100% [dubovyk]
+
+"majority_nesting_location" - majority (>51%) prevalence of use of nesting location. If NA, not one preferred location [eltontraits]
+    "ground"
+    NA                
+    "float"
+    "tree"
+    "snag"
+    "grass"
+    "human.structure"
+    "cliff"
+    "shrub"
+    "bank"
+    "?" 
+
+"most_common_nesting_location" - most common nesting location [eltontraits]
+    "ground"
+    NA   = no data             
+    "float"
+    "tree"
+    "snag"
+    "grass"
+    "human.structure"
+    "cliff"
+    "shrub"
+    "bank"
+    "?" 
+
+"second_nesting_location" - second most common nesting location. If NA, only uses the most common location [elton traits]
+    "float"
+    NA
+    "grass" 
+    "snag"
+    "tree"
+    "cliff"
+    "shrub"
+    "human.structure"
+    "ground"
+    "bank"
+    "cactus"
+    "tangle"   
+
+"nest_type" - specific nest type (original column to nest_categoty) [dubovyk]
+
+"nest_category" - lumped category for nest types [dubovyk]
+    "cup", "gourd", "sphere", "gourd", "saucer", "chamber", "oven", "pend" ==> _built.structure_
+    "scrape" or "no" ==> _open_
+    "platform"
+    "cavity"
+    "crevice"
+    "burrow"
+    "paras" ==> parasite
+
+"majority_foraging_location" - majority (>51%) prevalence of foraging strategy. If NA, not one preferred location [eltontraits]
+
+"most_common_foraging_location" - most common foraging strategy [eltontraits]
+
+"second_foraging_location"- second most common foraging strategy. If NA, only uses the most common strategy [eltontraits]
