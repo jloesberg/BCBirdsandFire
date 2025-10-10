@@ -5,9 +5,7 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 _to do:_
--pivot longer the reproduction dfs
--check in with jenny about the best wya to fill in the small gaps
--check in about the traits weve found (ie, could they be coarser?)
+
 
 
 ```{r setup, include=FALSE}
@@ -38,8 +36,10 @@ dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk_trait_database.csv"))
 
 dtrait <- dtrait %>% 
   mutate(ntree = nsdeci+nsconi,
-         nest.tree.use = (ntree+nssnag)/100) %>% #to what scale do they use trees to nest? Essentially adding the % they use deciduous, coniferous, and snags
-  select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nssnag, nscact, nstang, nsfloat, ntree, attem, eng_name,nest.tree.use) %>% 
+         nest.tree.use = (ntree+nssnag)/100, #to what scale do they use trees to nest? Essentially adding the % they use deciduous, coniferous, and snags
+         live_tree_nesting_use = ntree/100,
+         snag_nesting_use = nssnag/100) %>% 
+  select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nssnag, nscact, nstang, nsfloat, ntree, attem, eng_name,nest.tree.use, live_tree_nesting_use, snag_nesting_use) %>% 
   rename(Elton_ID = et_id,lifespan = mlife, ReproAge = matage,  nest.type = nest, clutches.per.year = attem,
          bank = nsbank, ground = nsgroun, grass = nsgrass, cliff = nsclif, human.structure = nsbuild, shrub = nsshru, snag = nssnag, float = nsfloat, cactus = nscact, tangle = nstang, tree = ntree)
 
@@ -168,11 +168,11 @@ avtrait3 <- read.csv(here("Data", "TraitDatabases", "ELEData", "TraitData", "AVO
 avtrait <- avtrait %>% 
   rename(sci_name = Species1,
          AV_ID = Sequence) %>% 
-  select(AV_ID, sci_name, Mass, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size)
+  select(AV_ID, sci_name, Mass, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, Kipps.Distance, Hand.Wing.Index)
 
 avtrait3 <- avtrait3 %>% 
   rename(sci_name = Species3) %>% 
-  select(sci_name, Mass, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size)
+  select(sci_name, Mass, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, Kipps.Distance, Hand.Wing.Index)
 #changing some of the codes to something more readable:
 avtrait$Habitat.Density[avtrait$Habitat.Density == 1] <- "dense"
 avtrait$Habitat.Density[avtrait$Habitat.Density == 2] <- "semiopen"
@@ -288,72 +288,7 @@ bctraits.all <- left_join(bctraits3, bctrait)
 #cleanign it up a bit
 bctraits.all <- bctraits.all %>% 
   rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific, mass_g= Mass ) %>% 
-  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category, majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name)
-  
-
-
-
-
-
-
-
-#they have perc for nesting substrate BUT maybe unhelpful for this project
-##which traits do we want here?
-# this database has" 23 functional traits were used that can be partitioned into categories of ecological influence and importance within habitat filtering: metadata at https://zenodo.org/records/13351162
-#filter to just get the BC species:
-##there are differing scientific names and differing common names!
-
-#############################################
-#global_nest_data from catherine heard
-##this has a lot of information but isnt easily sortable/able to be used in coding. May have to go through by hand for some of the species.
-# nest <- read.csv(here("Data", "TraitDatabases", "catherinesheard-global-nest-data", "global_nest_data.csv"))
-# nest <- nest %>%
-#   mutate(across(where(is.character), ~na_if(., "no info"))) %>% 
-#   rename(sci_name = Species.scientific.name) %>% 
-#   select(sci_name, Raw.nest.info, Nest.structure, Nest.location) %>% 
-#   group_by(sci_name) %>% 
-#   slice(1) %>% 
-#   mutate(across(everything(), ~ ifelse(grepl(",|uncertain|artificial|\\b|\\bnone\\b", ., ignore.case = TRUE), NA, .)))#there are multiple records for each species, just look at the first entry
-
-# ############################################
-# nest.trait <- read.csv(here("Data", "TraitDatabases", "catherinesheard-global-nest-data", "global_nest_data.csv"))
-# nest.trait <- nest.trait %>% 
-#   rename(sci_name = Species.scientific.name) %>% 
-#   filter(Source == "BNO")
-# 
-# nest.trait <- left_join(birdlist, nest.trait)
-# ###########################################
-# 
-# ## Combine the ecology data paper and the avonet database, as they cover different things:
-# 
-# bctraits <- left_join(bctraits2, bctraits3)
-# #there are a couple of spp where the eco db has mass values vut avonet does,just coalesce those over where its NA in the avonet db
-# bctraits <- bctraits %>% 
-#   mutate(Mass = if_else(is.na(Mass), coalesce(BodyMass.Value), Mass),
-#          Mass = round(Mass, 1)) %>% 
-#   select(-BodyMass.Value)
-# #both of those df have values fo rmass and sometimes dont overlap - make a column that is a combination of the two.
-# 
-# #add in the dtraits
-# bctraits <- left_join(bctraits, bctraits.nabirds)
-# 
-# bctraits <- left_join(bctraits, nest, by = "sci_name")
-# bctraits <- bctraits %>% 
-#   mutate(nest.type = if_else(is.na(nest.type), coalesce(Nest.structure), nest.type),
-#          nesting.location = if_else(is.na(nesting.location), coalesce(Nest.location), nesting.location)) %>% 
-#   select(-c(Raw.nest.info, Nest.structure, Nest.location))
-# 
-# ###################################################################################
-#these problems are solved!
-# #which species do we still need nesting info for?
- # nest.na <- nest %>% 
- #   filter(is.na(nesting.location)) %>% 
- #  left_join(birdlist, by = c("eng_name" = "common_name")) %>% 
- #  filter(!is.na(Order))
-#write.csv(nest.na, here("Data", "cleaned", "BC_missing.nest.location.csv"), row.names = FALSE)
-
-#remove(avtrait, bctraits1,bctraits2,bctraits3,dtrait,eco_t,nest)
-
+  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category,nest.tree.use, live_tree_nesting_use, snag_nesting_use,majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name)
 
 ###A few of these species don't have data in these databases: filling in from other sources
 #lots of missing data for Pacific Golden-Plover
@@ -379,16 +314,20 @@ bctraits.all$clutches.per.year[bctraits.all$common_name=="Short-tailed Shearwate
 #bctraits.all$nest.category[bctraits.all$common_name=="Short-tailed Shearwater"] <- "open"
 
 
-#lots of missing data for Pacific Wren - associated with old growth forests
+#lots of missing data for Pacific Wren - associated with old growth forests AND was recently seperated from winter wren. So where there isnt data for pacific, use data from winter
 bctraits.all$lifespan[bctraits.all$common_name=="Pacific Wren"] <- 4 #making it the same as the winter wren, which it was recently split from
 bctraits.all$clutches.per.year[bctraits.all$common_name=="Pacific Wren"] <- 1 #can lay a replacement clutch if first is lost
-bctraits.all$majority.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "?"
+#bctraits.all$majority.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "?"
 bctraits.all$nest.type[bctraits.all$common_name=="Pacific Wren"] <- "cavity"
 bctraits.all$nest.category[bctraits.all$common_name=="Pacific Wren"] <- "cavity"
-bctraits.all$Diet.5Cat[bctraits.all$common_name=="Pacific Wren"] <- "Invertebrate"
-
-
-
+#bctraits.all$Diet.5Cat[bctraits.all$common_name=="Pacific Wren"] <- "Invertebrate"
+bctraits.all$nest.tree.use[bctraits.all$common_name=="Pacific Wren"] <- .5
+bctraits.all$live_tree_nesting_use[bctraits.all$common_name=="Pacific Wren"] <- .2
+bctraits.all$snag_nesting_use[bctraits.all$common_name=="Pacific Wren"] <- .3
+bctraits.all$most.common.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "snag"
+bctraits.all$second.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "ground"
+bctraits.all$most.common.foraging.location[bctraits.all$common_name=="Pacific Wren"] <- "ground"
+bctraits.all$second.foraging.location[bctraits.all$common_name=="Pacific Wren"] <- "understory"
 ```
 
 ```{r}
@@ -399,7 +338,9 @@ birdbase <- birdbase %>%
   clean_names()
 birdbase <- birdbase %>% 
   rename(iucn.2024 = x2024_iucn_red_list_category, forest.use = 33, habitat.breadth = hb, diet.breadth =db, Eco.Spec.Index = esi, latin = 3, former.latin = 5, common.name = 2) %>% 
-  select(1:7, iucn.2024, rr, average_mass, elevational_range, forest.use, primary_habitat, habitat.breadth, primary_diet,diet.breadth, Eco.Spec.Index)
+  select(1:7, iucn.2024, rr, average_mass, elevational_range, forest.use, primary_habitat, habitat.breadth, primary_diet,diet.breadth, Eco.Spec.Index) 
+birdbase$forest.use[is.na(birdbase$forest.use)] <- 0 
+
 ##ESI: Ecological Specialization Index: log10 (100/[dietary breadth x habitat breadth]), with a maximum of 2 for the most specialized species that only feed on one major food group and live in one major type of habitat (e.g., forest frugivore; Sekercioglu, 2011)
 #just get BC birds
 birdbase.bc <- left_join(birdlist, birdbase, by = c("sci_name" = "latin"))
@@ -429,92 +370,267 @@ birdbase.bc<- birdbase.bc %>%
 
 bctraits.all <- left_join(bctraits.all, birdbase.bc)
 
+bctraits.all <- bctraits.all %>% 
+ # rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific ) %>% 
+  #select(AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name) #uncheck this to include these other names/database IDs
+  select(Order, Family, sci_name, common_name, status, iucn.2024, Primary.Lifestyle, primary_habitat, Habitat.Density, forest.use, habitat.breadth, primary_diet, diet.breadth, Eco.Spec.Index,Trophic.Level, Trophic.Niche,  Migration, Range.Size, elevational_range, lifespan, ReproAge, average_mass,Kipps.Distance, Hand.Wing.Index, clutches.per.year, nest.tree.use, live_tree_nesting_use, snag_nesting_use, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.type, nest.category, majority.foraging.location, most.common.foraging.location, second.foraging.location)
+  
+bctraits.all <- bctraits.all %>% 
+  janitor::clean_names()
+
 write.csv(bctraits.all, here("Data", "cleaned", "BC_bird_traits.csv"), row.names = FALSE)
 
 ```
 
+Read me:
+
+"order" - [BC bird list]
+"family" - [BC bird list]
+"sci_name" - [BC bird list]
+"common_name" - [BC bird list]
+"status" - status in BC, including rare/accidental [BC bird list]
+
+"iucn_2024" - 2024 IUCN status [Birdbase]
+    EX	Extinct
+    CR	Critically Endangered
+    EN	Endangered
+    VU	Vulnerable
+    NT	Near-threatened
+    LC	Least Concern
+    DD	Data Deficient
+    
+"primary_lifestyle" - [avonet]
+    Aerial = species spends much of the time in flight, and hunts or forages predominantly on the wing; 
+    Terrestrial = species spends majority of its time on the ground, where it obtains food while either walking or hopping (note this includes species that also wade in water with their body raised above the water); 
+    Insessorial = species spends much of the time perching above the ground, either in branches of trees and other vegetation (i.e. arboreal), or on other raised substrates including rocks, buildings, posts, and wires; 
+    Aquatic = species spends much of the time sitting on water, and obtains  food while afloat or when diving under the water's surface; Generalist = species has no primary lifestyle because it spends time in different lifestyle classes"
+
+"primary_habitat" - The main habitat type utilized by a species [birdbase]
+    Forest, secondary forest, swamp forest, tree-fall gaps, taiga, igapo, varzea
+    Shrubland, scrub, secondary growth (with few trees), cerrado, campo, karoo, thickets, roadside growth, heaths, copses, hedgerow, vine tangle, caatinga, chaco
+    Savanna, arid plains, wooded grassland, pampas, campos,
+    Grasslands, high altitude flats, puna, altiplano, tundra, tussock, pastures, steppe, paramo, moorland, plateaus, open vegetation
+    Plains, dry & open areas, semi-desert, steppe, tundra, arid and semi-arid grassland
+    Rocky areas, cliffs, outcrop, inselberg, koppi, escarpment
+    Desert, sand dune (not coastal)
+    Artificial, agricultural, farms, plantations, suburban, quarry, mine, excavation, dams and man-made lakes
+    Sea coast, mangrove, estuary, bays, shores, fjords (only sea coast), coastal dune
+    Riparian, riverine, gallery forest, stream, running water, wooded ravines
+    Wetlands, lakes, salt lakes, marsh, reedbed
+    Open sea, pelagic
+    Woodland: Acacia woodland, tropical deciduous/dry forest, savanna woodland, palm groves, miombo woodland, thorn forest, Polylepis woodland, pine-oak woodland
+
+    
+"habitat_density" - [avonet]
+    1 = Dense habitats. Species primarily lives in the lower or middle storey of forest, or in dense thickets, dense shrubland etc.
+    2 = Semi-open habitats. Species primarily lives in open shrubland, scattered bushes, parkland, low dry or deciduous forest, thorn forest. 
+    3 = Open habitats. Species primarily lives in desert, grassland, open water, low shrubs, rocky habitats, seashores, cities. Also applies to species living mainly on top of forest canopy (i.e. mostly in the open)
+    
+"forest_use" - extent to which forest is prefered as a habitat. Ranges from 1-6, where 1 = forest is most prefered, 6 = least prefered. NA indicates forest not used at all [birdbase]
+
+"habitat_breadth" - the number of major habitats used. Lower = more habitat specialized, higher = broader habitat use [birdbase]
+
+"primary_diet" - Majority of diet. Else, if none of the weighted categories area majority, used "Carnivore" if the species primarily eat a variety of animal matter, or ''Herbivore' if it eats a variety of plant matter. If a combination of animal and plant, assigned 'Omnivore.' [birdbase]
+
+"diet_breadth" - Diet breadth, the number of major food types consumed [birdbase]. Lower = more diet  specialized, higher = broader diet
+
+"eco_spec_index" - Ecological Specialization Index: log10 (100/[dietary breadth x habitat breadth]), with a maximum of 2 for the most specialized species that only feed on one major food group and live in one major type of habitat (e.g., forest frugivore; Sekercioglu, 2011) [birdbase]
+
+"trophic_level" - [avonet]
+    Herbivore = species obtaining at least 70% of food resources from plants; 
+    Carnivore = species obtaining at least 70% of food resources by consuming live invertebrate or vertebrate animals; 
+    Scavenger = species obtaining at least 70% of food resources from carrion or refuse; 
+    Omnivore = species obtaining resources from multiple trophic level in roughly equal proportion
+
+"trophic_niche" - [avonet]
+    "Frugivore = species obtaining at least 60% of food resources from fruit; 
+    Granivore = species obtaining at least 60% of food resources from seeds or nuts; 
+    Nectarivore =  species obtaining at least 60% of food resources from nectar; 
+    Herbivore = species obtaining at least 60% of food resources from other plant materials in non-aquatic systems, including leaves, buds, whole flowers etc.; 
+    Herbivore aquatic = species obtaining at least 60% of food resources from plant materials in aquatic systems, including algae and aquatic plant leaves; 
+    Invertivore = species obtaining at least 60% of food resources from invertebrates in terrestrial systems, including insects, worms, arachnids, etc.; 
+    Vertivore = species obtaining at least 60% of food resources from vertebrate animals in terrestrial systems, including mammals, birds, reptiles etc.; 
+    Aquatic Predator = species obtaining at least 60% of food resources from vertebrate and invertebrate animals in aquatic systems, including fish, crustacea, molluscs, etc; 
+    Scavenger = species obtaining at least 60% of food resources from carrion, offal or refuse; Omnivore = Species using multiple niches, within or across trophic levels, in relatively equal proportions "
 
 
-```{r}
+"migration" - [avonet]
+    1 = Sedentary. 
+    2 = Partially migratory, i.e. minority of population migrates long distances, or most of population undergoes short-distance migration, nomadic movements, distinct altitudinal migration, etc.
+    3 = Migratory, i.e. majority of population undertakes long-distance migration"
+    
+"range_size" - ""The total area of the mapped range of the species (not the Extent of Occurrence [EOO]). We used maps shared by BirdLife International and restricted our analysis to areas of the range coded as Presence = 1 (Extant only),     Origin = 1 & 2 (Native & Reintroduced), Seasonal = 1 & 2 (Resident and breeding). We calculated the total combined mapped area of these parts of the range using the areaPolygon function from the R package geosphere (Hijmans et al.,        2011). This function accurately calculates the area in the World Geodetic System (WGS84) projection using spherical distances" [avonet]
 
+"elevational_range" - The difference between a species' normal lowest and highest elevational extents [birdbase]
 
+"lifespan" - maximum observed lifespan, years [dubovyk]
 
-#	Pink-footed Shearwater
+"repro_age" - mean age of first breeding [dubovyk]
 
-#we figured out these problems
-# ### NESTING LOCATION ONLY
-# #these guys dopnt have a nesting location from dtraits because there wasnt a nesting % >50%
-# #wood duck nesting location: needs mature large trees with preformed cavities
-# bctraits.all$nesting.location[bctraits.all$common_name=="Wood Duck"] <- "tree"
-# # 
-# # #Bufflehead nesting location: use woodpacker cavities
-# # bctraits.all$nesting.location[bctraits.all$common_name=="Bufflehead"] <- "tree"
-# 
-# #Common Goldeneye nesting location: nests in TREE and SNAG, majority in snag
-# bctraits.all$nesting.location[bctraits.all$common_name=="Common Goldeneye"] <- "snag"
-# 
-# #Barrow's Goldeneye nesting location: nests in TREE and SNAG
-# bctraits.all$nesting.location[bctraits.all$common_name=="Barrow's Goldeneye"] <- "snag"
-# 
-# #Common Merganser nesting location: nests in TREE and SNAG, 50% snag
-# bctraits.all$nesting.location[bctraits.all$common_name=="Common Merganser"] <- "snag"
-# 
-# #Black-chinned Hummingbird - 50% shrub and tree, BoW says mostly tree and >2 m high. could check this
-# bctraits.all$nesting.location[bctraits.all$common_name=="Black-chinned Hummingbird"] <- "tree"
-# 
-# #Double-crested Cormorant
-# bctraits.all$nesting.location[bctraits.all$common_name=="Double-crested Cormorant"] <- "?" #only 30% ground nesting
-# 
-# #Brown Pelican
-# bctraits.all$nesting.location[bctraits.all$common_name=="Brown Pelican"] <- "?" # cliff or tree, BoW says cliff, 50% ground in dtrait
-# 
-# # Western Cattle-Egret
-# bctraits.all$nesting.location[bctraits.all$common_name=="Western Cattle-Egret"] <- "?" # 50% tree
-# 
-# #	American Barn Owl
-# bctraits.all$nesting.location[bctraits.all$common_name=="American Barn Owl"] <- "?" # cliff, building , snag
-# 
-# #	Western Screech-Owl
-# bctraits.all$nesting.location[bctraits.all$common_name=="Western Screech-Owl"] <- "?" # tree, snag, cactus
-# 
-# #	Great Horned Owl
-# bctraits.all$nesting.location[bctraits.all$common_name=="Great Horned Owl"] <- "?" # mixed
-# 
-# #Northern Hawk Owl
-# bctraits.all$nesting.location[bctraits.all$common_name=="Northern Hawk Owl"] <- "?" # mixed
-# 
-# #	Rough-legged Hawk
-# bctraits.all$nesting.location[bctraits.all$common_name=="Rough-legged Hawk"] <- "?" # mixed
-# 
-# #	Northern Saw-whet Owl
-# bctraits.all$nesting.location[bctraits.all$common_name=="Northern Saw-whet Owl"] <- "?" # mixed
-# 
-# #	Boreal Owl
-# bctraits.all$nesting.location[bctraits.all$common_name=="Boreal Owl"] <- "?" # mixed
-# 
-# #	Eastern Phoebe
-# bctraits.all$nesting.location[bctraits.all$common_name=="Eastern Phoebe"] <- "?" # mixed
-# #	Say's Phoebe
-# bctraits.all$nesting.location[bctraits.all$common_name=="Say's Phoebe"] <- "?" # mixed
-# 
-# #	Tropical Kingbird
-# bctraits.all$nesting.location[bctraits.all$common_name =="Tropical Kingbird"] <- "?" # mixed
-# #	Western Kingbird
-# bctraits.all$nesting.location[bctraits.all$common_name == "Western Kingbird"] <- "?" # mixed
-# #	Eastern Kingbird
-# bctraits.all$nesting.location[bctraits.all$common_name == "Eastern Kingbird"] <- "tree" # mixed
-# 
-# #Blue-headed Vireo
-# bctraits.all$nesting.location[bctraits.all$common_name == "Blue-headed Vireo"] <- "?" # mixed
-# 
-# #	Black-billed Magpie
-# bctraits.all$nesting.location[bctraits.all$common_name == "Black-billed Magpie"] <- "?" # mixed
+"average_mass" - the average value across males, females, and unsexed individuals in the dataset [birdbase]
 
+"kipps_distance" - Length from the tip of the first secondary feather to the tip of the longest primary in mm [avonet]
 
+"hand_wing_index" - 100*DK/Lw, where DK is Kipp’s distance and Lw is wing length (i.e., Kipp’s distance corrected for wing size) [avonet]
+
+"clutches_per_year" - mean number of successful nesting  attempts a year [dubovyk]
+
+"nest_tree_use" - % of total nesting preference (ntree+nssnag)/100) %>% #to what scale do they use trees to nest? Essentially adding the % they use deciduous, coniferous, and snags, so out of 100% [dubovyk]
+
+live_tree_nesting_use - % of nesting preference for live trees out of 100% [dubovyk]
+
+snag_nesting_use - % of nesting preference for snags out of 100% [dubovyk]
+
+"majority_nesting_location" - majority (>51%) prevalence of use of nesting location. If NA, not one preferred location [eltontraits]
+    "ground"
+    NA                
+    "float"
+    "tree"
+    "snag"
+    "grass"
+    "human.structure"
+    "cliff"
+    "shrub"
+    "bank"
+    "?" 
+
+"most_common_nesting_location" - most common nesting location [eltontraits]
+    "ground"
+    NA   = no data             
+    "float"
+    "tree"
+    "snag"
+    "grass"
+    "human.structure"
+    "cliff"
+    "shrub"
+    "bank"
+    "?" 
+
+"second_nesting_location" - second most common nesting location. If NA, only uses the most common location [elton traits]
+    "float"
+    NA
+    "grass" 
+    "snag"
+    "tree"
+    "cliff"
+    "shrub"
+    "human.structure"
+    "ground"
+    "bank"
+    "cactus"
+    "tangle"   
+
+"nest_type" - specific nest type (original column to nest_categoty) [dubovyk]
+
+"nest_category" - lumped category for nest types [dubovyk]
+    "cup", "gourd", "sphere", "gourd", "saucer", "chamber", "oven", "pend" ==> _built.structure_
+    "scrape" or "no" ==> _open_
+    "platform"
+    "cavity"
+    "crevice"
+    "burrow"
+    "paras" ==> parasite
+
+"majority_foraging_location" - majority (>51%) prevalence of foraging strategy. If NA, not one preferred location [eltontraits]
+
+"most_common_foraging_location" - most common foraging strategy [eltontraits]
+
+"second_foraging_location"- second most common foraging strategy. If NA, only uses the most common strategy [eltontraits]
+
+```{r Fire Index}
+
+index <- bctraits.all %>% 
+  mutate(index_primary_lifestyle = ifelse(primary_lifestyle=="Insessorial", 1, 0),
+         index_primary_habitat = ifelse(primary_habitat == "Forest"|primary_habitat == "Woodland", -1, ifelse(primary_habitat == "Shrub"|primary_habitat == "Grassland"|primary_habitat == "Plains", 1, 0)),
+         index_habitat_density = ifelse(habitat_density == "dense", -1, ifelse(is.na(habitat_density), 0, 1)),
+         index_forest_use = ifelse(forest_use == 1, -1, 0),
+         index_eco_spec_index = ifelse(eco_spec_index >1, -1,0),
+         index_foraging_location = ifelse(most_common_foraging_location=="canopy"|most_common_foraging_location == "midhigh", -1, ifelse(most_common_foraging_location=="ground"|most_common_foraging_location == "understory", 1, 0)),
+         index_trophic_niche = ifelse(trophic_niche == "Invertivore"|trophic_niche == "Nectarivore"|trophic_niche == "Granivore"|trophic_niche=="Frugivore", 1, ifelse(trophic_niche == "Herbivore terrestrial", -1, 0)),
+         #20th percentile for range size will be considered "small"
+         index_range_size = ifelse(range_size<(quantile(range_size, probs = 0.20, na.rm =T)), -1, 0),
+         index_migration = ifelse(migration == "sedentary", -1, 0),
+         #hwi maybe not the best...would mean that vultures are least dispersing??
+         index_kipps = ifelse(kipps_distance<(quantile(kipps_distance, probs = 0.20, na.rm =T)), -1, 0),
+         index_live_tree = ifelse(live_tree_nesting_use >.90, -1, 0),
+         #only one spp does snags>90
+         index_snag_use = ifelse(snag_nesting_use>.60, 1, 0),
+         index_nesting_location = ifelse(most_common_nesting_location == "tree", -1, ifelse(most_common_nesting_location == "snag"|most_common_nesting_location == "ground"|most_common_nesting_location=="grass"|most_common_nesting_location == "shrub", 1, 0)),
+         index_nest_type = ifelse(nest_category=="cavity", 1, 0),
+index_sum = rowSums(across(starts_with("index")), na.rm = TRUE))
 
 
 ```
 
+```{r}
+
+
+# Create the figure: Lollipop Chart
+# NOTE: Replace 'species' with the actual species column name if it is different
+# We reorder the species (Y-axis) based on the index_sum (X-axis) for better visualization
+(index1 <- ggplot(index, aes(x = index_sum, 
+                  y = reorder(sci_name, index_sum), 
+                  color = index_sum)) +
+  geom_segment(aes(x = 0, xend = index_sum, y = reorder(sci_name, index_sum), yend = reorder(sci_name, index_sum)),
+               linewidth = 0.5, alpha = 0.7) +
+  geom_point(size = 2.5) +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
+                        midpoint = 0, name = "Index Score") +
+  labs(x = "Fire Vulnerability Index Score", y = "Species") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text.y = element_text(size = 8), # Smaller font for potentially many species
+    panel.grid.major.y = element_blank(), # Remove horizontal lines for clean look
+    legend.position = "bottom"
+  ))
+#Picidae
+
+(woodpeckers <- index %>% filter(family == " Picidae") %>% 
+    ggplot(aes(x = index_sum, 
+                  y = reorder(common_name, index_sum), 
+                  color = index_sum)) +
+  geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
+               linewidth = 0.5, alpha = 0.7) +
+  geom_point(size = 2.5) +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
+                        midpoint = 0, name = "Index Score") +
+  labs(title = "Picidae", x = "Fire Vulnerability Index Score", y = "Species") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text.y = element_text(size = 8), # Smaller font for potentially many species
+    panel.grid.major.y = element_blank(), # Remove horizontal lines for clean look
+    legend.position = "bottom"
+  ))
+
+#Tyrannidae
+
+(tyran <- index %>% filter(family == " Tyrannidae") %>% 
+    ggplot(aes(x = index_sum, 
+                  y = reorder(common_name, index_sum), 
+                  color = index_sum)) +
+  geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
+               linewidth = 0.5, alpha = 0.7) +
+  geom_point(size = 2.5) +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
+                        midpoint = 0, name = "Index Score") +
+  labs(title = "Tyrannidae", x = "Fire Vulnerability Index Score", y = "Species") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    axis.text.y = element_text(size = 8), # Smaller font for potentially many species
+    panel.grid.major.y = element_blank(), # Remove horizontal lines for clean look
+    legend.position = "bottom"
+  ))
+
+ggsave(here("Figures", "index.first.try.png"), plot = index1, width = 20, height =20)
+ggsave(here("Figures", "index.first.try.picidae.png"), plot = woodpeckers, width = 8, height =6)
+ggsave(here("Figures", "index.first.try.tyrannidae.png"), plot = tyran, width = 8, height =6)
+
+
+```
 
 ```{r}
 #update spp names
