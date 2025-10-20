@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-library(ncdf4)
+#library(ncdf4)
 library(tidyverse)
 library(bcmaps)
 library(terra)
@@ -67,18 +67,18 @@ t_bc_masked <- mask(t_bc, bc_proj)
 
 # Plot result to confirm
 plot(t_bc_masked, main = "Fire Season Length (RCP2.6, 1991–2020) with BC Boundary")
-
 # Add BC boundary as lines
 lines(bc_proj, col = "black", lwd = 2)
 
 project(t_bc_masked, bc) %>%
   plot()
+lines(bc_proj, col = "black", lwd = 2)
 
 ```
 
 ```{r}
-t.26 <- terra::rast("C:/Users/Jenna/OneDrive - The University Of British Columbia/Data Projects/BCBirdsandFire/Data/ClimateDataCanada/May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050_.nc") # for terra package
-#print(t.26)
+t.26 <- rast(here("Data","ClimateDataCanada","May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050_.nc")) # for terra package
+print(t.26)
 #plot(t.26)
 bc_proj <- project(bc_vect, t.26)
 t.26bc <- mask(crop(t.26, bc_proj), bc_proj)

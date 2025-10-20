@@ -1,0 +1,166 @@
+---
+title: "distributions"
+author: "JL"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(tiff)
+library(terra)
+library(here)
+library(bcmaps)
+# install.packages("terra")
+library(tidyterra)
+
+```
+
+```{r OSF}
+
+osf <- rast(here("Data", "distributionExamples", "PacificBirds-BC_Olive-sided-Flycatcher_mean_seasonal_abundance_2023_breeding.tif"))
+
+plot(osf, main = "Olive-sided Flycatcher Mean Seasonal Abundance")
+
+#add bc boundary
+bc <- bcmaps::bc_bound() %>%
+  vect()
+# 
+bc_proj<- project(bc, osf)
+osf.bc <- mask(crop(osf, bc_proj), bc_proj)
+osf_final <- project(osf.bc, crs(bc))
+# 
+
+plot(osf_final,
+     main = "Olive-sided Flycatcher",  	col = viridis::viridis(100, option = "D"))
+lines(bc,
+      col = "black",
+      lwd = 2)
+# terra::writeRaster(
+#   x = osf_final,
+#   filename = here("Maps", "osf_abundance_BC_clip.tif"), # Set your desired output path
+#   filetype = "GTiff",     # Specify GeoTIFF format
+#   overwrite = TRUE         # Allows R to overwrite the file if it already exists
+# )
+```
+
+```{r FWI}
+t.26 <- rast(here("Data","ClimateDataCanada","May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050_.nc")) # for terra package
+print(t.26)
+#plot(t.26)
+bc_proj <- project(bc, t.26)
+t.26bc <- mask(crop(t.26, bc_proj), bc_proj)
+t.26bc <- project(t.26bc, crs(bc)) #turns it back to the BC specific projection
+plot(t.26bc, main = "BC May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050")
+lines(bc, col = "black", lwd = 2)
+
+climate_layer <- t.26bc[[1]] 
+climate_aligned <- resample(climate_layer, osf_final, method = "near") 
+risk_map <- osf_final * climate_aligned
+```
+
+```{r plot version}
+png(here("Maps", "try1.png"), width = 3000, height = 1000, pointsize = 24)
+par(mfrow = c(1, 3)) 
+# Plot Map 2: Climate Data
+plot(climate_aligned, 
+     main = "FWI RCP2.6 2021-2050",
+     col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
+)
+lines(bc, col = "black", lwd = 1.5)
+# Plot Map 1: Bird Abundance (using your preferred colors)
+plot(osf_final, 
+     main = "Olive-sided Flycatcher ",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot the resulting composite map
+plot(risk_map, 
+     main = "FWI * Abundance",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+
+```
+
+```{r}
+climate_layer <- t.26bc[[1]] 
+
+# 2. Rename the layers to be clear in the facet titles/legends
+names(osf_final) <- "Abundance"
+names(climate_layer) <- "FWI_2050" 
+
+# 3. Combine the two aligned rasters into a single SpatRaster stack
+climate_aligned <- resample(climate_layer, osf_final, method = "near") 
+
+combined_raster_stack <- c(osf_final, climate_aligned)
+ggplot() +
+  geom_spatraster(data = climate_layer) +
+  scale_fill_viridis_c(
+    na.value = "transparent",
+    option = "A", # Magma/Heat color scheme
+    name = "FWI Value",
+    guide = guide_colorbar(direction = "horizontal", title.position = "top") # Set up first legend
+  ) +
+
+  # C. Top Layer: BC Boundary
+  geom_sf(data = bc, 
+          fill = NA, 
+          color = "black", # Use a contrasting color for the boundary
+          linewidth = 0.75) +
+  
+  # D. Theming
+  coord_sf(expand = FALSE) + 
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.box = "horizontal")
+```
+
+```{r}
+ci <- rast(here("Data", "distributionExamples", "CIJV_all-bird-groups_all-species-priority_all-species-conservation_richness_annual-max.tif"))
+plot(ci)
+#add bc boundary
+bc <- bcmaps::bc_bound() %>%
+  vect()
+# 
+bc_proj<- project(bc, ci)
+ci.bc <- mask(crop(ci, bc_proj), bc_proj)
+ci_final <- project(ci.bc, crs(bc))
+climate_layer <- t.26bc[[1]] 
+climate_aligned <- resample(climate_layer, ci_final, method = "near") 
+risk_map <- ci_final * climate_aligned
+# 
+png(here("Maps", "try.cijv.png"), width = 3000, height = 1000, pointsize = 24)
+
+plot(ci_final,
+     main = "Priority CIJV",  	col = viridis::viridis(100, option = "D"))
+lines(bc,
+      col = "black",
+      lwd = 2)
+
+par(mfrow = c(1, 3)) 
+# Plot Map 2: Climate Data
+plot(climate_aligned, 
+     main = "FWI RCP2.6 2021-2050",
+     col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
+)
+lines(bc, col = "black", lwd = 1.5)
+# Plot Map 1: Bird Abundance (using your preferred colors)
+plot(ci_final, 
+     main = "CIJV Priority",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot the resulting composite map
+plot(risk_map, 
+     main = "FWI * Abundance",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+
+```
+
