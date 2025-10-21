@@ -39,7 +39,7 @@ dtrait <- dtrait %>%
          nest.tree.use = (ntree+nssnag)/100, #to what scale do they use trees to nest? Essentially adding the % they use deciduous, coniferous, and snags
          live_tree_nesting_use = ntree/100,
          snag_nesting_use = nssnag/100) %>% 
-  select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nssnag, nscact, nstang, nsfloat, ntree, attem, eng_name,nest.tree.use, live_tree_nesting_use, snag_nesting_use) %>% 
+  select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nssnag, nscact, nstang, nsfloat, ntree, attem, eng_name,nest.tree.use, live_tree_nesting_use, snag_nesting_use, fmhawk, fmfogl, fmbagl, fstimb, fcinvert) %>% 
   rename(Elton_ID = et_id,lifespan = mlife, ReproAge = matage,  nest.type = nest, clutches.per.year = attem,
          bank = nsbank, ground = nsgroun, grass = nsgrass, cliff = nsclif, human.structure = nsbuild, shrub = nsshru, snag = nssnag, float = nsfloat, cactus = nscact, tangle = nstang, tree = ntree)
 
@@ -288,7 +288,7 @@ bctraits.all <- left_join(bctraits3, bctrait)
 #cleanign it up a bit
 bctraits.all <- bctraits.all %>% 
   rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific, mass_g= Mass ) %>% 
-  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category,nest.tree.use, live_tree_nesting_use, snag_nesting_use,majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name)
+  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category,nest.tree.use, live_tree_nesting_use, snag_nesting_use,majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name,  fmhawk, fmfogl, fmbagl, fstimb, fcinvert)
 
 ###A few of these species don't have data in these databases: filling in from other sources
 #lots of missing data for Pacific Golden-Plover
@@ -328,6 +328,13 @@ bctraits.all$most.common.nesting.location[bctraits.all$common_name=="Pacific Wre
 bctraits.all$second.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "ground"
 bctraits.all$most.common.foraging.location[bctraits.all$common_name=="Pacific Wren"] <- "ground"
 bctraits.all$second.foraging.location[bctraits.all$common_name=="Pacific Wren"] <- "understory"
+bctraits.all$ReproAge[bctraits.all$common_name=="Pacific Wren"] <- 1 #these are from winter wren
+bctraits.all$fmhawk[bctraits.all$common_name=="Pacific Wren"] <- 0
+bctraits.all$fmfogl[bctraits.all$common_name=="Pacific Wren"] <- 40
+bctraits.all$fmbagl[bctraits.all$common_name=="Pacific Wren"] <- 0
+bctraits.all$fstimb[bctraits.all$common_name=="Pacific Wren"] <- 10
+bctraits.all$fcinvert[bctraits.all$common_name=="Pacific Wren"] <- 60
+
 ```
 
 ```{r}
@@ -373,7 +380,7 @@ bctraits.all <- left_join(bctraits.all, birdbase.bc)
 bctraits.all <- bctraits.all %>% 
  # rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific ) %>% 
   #select(AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name) #uncheck this to include these other names/database IDs
-  select(Order, Family, sci_name, common_name, status, iucn.2024, Primary.Lifestyle, primary_habitat, Habitat.Density, forest.use, habitat.breadth, primary_diet, diet.breadth, Eco.Spec.Index,Trophic.Level, Trophic.Niche,  Migration, Range.Size, elevational_range, lifespan, ReproAge, average_mass,Kipps.Distance, Hand.Wing.Index, clutches.per.year, nest.tree.use, live_tree_nesting_use, snag_nesting_use, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.type, nest.category, majority.foraging.location, most.common.foraging.location, second.foraging.location)
+  select(Order, Family, sci_name, common_name, status, iucn.2024, Primary.Lifestyle, primary_habitat, Habitat.Density, forest.use, habitat.breadth,  fmhawk, fmfogl, fmbagl, fstimb, fcinvert, primary_diet, diet.breadth, Eco.Spec.Index,Trophic.Level, Trophic.Niche,  Migration, Range.Size, elevational_range, lifespan, ReproAge, average_mass,Kipps.Distance, Hand.Wing.Index, clutches.per.year, nest.tree.use, live_tree_nesting_use, snag_nesting_use, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.type, nest.category, majority.foraging.location, most.common.foraging.location, second.foraging.location)
   
 bctraits.all <- bctraits.all %>% 
   janitor::clean_names()
@@ -429,6 +436,9 @@ Read me:
 "forest_use" - extent to which forest is prefered as a habitat. Ranges from 1-6, where 1 = forest is most prefered, 6 = least prefered. NA indicates forest not used at all [birdbase]
 
 "habitat_breadth" - the number of major habitats used. Lower = more habitat specialized, higher = broader habitat use [birdbase]
+
+ fmhawk: foraging method hawking, fmfogl: foraging method foliage gleaning, fmbagl: foraging method bark gleaning, fstimb: foraging substrate: timber, fcinvert: foraging category: invertebrate [%'s]
+
 
 "primary_diet" - Majority of diet. Else, if none of the weighted categories area majority, used "Carnivore" if the species primarily eat a variety of animal matter, or ''Herbivore' if it eats a variety of plant matter. If a combination of animal and plant, assigned 'Omnivore.' [birdbase]
 
