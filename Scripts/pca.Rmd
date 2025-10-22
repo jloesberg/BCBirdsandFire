@@ -193,3 +193,30 @@ ggsave(here("Figures", "PCA", "pca by response spp names.png"), plot = pos.neg.s
 
 ```
 
+
+```{r}
+# Extract loadings
+loadings <- as.data.frame(pca_result$rotation)
+
+# Add trait names as a column
+loadings$trait <- rownames(loadings)
+
+loadings_long <- loadings %>%
+  pivot_longer(cols = starts_with("PC"), 
+               names_to = "PC", 
+               values_to = "loading") %>%
+  filter(PC %in% paste0("PC", 1:5))   # keep only PCs 1-5
+
+(loadings.bar <- ggplot(loadings_long, aes(x = trait, y = loading, fill = PC)) +
+  geom_col(position = "dodge") +   # side-by-side bars per PC
+  coord_flip() +                   # horizontal bars
+  labs(x = "Trait", y = "Loading", 
+       title = "PCA Loadings per Trait") +
+  theme_bw(base_size = 14) +
+  scale_fill_brewer(palette = "Set2")+facet_wrap(~PC)+
+    theme(legend.position = "none"))
+
+ggsave(here("Figures", "PCA", "loadings bar plot.png"), plot = loadings.bar, width = 15, height =15, dpi = 300)
+
+```
+
