@@ -15,14 +15,21 @@ traits <- read.csv(here("Data", "cleaned", "BC_bird_traits.csv"))
 traits$habitat_density[traits$habitat_density == "dense"] <- 1
 traits$habitat_density[traits$habitat_density == "semiopen"] <- 2
 traits$habitat_density[traits$habitat_density == "open"] <- 3
+traits <- traits %>% 
+   mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
+          ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
+          shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0)) %>%
+    mutate(habitat_density = as.numeric(habitat_density)) 
+
+
 ##
-positive <- c("American Wigeon", "Green-winged Teal", "Mallard", "Northern Pintail", "Northern Shoveler", "Bufflehead", "Canvasback", "Barrow's Goldeneye", "Common Goldeneye", "Red-breasted Merganser", "Common Merganser","Ring-necked Duck", "Greater Scaup", "Lesser Scaup", "Surf Scoter", "White-winged Scoter", "Alder Flycatcher", "Canada Goose", "Swamp Sparrow", "Red-winged Blackbird", "Common Yellowthroat", "Western Bluebird", "Steller's Jay", "Hairy Woodpecker", "American Robin", "Northern Flicker", "Olive-sided Flycatcher", "Mountain Bluebird", "American Three-toed Woodpecker", "Black-backed Woodpecker", "Western Wood-Pewee", "Northern House Wren", "Lazuli Bunting", "Cassin's Finch", "Pine Siskin","Black-backed Woodpecker", "Lewis's Woodpecker", "Dark-eyed Junco", "Townsend's Solitaire", "Acorn Woodpecker", "Tree Swallow", "American Kestrel", "Northern Hawk Owl", "White-throated Sparrow", "Chipping Sparrow", "White-crowned Sparrow", "Brown Creeper", "Tennessee Warbler", "Chestnut-sided Warbler", "Brewer's Sparrow", "Rock Wren", "Hermit Thrush", "White-breasted Nuthatch", "American Crow", "American Goldfinch", "Baltimore Oriole", "Black-billed Magpie", "Brown-headed Cowbird", "Clay-colored Sparrow", "Eastern Kingbird", "Nelson's Sparrow", "Savannah Sparrow", "Song Sparrow", "Yellow-bellied Sapsucker", "Canada Jay", "Lincoln's Sparrow", "MacGillivray's Warbler", "Spotted Towhee", "Turkey Vulture", "Brewer's Blackbird", "Say's Phoebe", "Warbling Vireo", "Veery", "Song Sparrow", "Red-breasted Nuthatch", "Mountain Chickadee", "Redpoll", "Western Screech-Owl", "Northern Pygmy-Owl", "Mountain Quail", "Black-capped Chickadee", "Downy Woodpecker", "Pacific Wren", "Connecticut Warbler", "Yellow-rumped Warbler", "Cedar Waxwing", "Eastern Bluebird")
+positive <- c("American Wigeon", "Green-winged Teal", "Mallard", "Northern Pintail", "Northern Shoveler", "Bufflehead", "Canvasback", "Barrow's Goldeneye", "Common Goldeneye", "Red-breasted Merganser", "Common Merganser","Ring-necked Duck", "Greater Scaup", "Lesser Scaup", "Surf Scoter", "White-winged Scoter", "Alder Flycatcher", "Canada Goose", "Swamp Sparrow", "Red-winged Blackbird", "Common Yellowthroat", "Western Bluebird", "Steller's Jay", "Hairy Woodpecker", "American Robin", "Northern Flicker", "Olive-sided Flycatcher", "Mountain Bluebird", "American Three-toed Woodpecker", "Black-backed Woodpecker", "Western Wood-Pewee", "Northern House Wren", "Lazuli Bunting", "Cassin's Finch", "Pine Siskin","Black-backed Woodpecker", "Lewis's Woodpecker", "Dark-eyed Junco", "Townsend's Solitaire", "Acorn Woodpecker", "Tree Swallow", "American Kestrel", "Northern Hawk Owl", "White-throated Sparrow", "Chipping Sparrow", "White-crowned Sparrow", "Brown Creeper", "Tennessee Warbler", "Chestnut-sided Warbler", "Brewer's Sparrow", "Rock Wren", "Hermit Thrush", "White-breasted Nuthatch", "American Crow", "American Goldfinch", "Baltimore Oriole", "Black-billed Magpie", "Brown-headed Cowbird", "Clay-colored Sparrow", "Eastern Kingbird", "Nelson's Sparrow", "Savannah Sparrow", "Song Sparrow", "Yellow-bellied Sapsucker", "Canada Jay", "Lincoln's Sparrow", "MacGillivray's Warbler", "Spotted Towhee", "Turkey Vulture", "Brewer's Blackbird", "Say's Phoebe", "Warbling Vireo", "Veery", "Song Sparrow", "Red-breasted Nuthatch", "Mountain Chickadee", "Redpoll", "Western Screech-Owl", "Northern Pygmy-Owl", "Mountain Quail", "Black-capped Chickadee", "Downy Woodpecker", "Pacific Wren", "Connecticut Warbler", "Yellow-rumped Warbler", "Cedar Waxwing", "Eastern Bluebird", "Broad-tailed Hummingbird", "Red-headed Woodpecker", "Eastern Kingbird", "Evening Grosbeak", "Prairie Warbler", "Palm Warbler", "Field Sparrow", "Black-headed Grosbeak", "Black-throated Gray Warbler", "Western Tanager",  "Dusky Flycatcher", "Hermit Warbler")
 missing_names <- positive[!(positive %in% traits$common_name)] #do all these names appear in the BC list?
 
-negative <- c("American Black Duck", "Common Goldeneye", "Western Wood-Pewee", "Pygmy Nuthatch", "Cassin's Vireo", "Dusky Flycatcher", "Ruby-crowned Kinglet", "Golden-crowned Kinglet", "Swainson's Thrush", "Yellow-rumped Warbler", "Townsend's Warbler", "Swainson's Thrush", "Hermit Warbler", "Red-breasted Nuthatch", "Brown Creeper", "Chestnut-backed Chickadee", "Black-throated Gray Warbler", "Winter Wren", "Hutton's Vireo", "Western Tanager", "Steller's Jay", "Wilson's Warbler", "Common Raven", "Sooty Grouse", "Northern Waterthrush", "Blue-headed Vireo", "Red-eyed Vireo", "Ovenbird", "MacGillivray's Warbler", "Hermit Thrush", "Nashville Warbler", "Hermit Warbler", "Warbling Vireo", "Mountain Chickadee", "Dark-eyed Junco", "Wilson's Warbler", "Philadelphia Vireo", "Canada Jay", "Pine Grosbeak", "Red Crossbill", "Yellow Warbler", "Bay-breasted Warbler", "Cape May Warbler", "Purple Finch",  "Boreal Chickadee", "Pine Siskin", "White-winged Crossbill", "Alder Flycatcher", "Common Yellowthroat", "Orange-crowned Warbler", "Ruffed Grouse", "Swamp Sparrow", "Yellow-rumped Warbler", "Pinyon Jay", "Greater Sage-Grouse", "Red-naped Sapsucker", "Barred Owl", "Northern Saw-whet Owl", "Great Horned Owl", "Vaux's Swift", "Red-breasted Sapsucker", "Pileated Woodpecker", "Red-breasted Nuthatch", "Western Tanager", "Red Crossbill")
+negative <- c("American Black Duck", "Common Goldeneye", "Western Wood-Pewee", "Pygmy Nuthatch", "Cassin's Vireo", "Dusky Flycatcher", "Ruby-crowned Kinglet", "Golden-crowned Kinglet", "Swainson's Thrush", "Yellow-rumped Warbler", "Townsend's Warbler", "Swainson's Thrush", "Hermit Warbler", "Red-breasted Nuthatch", "Brown Creeper", "Chestnut-backed Chickadee", "Black-throated Gray Warbler", "Winter Wren", "Hutton's Vireo", "Western Tanager", "Steller's Jay", "Wilson's Warbler", "Common Raven", "Sooty Grouse", "Northern Waterthrush", "Blue-headed Vireo", "Red-eyed Vireo", "Ovenbird", "MacGillivray's Warbler", "Hermit Thrush", "Nashville Warbler", "Hermit Warbler", "Warbling Vireo", "Mountain Chickadee", "Dark-eyed Junco", "Wilson's Warbler", "Philadelphia Vireo", "Canada Jay", "Pine Grosbeak", "Red Crossbill", "Yellow Warbler", "Bay-breasted Warbler", "Cape May Warbler", "Purple Finch",  "Boreal Chickadee", "Pine Siskin", "White-winged Crossbill", "Alder Flycatcher", "Common Yellowthroat", "Orange-crowned Warbler", "Ruffed Grouse", "Swamp Sparrow", "Yellow-rumped Warbler", "Pinyon Jay", "Greater Sage-Grouse", "Red-naped Sapsucker", "Barred Owl", "Northern Saw-whet Owl", "Great Horned Owl", "Vaux's Swift", "Red-breasted Sapsucker", "Pileated Woodpecker", "Red-breasted Nuthatch", "Western Tanager", "Red Crossbill", "Acorn Woodpecker",  "Williamson's Sapsucker", "Acadian Flycatcher",  "Ash-throated Flycatcher", "Great Crested Flycatcher", "Blue-gray Gnatcatcher", "Wood Thrush", "Black-and-white Warbler", "Hooded Warbler", "Northern Cardinal", "Black-headed Grosbeak", "Pacific Wren")
 missing_names <- negative[!(negative %in% traits$common_name)] #do all these names appear in the BC list?
 
-null <- c("Mallard", "Ring-necked Duck", "Common Loon", "Mourning Dove", "Common Nighthawk", "Cassin's Finch","Pine Siskin", "Chipping Sparrow", "Dark-eyed Junco", "American Robin", "Townsend's Solitaire", "Hammond's Flycatcher", "Clark's Nutcracker", "Red-naped Sapsucker", "Western Tanager", "White-breasted Nuthatch", "Evening Grosbeak", "Pygmy Nuthatch", "Yellow-rumped Warbler", "Williamson's Sapsucker", "Red Crossbill", "Ruby-crowned Kinglet", "Pacific Wren", "Brewer's Blackbird", "Mountain Chickadee", "Nashville Warbler", "Swainson's Thrush",  "House Finch", "Red Crossbill", "American Goldfinch", "American Kestrel")
+null <- c("Mallard", "Ring-necked Duck", "Common Loon", "Mourning Dove", "Common Nighthawk", "Cassin's Finch","Pine Siskin", "Chipping Sparrow", "Dark-eyed Junco", "American Robin", "Townsend's Solitaire", "Hammond's Flycatcher", "Clark's Nutcracker", "Red-naped Sapsucker", "Western Tanager", "White-breasted Nuthatch", "Evening Grosbeak", "Pygmy Nuthatch", "Yellow-rumped Warbler", "Williamson's Sapsucker", "Red Crossbill", "Ruby-crowned Kinglet", "Pacific Wren", "Brewer's Blackbird", "Mountain Chickadee", "Nashville Warbler", "Swainson's Thrush",  "House Finch", "Red Crossbill", "American Goldfinch", "American Kestrel", "Red-breasted Sapsucker", "Hairy Woodpecker", "Olive-sided Flycatcher", "Cassin's Vireo", "Wilson's Warbler")
 missing_names <- null[!(null %in% traits$common_name)] #do all these names appear in the BC list?
 
 traits$positive <- ifelse(traits$common_name %in% positive, 1, NA)
@@ -30,8 +37,7 @@ traits$negative <- ifelse(traits$common_name %in% negative, 1, NA)
 traits$null <- ifelse(traits$common_name %in% null, 1, NA)
 
 
-traits <- traits %>%
-    mutate(habitat_density = as.numeric(habitat_density)) %>% 
+traits2 <- traits %>%
     filter(!if_all(c(positive, negative, null), is.na)) %>% 
     mutate(across(c(positive, negative, null), ~replace_na(.x, 0)))
 
@@ -40,7 +46,7 @@ traits <- traits %>%
 ```
 
 ```{r}
-trait.pca <- traits %>% select(common_name, where(is.numeric), -elevational_range,-positive, -negative, -null, -nest_tree_use)
+trait.pca <- traits2 %>% select(common_name, where(is.numeric), -elevational_range,-positive, -negative, -null, -nest_tree_use, -kipps_distance, -repro_age, -clutches_per_year)
 
 pca_result <- prcomp(trait.pca[,-1], scale. = TRUE) #variables are already scaled
 ##
@@ -113,12 +119,35 @@ loadings <- loadings %>%
             aes(x = PC1_arrow * 1.1, y = PC2_arrow * 1.1, label = trait),
             color = "black", size = 3, hjust = 0.5, vjust = 0.5) +
   scale_color_manual(values = c(
-    "Positive" = "blue",
-    "Negative" = "red",
+    "Positive" = "#005AB5",
+    "Negative" = "#DC3220",
     "Neutral" = "grey",
-    "Positive & Negative" = "#e7298a",
+    "Positive & Negative" = "#44AA99",
     "Positive & Neutral" = "#66a61e",
     "Negative & Neutral" = "#e6ab02"
+  )))
+(f1.1 <- ggplot(pca_df, aes(PC1, PC2, color = fire_response)) +
+  geom_point(size = 2, alpha = 0.9) +
+  theme_classic() +
+  labs(
+    title = "PCA of Bird Traits Colored by Fire Response",
+    x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
+    y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")
+  ) +
+   geom_segment(data = loadings,
+               aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
+               arrow = arrow(length = unit(0.3, "cm")),
+               color = "black") +
+  geom_text(data = loadings,
+            aes(x = PC1_arrow * 1.1, y = PC2_arrow * 1.1, label = trait),
+            color = "black", size = 3, hjust = 0.5, vjust = 0.5) +
+  scale_color_manual(values = c(
+    "Positive" = "#005AB5",
+    "Negative" = "#DC3220",
+    "Neutral" = "grey",
+    "Positive & Negative" = "#44AA99",
+    "Positive & Neutral" = "#005AB5",
+    "Negative & Neutral" = "#DC3220"
   )))
 ggsave(here("Figures", "PCA", "all responses.png"), plot = f1, width = 10, height =8)
 
@@ -141,15 +170,15 @@ loadings <- loadings %>%
   geom_text(data = loadings,
             aes(x = PC1_arrow * 1.1, y = PC2_arrow * 1.1, label = trait),
             color = "black", size = 3) +
-  theme_classic() +
-  labs(title = "PCA Trait Loadings", x = "PC1", y = "PC2"))
+  theme_bw() +
+  labs(x = "PC1", y = "PC2"))
 ggsave(here("Figures", "PCA", "pca loadings.png"), plot = f2, width = 10, height =8)
 
 ```
 
 ```{r}
 pca_scores <- as.data.frame(pca_result$x)
-pca_scores$species <- traits$common_name
+pca_scores$common_name <- traits$common_name
 pca_scores$positive <- traits$positive
 pca_scores$negative <- traits$negative
 pca_scores$null <- traits$null
@@ -157,13 +186,13 @@ pca_scores$null <- traits$null
 # 3️⃣ ggplot biplot colored by positive
 (f3 <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = factor(positive))) +
   geom_point(size = 3, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey", "1" = "blue")) +
+  scale_color_manual(values = c("0" = "grey", "1" = "#005AB5")) +
   theme_bw() +
   labs(color = "Positive Response", x = "PC1", y = "PC2",
        title = "PCA of Bird Traits Colored by Positive Fire Response"))
 (f4 <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = factor(negative))) +
   geom_point(size = 3, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey", "1" = "red")) +
+  scale_color_manual(values = c("0" = "grey", "1" = "#DC3220")) +
   theme_bw() +
   labs(color = "Negative Response", x = "PC1", y = "PC2",
        title = "PCA of Bird Traits Colored by Negative Fire Response"))
@@ -175,15 +204,15 @@ ggsave(here("Figures", "PCA", "pca by response.png"), plot = pos.neg, width = 8,
 ##
 (f5 <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = factor(positive))) +
   geom_point(size = 3, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey", "1" = "blue")) +
+  scale_color_manual(values = c("0" = "grey", "1" = "#005AB5")) +
   theme_bw() +
-  geom_text(aes(label = species), size = 3) +
+  geom_text(aes(label = common_name), size = 3) +
   labs(color = "Positive Response", x = "PC1", y = "PC2",
        title = "PCA of Bird Traits Colored by Positive Fire Response"))
 (f6 <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = factor(negative))) +
   geom_point(size = 3, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey", "1" = "red")) +
-    geom_text(aes(label = species), size = 3) +
+  scale_color_manual(values = c("0" = "grey", "1" = "#DC3220")) +
+    geom_text(aes(label = common_name), size = 3) +
   theme_bw() +
   labs(color = "Negative Response", x = "PC1", y = "PC2",
        title = "PCA of Bird Traits Colored by Negative Fire Response"))
@@ -217,6 +246,256 @@ loadings_long <- loadings %>%
     theme(legend.position = "none"))
 
 ggsave(here("Figures", "PCA", "loadings bar plot.png"), plot = loadings.bar, width = 15, height =15, dpi = 300)
+
+```
+
+```{r}
+# traits <- read.csv(here("Data", "cleaned", "BC_bird_traits.csv"))
+# traits$habitat_density[traits$habitat_density == "dense"] <- 1
+# traits$habitat_density[traits$habitat_density == "semiopen"] <- 2
+# traits$habitat_density[traits$habitat_density == "open"] <- 3
+# traits <- traits %>% 
+#    mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
+#           ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
+#           shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0))
+bc <- traits %>% select(common_name, where(is.numeric), -elevational_range, -nest_tree_use, -kipps_distance, -repro_age, -clutches_per_year, -null, -negative, -positive) %>% 
+  # mutate(null = NA,
+  #        positive = NA,
+  #        negative = NA) %>% 
+  filter(if_all(1:22, ~ !is.na(.)))
+
+#plotting all spp on this pca:
+bc_scaled <- scale(bc[,-1],
+                    center = (pca_result$center),
+                    scale = (pca_result$scale))
+
+bc_scores <- as.data.frame(as.matrix(bc_scaled) %*% pca_result$rotation)
+
+```
+
+
+```{r}
+bc_scores$common_name <- bc$common_name
+centers <- data.frame(
+  group = c("positive", "negative"),
+  PC1 = c(
+    mean(pca_scores$PC1[pca_scores$positive == 1], na.rm = TRUE),
+    mean(pca_scores$PC1[pca_scores$negative == 1], na.rm = TRUE)),
+  PC2 = c(
+    mean(pca_scores$PC2[pca_scores$positive == 1], na.rm = TRUE),
+    mean(pca_scores$PC2[pca_scores$negative == 1], na.rm = TRUE)
+  )
+)
+
+# Basic PCA scatterplot
+(all <- ggplot(bc_scores, aes(x = PC1, y = PC2)) +  # V1 and V2 are PC1 and PC2
+  geom_point(size = 3, alpha = 0.7) +
+  labs(x = "PC1", y = "PC2", title = "All BC Birds Plotted on PCA Axes") +
+  theme_bw())
+ggsave(here("Figures", "PCA", "all spp.png"), plot = all, width = 15, height =15, dpi = 300)
+
+
+# Original PCA points
+orig_df <- pca_scores
+orig_df$type <- "PCA"
+orig_df <- orig_df %>% 
+  rename(common_name = species)
+
+# New projected points
+new_df <- bc_scores
+new_df$common_name <- bc$common_name[complete.cases(bc)]
+
+new_df <- new_df %>% select(-species)
+
+# Combine
+plot_df <- left_join(new_df,orig_df)
+
+# Overlay plot
+(p1 <- ggplot(orig_df, aes(x = PC1, y = PC2)) +
+    geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
+  geom_point(aes(color = factor(positive)), size = 2.5, alpha = 0.8) +
+  scale_color_manual(values = c("0" = "grey50", "1" = "#005AB5")) +
+  theme_bw() +
+  labs(x = "PC1", y = "PC2", color = "Positive Response", shape = "Point Type"))
+
+(n1 <- ggplot(orig_df, aes(x = PC1, y = PC2)) +
+    geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
+  geom_point(aes(color = factor(negative)), size = 2.5, alpha = 0.8) +
+  scale_color_manual(values = c("0" = "grey50", "1" = "#D55E00")) +
+  theme_bw() +
+  labs(x = "PC1", y = "PC2", color = "Negative Response", shape = "Point Type"))
+
+orig_df <- orig_df %>% 
+  mutate(
+    mixed = rowSums(data.frame(positive, negative), na.rm = TRUE),
+    mixed = ifelse(mixed == 2|mixed == 3, 1, 0))
+
+(m1 <- ggplot(orig_df, aes(x = PC1, y = PC2)) +
+    geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
+  geom_point(aes(color = factor(mixed)), size = 2.5, alpha = 0.8) +
+  scale_color_manual(values = c("0" = "grey50", "1" = "darkmagenta")) +
+  theme_bw() +
+  labs(x = "PC1", y = "PC2", color = "Mixed Response", shape = "Point Type"))
+
+(pcas <- p1/n1/m1 + plot_annotation(tag_levels = 'A')
+)
+ggsave(here("Figures", "PCA", "PCA_all response patchwork.png"), plot = pcas, width = 8, height =12, dpi = 300)
+
+
+(with.mix <- ggplot(pca_scores) +
+  geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
+  geom_point(aes(PC1, PC2), color = "grey80") +
+  geom_point(data = subset(pca_scores, positive == 1),
+             aes(PC1, PC2), color = "#0072B2", size = 3, alpha = 0.8) +
+  geom_point(data = subset(pca_scores, negative == 1),
+             aes(PC1, PC2), color = "#D55E00", size = 3, alpha = 0.8) +
+  geom_point(data = subset(pca_scores, negative == 1& positive == 1),
+             aes(PC1, PC2), color = "darkmagenta", size = 3, alpha = 0.8)+
+  geom_point(data = centers, aes(PC1, PC2), size = 5, color = "white", shape = 16) +
+  geom_point(data = centers, aes(PC1, PC2, color = group), size = 7, shape = 8) +
+  scale_color_manual(values = c("#D55E00","#0072B2")) +
+  theme_bw() +
+  theme(legend.position="bottom")+
+  labs(color = "Fire Response",
+       title = ""))
+ggsave(here("Figures", "PCA", "PCA_centers.png"), plot = with.mix, width = 8, height =8, dpi = 300)
+
+(wo.mix <- ggplot(pca_scores) +
+  geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
+  geom_point(aes(PC1, PC2), color = "grey80") +
+  geom_point(data = subset(pca_scores, positive == 1),
+             aes(PC1, PC2), color = "#0072B2", size = 3, alpha = 0.8) +
+  geom_point(data = subset(pca_scores, negative == 1),
+             aes(PC1, PC2), color = "#D55E00", size = 3, alpha = 0.8) +
+  geom_point(data = centers, aes(PC1, PC2), size = 5, color = "white", shape = 16) +
+  geom_point(data = centers, aes(PC1, PC2, color = group), size = 5, shape = 8) +
+  scale_color_manual(values = c("#D55E00","#0072B2")) +
+  theme_bw() +
+  labs(color = "Response type",
+       title = "Locations of positive vs negative responses in PCA space"))
+
+t.test(
+  pca_scores$PC1[pca_scores$positive == 1],
+  pca_scores$PC1[pca_scores$negative == 1]
+)
+
+# PC2
+t.test(
+  pca_scores$PC2[pca_scores$positive == 1],
+  pca_scores$PC2[pca_scores$negative == 1]
+)
+
+#p < 0.05 → The positive and negative 1’s occupy significantly different mean positions along that PC.
+#p ≥ 0.05 → No significant difference.
+(f2 <- ggplot() +
+  geom_segment(data = loadings,
+               aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
+               arrow = arrow(length = unit(0.3, "cm")),
+               color = "black") +
+  geom_text(data = loadings,
+            aes(x = PC1_arrow * 1.1, y = PC2_arrow * 1.1, label = trait),
+            color = "black", size = 3) +
+  geom_point(data = centers, aes(PC1, PC2, color = group), size = 6, shape = 8) +
+  theme_bw() +
+  labs(x = "PC1", y = "PC2"))
+
+with.mix+f2
+```
+
+	Welch Two Sample t-test
+
+data:  pca_scores$PC1[pca_scores$positive == 1] and pca_scores$PC1[pca_scores$negative == 1]
+t = -4.0916, df = 163.79, p-value = 6.707e-05
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -1.7584618 -0.6136986
+sample estimates:
+ mean of x  mean of y 
+-0.2860344  0.9000458 
+
+(for PC1, the posittve and negaitvely affected birds are significantly different)
+
+
+	Welch Two Sample t-test
+
+data:  pca_scores$PC2[pca_scores$positive == 1] and pca_scores$PC2[pca_scores$negative == 1]
+t = 1.638, df = 146.21, p-value = 0.1036
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.09737712  1.04035920
+sample estimates:
+ mean of x  mean of y 
+ 0.1557301 -0.3157610 
+
+(But, not differnet in PC2)
+
+1
+positive
+pca1 -0.2860344
+pca2 0.1557301
+2
+negative
+pca1 0.9000458
+pca2 -0.3157610
+
+```{r}
+pca_scores <- pca_scores %>%
+  mutate(fire_response = case_when(
+    positive == 1 & negative == 1 ~ "mixed",
+    positive == 1 ~ "positive",
+    negative == 1 ~ "negative",
+    TRUE ~ "no response"
+  ))
+(with.mix <- ggplot() +
+  geom_point(data = new_df, aes(PC1, PC2),
+             shape = 1, color = "grey", alpha = 0.85, size = 2) +
+  geom_point(data = pca_scores,
+             aes(PC1, PC2, color = fire_response),
+             size = 3, alpha = 0.8) +
+  geom_point(data = centers, aes(PC1, PC2, color = group),
+             size = 7, shape = 8) +
+  scale_color_manual(
+    values = c(
+      "positive" = "#0072B2",
+      "negative" = "#D55E00",
+      "mixed" = "darkmagenta",
+      "no response" = "grey80"
+    )
+  ) +
+  theme_bw() +
+     scale_x_continuous(breaks = seq(floor(min(pca_scores$PC1)), 
+                                  ceiling(max(pca_scores$PC1)), 
+                                  by = 2))+
+  theme(legend.position = "bottom") +
+  labs(color = "Fire Response",
+       title = ""))
+
+(f2 <- ggplot() +
+  geom_segment(data = loadings,
+               aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
+               arrow = arrow(length = unit(0.3, "cm")),
+               color = "black") +
+  geom_text_repel(data = loadings,
+                  aes(x = PC1_arrow, y = PC2_arrow, label = trait),
+                  color = "black",
+                  size = 4,
+                  segment.color = "grey50",    # line from label to point
+                  segment.size = 0.5,
+                  segment.alpha = 0.8,
+                  nudge_x = 0,                 # optional small nudge
+                  nudge_y = 0,
+                  box.padding = 0.5,
+                  point.padding = 0.5) +
+  geom_point(data = centers, aes(PC1, PC2, color = group), size = 6, shape = 8) +
+  theme_bw() +
+    theme(legend.position = "none")+
+  scale_color_manual(values = c("#D55E00","#0072B2")) +
+  labs(x = "PC1", y = "PC2"))
+
+(end <- with.mix+f2+  
+  plot_layout(guides = "collect") +
+  plot_annotation(theme = theme(legend.position = "bottom"), tag_levels = "A"))
+ggsave(here("Figures", "PCA", "PCA_final.png"), plot = end, width = 16, height =8, dpi = 300)
 
 ```
 
