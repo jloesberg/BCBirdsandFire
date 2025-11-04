@@ -32,7 +32,7 @@ birdlist <- birdlist%>%
 ```
 
 ```{r read in trait data base available databases}
-dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk_trait_database.csv")) #> nest <- dtrait %>% select(name, eng_name, nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nsdeci, nsconi, nssnag, nsfloat, nscact, nstang, ntree, nesting.location)
+dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk", "Dubovyk_trait_database.csv")) #> nest <- dtrait %>% select(name, eng_name, nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nsdeci, nsconi, nssnag, nsfloat, nscact, nstang, ntree, nesting.location)
 
 dtrait <- dtrait %>% 
   mutate(ntree = nsdeci+nsconi,
@@ -88,7 +88,7 @@ dtrait <- dtrait %>%
 ###########################################################################################
 
 #Ecology data paper - ELTON TRAITS
-eco_t <- read.delim(here("Data", "TraitDatabases", "Ecology_BirdFuncDat.txt"), sep = "\t", header = T)
+eco_t <- read.delim(here("Data", "TraitDatabases","EltonTraits", "Ecology_BirdFuncDat.txt"), sep = "\t", header = T)
 eco_t <- eco_t %>% 
   mutate(ForStrat.water = ForStrat.watbelowsurf+ForStrat.wataroundsurf) %>% 
   select(SpecID, Scientific, English, starts_with("ForStrat"), -c(ForStrat.Source, ForStrat.SpecLevel, ForStrat.EnteredBy, ForStrat.watbelowsurf, ForStrat.wataroundsurf)) %>% 
@@ -124,7 +124,7 @@ eco_t <- eco_t %>%
       # If FALSE: Assign the column name
       cols_to_check[sorted_indices[2]])) %>% 
     ungroup() %>%
-  select(-c(row_values, sorted_indices, ForStrat.ground, ForStrat.understory, ForStrat.midhigh, ForStrat.canopy, ForStrat.aerial, ForStrat.water))
+  select(-c(row_values, sorted_indices, ForStrat.aerial, ForStrat.water))
 eco_t$most.common.foraging.location <- gsub("ForStrat.", "", eco_t$most.common.foraging.location)
 eco_t$second.foraging.location <- gsub("ForStrat.", "", eco_t$second.foraging.location)
 
@@ -288,7 +288,7 @@ bctraits.all <- left_join(bctraits3, bctrait)
 #cleanign it up a bit
 bctraits.all <- bctraits.all %>% 
   rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific, mass_g= Mass ) %>% 
-  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category,nest.tree.use, live_tree_nesting_use, snag_nesting_use,majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name,  fmhawk, fmfogl, fmbagl, fstimb, fcinvert, nsdeci,nsconi)
+  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category,nest.tree.use, live_tree_nesting_use, snag_nesting_use,majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name,  fmhawk, fmfogl, fmbagl, fstimb, fcinvert, nsdeci,nsconi, ForStrat.ground, ForStrat.understory, ForStrat.midhigh, ForStrat.canopy)
 
 ###A few of these species don't have data in these databases: filling in from other sources
 #lots of missing data for Pacific Golden-Plover
@@ -336,6 +336,10 @@ bctraits.all$fstimb[bctraits.all$common_name=="Pacific Wren"] <- 10
 bctraits.all$fcinvert[bctraits.all$common_name=="Pacific Wren"] <- 60
 bctraits.all$nsconi[bctraits.all$common_name=="Pacific Wren"] <- 10
 bctraits.all$nsdeci[bctraits.all$common_name=="Pacific Wren"] <- 10
+bctraits.all$ForStrat.ground[bctraits.all$common_name=="Pacific Wren"] <- 50
+bctraits.all$ForStrat.understory[bctraits.all$common_name=="Pacific Wren"] <- 50
+bctraits.all$ForStrat.midhigh[bctraits.all$common_name=="Pacific Wren"] <- 0
+bctraits.all$ForStrat.canopy[bctraits.all$common_name=="Pacific Wren"] <- 0
 
 ```
 
@@ -382,7 +386,13 @@ bctraits.all <- left_join(bctraits.all, birdbase.bc)
 bctraits.all <- bctraits.all %>% 
  # rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific ) %>% 
   #select(AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name) #uncheck this to include these other names/database IDs
-  select(Order, Family, sci_name, common_name, status, iucn.2024, Primary.Lifestyle, primary_habitat, Habitat.Density, forest.use, habitat.breadth,  fmhawk, fmfogl, fmbagl, fstimb, fcinvert, primary_diet, diet.breadth, Eco.Spec.Index,Trophic.Level, Trophic.Niche,  Migration, Range.Size, elevational_range, lifespan, ReproAge, average_mass,Kipps.Distance, Hand.Wing.Index, clutches.per.year, nest.tree.use, live_tree_nesting_use, snag_nesting_use, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.type, nest.category, majority.foraging.location, most.common.foraging.location, second.foraging.location, nsdeci,nsconi)
+  select(Order, Family, sci_name, common_name, status, iucn.2024, Primary.Lifestyle, primary_habitat, Habitat.Density, forest.use, habitat.breadth,  fmhawk, fmfogl, fmbagl, fcinvert, primary_diet, diet.breadth, Eco.Spec.Index,Trophic.Level, Trophic.Niche,  Migration, Range.Size, elevational_range, lifespan, ReproAge, average_mass,Kipps.Distance, Hand.Wing.Index, clutches.per.year, nest.tree.use, live_tree_nesting_use, snag_nesting_use, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.type, nest.category, majority.foraging.location, most.common.foraging.location, second.foraging.location, nsdeci,nsconi, ForStrat.ground, ForStrat.understory, ForStrat.midhigh, ForStrat.canopy)
+
+old_growth <-  c("American Three-toed Woodpecker", "Bay-breasted Warbler", "Black-capped Chickadee", "Boreal Chickadee", "Boreal Owl", "Brown Creeper", "Canada Warbler", "Chestnut-backed Chickadee", "Dusky Grouse", "Golden-crowned Kinglet", "Great Horned Owl", "Hairy Woodpecker", "Hammond's Flycatcher", "Hermit Thrush", "Lewis's Woodpecker", "American Goshawk", "Northern Waterthrush", "Western Flycatcher", "Pileated Woodpecker", "Red-breasted Nuthatch", "Red-breasted Sapsucker", "Ruby-crowned Kinglet", "Spruce Grouse", "Swainson's Thrush", "Townsend's Warbler", "Varied Thrush", "Vaux's Swift", "White-breasted Nuthatch")
+missing_names <- old_growth[!(old_growth %in% bctraits.all$common_name)] #do all these names appear in the BC list?
+
+bctraits.all <- bctraits.all %>%
+  mutate(old_growth = if_else(common_name %in% old_growth, 1, 0))
   
 bctraits.all <- bctraits.all %>% 
   janitor::clean_names()
@@ -547,6 +557,16 @@ snag_nesting_use - % of nesting preference for snags out of 100% [dubovyk]
 "most_common_foraging_location" - most common foraging strategy [eltontraits]
 
 "second_foraging_location"- second most common foraging strategy. If NA, only uses the most common strategy [eltontraits]
+
+"ForStrat-ground": Prevalence of: Foraging on ground - estimated % use (categories sum to 100% total) [eltontraits]
+
+"ForStrat-understory": Prevalence of: Foraging below 2m in understory in forest, forest edges, bushes or shrubs:estimated % use (categories sum to 100% total) [eltontraits]
+
+"ForStrat-midhigh": Prevalence of: Foraging in mid to high levels in trees or high bushes (2m upward), but below canopy, estimated % use (categories sum to 100% total) [eltontraits]
+
+"ForStrat-canopy": Prevalence of: Foraging in or just above (from) tree canopy. estimated % use (categories sum to 100% total) [eltontraits]
+
+"old_growth": are they associated with old growth? list from Peter Arcese
 
 ```{r Fire Index}
 
