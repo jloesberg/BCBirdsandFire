@@ -292,14 +292,25 @@ bc_scores <- as.data.frame(as.matrix(bc_scaled) %*% pca_result$rotation)
 
 ```{r}
 bc_scores$common_name <- bc$common_name
+pca_scores <- pca_scores %>%
+  mutate(fire_response = case_when(
+    positive == 1 & negative == 1 ~ "mixed",
+    positive == 1 & negative == 0 ~ "positive",
+    negative == 1 & positive == 0 ~ "negative",
+    TRUE ~ "neutral"
+  ))
 centers <- data.frame(
-  group = c("positive", "negative"),
+  group = c("positive", "mixed", "negative", "neutral"),
   PC1 = c(
-    mean(pca_scores$PC1[pca_scores$positive == 1&negative != 1], na.rm = TRUE),
-    mean(pca_scores$PC1[pca_scores$negative == 1&positive != 1], na.rm = TRUE)),
+    mean(pca_scores$PC1[pca_scores$positive == 1 & pca_scores$negative != 1], na.rm = TRUE),
+    mean(pca_scores$PC1[pca_scores$positive == 1 & pca_scores$negative == 1], na.rm = TRUE),
+    mean(pca_scores$PC1[pca_scores$negative == 1 & pca_scores$positive != 1], na.rm = TRUE),
+    mean(pca_scores$PC1[pca_scores$null == 1 & pca_scores$positive == 0 & pca_scores$negative == 0], na.rm = TRUE)),
   PC2 = c(
-    mean(pca_scores$PC2[pca_scores$positive == 1&negative != 1], na.rm = TRUE),
-    mean(pca_scores$PC2[pca_scores$negative == 1&positive != 1], na.rm = TRUE)
+    mean(pca_scores$PC2[pca_scores$positive == 1 & pca_scores$negative != 1], na.rm = TRUE),
+    mean(pca_scores$PC2[pca_scores$positive == 1 & pca_scores$negative == 1], na.rm = TRUE),
+    mean(pca_scores$PC2[pca_scores$negative == 1 & pca_scores$positive != 1], na.rm = TRUE),
+    mean(pca_scores$PC2[pca_scores$null == 1 & pca_scores$positive == 0 & pca_scores$negative == 0], na.rm = TRUE)
   )
 )
 
@@ -366,7 +377,7 @@ ggsave(here("Figures", "PCA", "PCA_all response patchwork.png"), plot = pcas, wi
              aes(PC1, PC2), color = "darkmagenta", size = 3, alpha = 0.8)+
   geom_point(data = centers, aes(PC1, PC2), size = 5, color = "white", shape = 16) +
   geom_point(data = centers, aes(PC1, PC2, color = group), size = 7, shape = 8) +
-  scale_color_manual(values = c("#D55E00","#0072B2")) +
+  scale_color_manual(values = c("darkmagenta", "#D55E00","grey80","#0072B2")) +
   theme_bw() +
   theme(legend.position="bottom")+
   labs(color = "Fire Response",
@@ -382,7 +393,7 @@ ggsave(here("Figures", "PCA", "PCA_centers.png"), plot = with.mix, width = 8, he
              aes(PC1, PC2), color = "#D55E00", size = 3, alpha = 0.8) +
   geom_point(data = centers, aes(PC1, PC2), size = 5, color = "white", shape = 16) +
   geom_point(data = centers, aes(PC1, PC2, color = group), size = 5, shape = 8) +
-  scale_color_manual(values = c("#D55E00","#0072B2")) +
+  scale_color_manual(values = c("darkmagenta", "#D55E00","grey80","#0072B2")) +
   theme_bw() +
   labs(color = "Response type",
        title = "Locations of positive vs negative responses in PCA space"))
@@ -397,26 +408,25 @@ t.test(
   pca_scores$PC2[pca_scores$positive == 1&pca_scores$negative != 1],
   pca_scores$PC2[pca_scores$negative == 1&pca_scores$positive != 1]
 )
+
+anova_pc1 <- aov(PC1 ~ fire_response, data = pca_scores)
+summary(anova_pc1)
+
+# Post-hoc (Tukey) test for pairwise comparisons
+TukeyHSD(anova_pc1)
+
+anova_pc2 <- aov(PC2~ fire_response, data = pca_scores)
+summary(anova_pc2)
+
+# Post-hoc (Tukey) test for pairwise comparisons
+TukeyHSD(anova_pc2)
+
+##
 arrow_multiplier <- 3
 loadings <- loadings %>%
   mutate(PC1_arrow = PC1 * arrow_multiplier,
          PC2_arrow = PC2 * arrow_multiplier)
-#p < 0.05 → The positive and negative 1’s occupy significantly different mean positions along that PC.
-#p ≥ 0.05 → No significant difference.
-(f2 <- ggplot() +
-  geom_segment(data = loadings,
-               aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
-               arrow = arrow(length = unit(0.3, "cm")),
-               color = "black") +
-  geom_text(data = loadings,
-            aes(x = PC1_arrow * 1.1, y = PC2_arrow * 1.1, label = trait),
-            color = "black", size = 3) +
-  geom_point(data = centers, aes(PC1, PC2, color = group), size = 6, shape = 8) +
-  theme_bw() +
-      scale_color_manual(values = c("#D55E00","#0072B2")) +
-  labs(x = "PC1", y = "PC2"))
 
-with.mix+f2
 ```
 
 	Welch Two Sample t-test
@@ -442,13 +452,7 @@ sample estimates:
 0.11210649 0.00159028 
 
 ```{r}
-pca_scores <- pca_scores %>%
-  mutate(fire_response = case_when(
-    positive == 1 & negative == 1 ~ "mixed",
-    positive == 1 ~ "positive",
-    negative == 1 ~ "negative",
-    TRUE ~ "no response"
-  ))
+
 (with.mix <- ggplot() +
   geom_point(data = new_df, aes(PC1, PC2),
              shape = 1, color = "grey", alpha = 0.85, size = 2) +
@@ -462,7 +466,7 @@ pca_scores <- pca_scores %>%
       "positive" = "#0072B2",
       "negative" = "#D55E00",
       "mixed" = "darkmagenta",
-      "no response" = "grey80"
+      "neutral" = "grey"
     )
   ) +
   theme_bw() +
@@ -471,7 +475,8 @@ pca_scores <- pca_scores %>%
                                   by = 2))+
   theme(legend.position = "bottom") +
   labs(color = "Fire Response",
-       title = ""))
+       title = "",x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
+    y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")))
 
 (f2 <- ggplot() +
   geom_segment(data = loadings,
@@ -488,17 +493,19 @@ pca_scores <- pca_scores %>%
                   nudge_x = 0,                 # optional small nudge
                   nudge_y = 0,
                   box.padding = 0.5,
-                  point.padding = 0.5) +
+                  point.padding = 0.5,
+                  max.overlaps = 20) +
   geom_point(data = centers, aes(PC1, PC2, color = group), size = 6, shape = 8) +
   theme_bw() +
     theme(legend.position = "none")+
-  scale_color_manual(values = c("#D55E00","#0072B2")) +
-  labs(x = "PC1", y = "PC2"))
+  scale_color_manual(values = c("darkmagenta", "#D55E00","grey","#0072B2")) +
+  labs(x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
+    y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")))
 
 (end <- with.mix+f2+  
   plot_layout(guides = "collect") +
   plot_annotation(theme = theme(legend.position = "bottom"), tag_levels = "A"))
-ggsave(here("Figures", "PCA", "PCA_final.png"), plot = end, width = 16, height =8, dpi = 300)
+ggsave(here("Figures", "PCA", "PCA_final.png"), plot = end, width = 18, height =8, dpi = 300)
 
 ```
 

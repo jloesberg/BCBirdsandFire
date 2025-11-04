@@ -271,14 +271,25 @@ bc_scores <- as.data.frame(as.matrix(bc_scaled) %*% pca_result$rotation)
 ```{r}
 
 bc_scores$common_name <- bc$common_name
+pca_scores <- pca_scores %>%
+  mutate(fire_response = case_when(
+    positive == 1 & negative == 1 ~ "mixed",
+    positive == 1 & negative == 0 ~ "positive",
+    negative == 1 & positive == 0 ~ "negative",
+    TRUE ~ "neutral"
+  ))
 centers <- data.frame(
-  group = c("positive_short", "negative_short"),
+  group = c("positive", "mixed", "negative", "neutral"),
   PC1 = c(
     mean(pca_scores$PC1[pca_scores$positive == 1 & pca_scores$negative != 1], na.rm = TRUE),
-    mean(pca_scores$PC1[pca_scores$negative == 1 & pca_scores$positive != 1], na.rm = TRUE)),
+    mean(pca_scores$PC1[pca_scores$positive == 1 & pca_scores$negative == 1], na.rm = TRUE),
+    mean(pca_scores$PC1[pca_scores$negative == 1 & pca_scores$positive != 1], na.rm = TRUE),
+    mean(pca_scores$PC1[pca_scores$null == 1 & pca_scores$positive == 0 & pca_scores$negative == 0], na.rm = TRUE)),
   PC2 = c(
     mean(pca_scores$PC2[pca_scores$positive == 1 & pca_scores$negative != 1], na.rm = TRUE),
-    mean(pca_scores$PC2[pca_scores$negative == 1 & pca_scores$positive != 1], na.rm = TRUE)
+    mean(pca_scores$PC2[pca_scores$positive == 1 & pca_scores$negative == 1], na.rm = TRUE),
+    mean(pca_scores$PC2[pca_scores$negative == 1 & pca_scores$positive != 1], na.rm = TRUE),
+    mean(pca_scores$PC2[pca_scores$null == 1 & pca_scores$positive == 0 & pca_scores$negative == 0], na.rm = TRUE)
   )
 )
 # Basic PCA scatterplot
@@ -344,37 +355,36 @@ ggsave(here("Figures", "PCA", "PCA_all response patchwork.short.png"), plot = pc
              aes(PC1, PC2), color = "darkmagenta", size = 3, alpha = 0.8)+
   geom_point(data = centers, aes(PC1, PC2), size = 5, color = "white", shape = 16) +
   geom_point(data = centers, aes(PC1, PC2, color = group), size = 7, shape = 8) +
-  scale_color_manual(values = c("#D55E00","#0072B2")) +
+  scale_color_manual(values = c("darkmagenta", "#D55E00","grey80","#0072B2")) +
   theme_bw() +
   theme(legend.position="bottom")+
   labs(color = "Fire Response",
        title = ""))
 ggsave(here("Figures", "PCA", "PCA_centers.short.png"), plot = with.mix, width = 8, height =8, dpi = 300)
 
-(wo.mix <- ggplot(pca_scores) +
-  geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
-  geom_point(aes(PC1, PC2), color = "grey80") +
-  geom_point(data = subset(pca_scores, positive == 1),
-             aes(PC1, PC2), color = "#0072B2", size = 3, alpha = 0.8) +
-  geom_point(data = subset(pca_scores, negative == 1),
-             aes(PC1, PC2), color = "#D55E00", size = 3, alpha = 0.8) +
-  geom_point(data = centers, aes(PC1, PC2), size = 5, color = "white", shape = 16) +
-  geom_point(data = centers, aes(PC1, PC2, color = group), size = 5, shape = 8) +
-  scale_color_manual(values = c("#D55E00","#0072B2")) +
-  theme_bw() +
-  labs(color = "Response type",
-       title = "Locations of positive vs negative responses in PCA space"))
+# t.test(
+#   pca_scores$PC1[pca_scores$positive == 1&pca_scores$negative != 1],
+#   pca_scores$PC1[pca_scores$negative == 1&pca_scores$positive != 1]
+# )
+# 
+# # PC2
+# t.test(
+#   pca_scores$PC2[pca_scores$positive == 1&pca_scores$negative != 1],
+#   pca_scores$PC2[pca_scores$negative == 1&pca_scores$positive != 1]
+# )
 
-t.test(
-  pca_scores$PC1[pca_scores$positive == 1&pca_scores$negative != 1],
-  pca_scores$PC1[pca_scores$negative == 1&pca_scores$positive != 1]
-)
+anova_pc1 <- aov(PC1 ~ fire_response, data = pca_scores)
+summary(anova_pc1)
 
-# PC2
-t.test(
-  pca_scores$PC2[pca_scores$positive == 1&pca_scores$negative != 1],
-  pca_scores$PC2[pca_scores$negative == 1&pca_scores$positive != 1]
-)
+# Post-hoc (Tukey) test for pairwise comparisons
+TukeyHSD(anova_pc1)
+
+anova_pc2 <- aov(PC2~ fire_response, data = pca_scores)
+summary(anova_pc2)
+
+# Post-hoc (Tukey) test for pairwise comparisons
+TukeyHSD(anova_pc2)
+
 #p < 0.05 → The positive and negative 1’s occupy significantly different mean positions along that PC.
 #p ≥ 0.05 → No significant difference.
 arrow_multiplier <- 5  # adjust to make arrows visible
@@ -391,35 +401,22 @@ loadings <- loadings %>%
             color = "black", size = 3) +
   geom_point(data = centers, aes(PC1, PC2, color = group), size = 6, shape = 8) +
   theme_bw() +
-  scale_color_manual(values = c("#D55E00","#0072B2")) +
+  scale_color_manual(values = c("darkmagenta", "#D55E00","grey80","#0072B2")) +
   labs(x = "PC1", y = "PC2"))
 
 (short <- with.mix+f2
 )
-ggsave(here("Figures", "PCA", "PCA_end fig short.png"), plot = short, width = 12, height =8, dpi = 300)
+ggsave(here("Figures", "PCA", "PCA_end fig short.png"), plot = short, width = 18, height =8, dpi = 300)
 
 ```
 
+Fit: aov(formula = PC1 ~ fire_response, data = pca_scores)
 
-	Welch Two Sample t-test
-
-data:  pca_scores$PC1[pca_scores$positive == 1 & pca_scores$negative != 1] and pca_scores$PC1[pca_scores$negative == 1 & pca_scores$positive != 1]
-t = 2.0861, df = 34.7, p-value = 0.04439
-alternative hypothesis: true difference in means is not equal to 0
-95 percent confidence interval:
- 0.02652909 1.97436581
-sample estimates:
-  mean of x   mean of y 
--0.05915343 -1.05960088 
-
-
-	Welch Two Sample t-test
-
-data:  pca_scores$PC2[pca_scores$positive == 1 & pca_scores$negative != 1] and pca_scores$PC2[pca_scores$negative == 1 & pca_scores$positive != 1]
-t = -0.6506, df = 32.887, p-value = 0.5198
-alternative hypothesis: true difference in means is not equal to 0
-95 percent confidence interval:
- -1.3571446  0.6995373
-sample estimates:
- mean of x  mean of y 
--0.1921674  0.1366362
+$fire_response
+                        diff        lwr        upr     p adj
+negative-mixed     0.9190779 -1.0118665  2.8500222 0.6028624
+neutral-mixed      3.3010379  1.5193368  5.0827390 0.0000240
+positive-mixed     1.9195253  0.2023417  3.6367089 0.0219339
+neutral-negative   2.3819601  0.9404929  3.8234272 0.0001976
+positive-negative  1.0004475 -0.3604671  2.3613620 0.2272206
+positive-neutral  -1.3815126 -2.5208111 -0.2422142 0.010634
