@@ -249,9 +249,15 @@ loadings_long <- loadings %>%
     theme(legend.position = "none"))
 
 ggsave(here("Figures", "PCA", "loadings bar plot.short.png"), plot = loadings.bar, width = 15, height =15, dpi = 300)
+loadings %>%  arrange(desc(abs(PC1)))
 
 ```
-
+Highest absolute PC1 loadings
+habitat_density	0.30469907 (higher number for habitat density indicates a sparse habitat, so dense habitats contribute to null responses)
+average_mass	0.30263854 (larger = null, smaller = negative)
+lifespan	0.27995496
+live_tree_nesting_use	-0.26461940	
+for_strat_midhigh	-0.24612471
 ```{r}
 bc <- traits %>% select(common_name, where(is.numeric), -elevational_range, -nest_tree_use, -kipps_distance, -repro_age, -clutches_per_year, -null_short, -negative_short, -positive_short) %>% 
   # mutate(null = NA,

@@ -1,26 +1,47 @@
-trait,description,values,source
-habitat_density,How dense habitat is ,"  1 = Dense habitats. Species primarily lives in the lower or middle storey of forest, or in dense thickets, dense shrubland etc.;    2 = Semi-open habitats. Species primarily lives in open shrubland, scattered bushes, parkland, low dry or deciduous forest, thorn forest;    3 = Open habitats. Species primarily lives in desert, grassland, open water, low shrubs, rocky habitats, seashores, cities. Also applies to species living mainly on top of forest canopy (i.e. mostly in the open)",Avonet
-forest_use,Extent to which forest is prefered as a habitat,"Ranges from 1-6, where 1 = forest is most prefered, 6 = least prefered. NA indicates forest not used at all",Birdbase
-habitat_breadth,The number of major habitats used,"Lower = more habitat specialized, higher = broader habitat use",Birdbase
-fmhawk,extent that foraging method is hawking (perching/incessorial),%,Dubovyk
-fmfogl,extent that foraging method foliage gleaning,%,Dubovyk
-fmbagl,extent that foraging method bark gleaning,%,Dubovyk
-fstimb,extent that foraging substrate: timber,%,Dubovyk
-fcinvert,extent that foraging category: invertebrate,%,Dubovyk
-diet_breadth,the number of major food types consumed," Lower = more diet  specialized, higher = broader diet",Birdbase
-eco_spec_index,Ecological Specialization Index: log10 (100/[dietary breadth x habitat breadth]),Maximum of 2 for the most specialized species that only feed on one major food group and live in one major type of habitat (lower number = more generalist),Birdbase
+trait,description,values,trait source,predicted fire impacts,source for fire impacts
+habitat_density,How dense habitat is ,"  1 = Dense habitats. Species primarily lives in the lower or middle storey of forest, or in dense thickets, dense shrubland etc.;    2 = Semi-open habitats. Species primarily lives in open shrubland, scattered bushes, parkland, low dry or deciduous forest, thorn forest;    3 = Open habitats. Species primarily lives in desert, grassland, open water, low shrubs, rocky habitats, seashores, cities. Also applies to species living mainly on top of forest canopy (i.e. mostly in the open)",Avonet,Species with preferencefor open habitat will be benefitted by fire,Kotliar et al. 2002; Schieck & Song 2006; Morissette et al. 2002; Latif et al. 2021; Stephens et al. 2019; Cadieux et a;. 2020; Knaggs et al. 2020; Gyug et al. 2012 ; Puig-Gironès et al. 2022; Hannon et al. 2005
+forest_use,Extent to which forest is prefered as a habitat,"Ranges from 1-6, where 1 = forest is most prefered, 6 = least prefered. NA indicates forest not used at all",Birdbase,Species with high preference for forests will be more impacted  by fire,Lewis et al 2016; Puig-Gironès et al. 2023
+habitat_breadth,The number of major habitats used,"Lower = more habitat specialized, higher = broader habitat use",Birdbase,,Morissette et al. 2002; 
+fmhawk,extent that foraging method is hawking (perching/incessorial),%,Dubovyk,Aerial insectivores are benefited by increased open areas,Saab et al 2004; Kotliar et al. 2002; Morissette et al. 2002; Latif et al. 2021; Knaggs et al. 2020; Edenius et al. 2011; 
+fmfogl,extent that foraging method is foliage gleaning,%,Dubovyk,Foliage gleaners will be negatively impacted,Dickson et al 2009; Smucker et al. 2005; Fontaine et al. 2009; Kotliar et al. 2002; Latif et al. 2021;
+fmbagl,extent that foraging method is bark gleaning,%,Dubovyk,Bark gleaners will be negatively impacted (if foraging on live trees),Kotliar et al. 2002; Latif et al. 2021;
+fmbagl,extent that foraging method is bark gleaning,%,Dubovyk,Bark gleaners will be positively impacted (if foraging on dead trees),Azeria et al. 2011; Gyug et al. 2012; Farris et al. 2009; Hannon et al. 2005
+Diet.Inv,extent that foraging category: invertebrate,%,EltonTraits,"Insectivores will be benefited due to increased insect activity in burned areas (bark beetles, etc)",Dickson et al 2009; Saab et al. 2004; Kotliar et al. 2002; Morissette et al. 2002; Latif et al. 2021; Knaggs et al. 2020;  Duquette et al. 2019; Edenius et al. 2011; Edenius et al. 2011; Duchac et al. 2021; 
+diet_breadth,the number of major food types consumed," Lower = more diet  specialized, higher = broader diet",Birdbase,,Morissette et al. 2002; 
+eco_spec_index,Ecological Specialization Index: log10 (100/[dietary breadth x habitat breadth]),Maximum of 2 for the most specialized species that only feed on one major food group and live in one major type of habitat (lower number = more generalist),Birdbase,Generalsits will be less negatively affected,Morissette et al. 2002; Knaggs et al. 2020; Duquette et al. 2019; Edenius et al. 2011; 
 migration,Extent of migration,"1 = Sedentary. 
     2 = Partially migratory, i.e. minority of population migrates long distances, or most of population undergoes short-distance migration, nomadic movements, distinct altitudinal migration, etc.
-    3 = Migratory, i.e. majority of population undertakes long-distance migration""",Avonet
-range_size,The total area of the mapped range of the species ,km^2,Avonet
-lifespan,maximum observed lifespan,years,Dubovyk
-average_mass,"the average value across males, females, and unsexed individuals in the database",g,Birdbase
-hand_wing_index,"100*DK/Lw, where DK is Kipp’s distance and Lw is wing length (i.e., Kipp’s distance corrected for wing size). Proxy for dispersal ability",,Avonet
-live_tree_nesting_use, % of nesting preference for live trees out of 100%,%,Dubovyk
-snag_nesting_use,% of nesting preference for snags out of 100%,%,Dubovyk
-nsdeci,% of nesting preference for deciduous trees,%,Dubovyk
-nsconi,% of nesting preference for coniferous trees,%,Dubovyk
-cavity_nester,is species a cavity nester,0 or 1,EltonTraits
-ground_nester,is species a ground nester,0 or 1,EltonTraits
-shrub_nester,is species a shrub nester,0 or 1,EltonTraits
-old_growth,is the species associated with old growth forests? ,0 or 1,"Schuster & Arcese, 2013 and https://databasin.org/datasets/302399b1e9164ce6ae94347d32852b48/"
+    3 = Migratory, i.e. majority of population undertakes long-distance migration""",Avonet,Greater dispersal ability (as a proxy for migration) will be less affected,Franklin et al. 2021; Batista et al. 2023
+migration,Extent of migration,"1 = Sedentary. 
+    2 = Partially migratory, i.e. minority of population migrates long distances, or most of population undergoes short-distance migration, nomadic movements, distinct altitudinal migration, etc.
+    3 = Migratory, i.e. majority of population undertakes long-distance migration""",Avonet,Migratory species will be negatively affected by fire because ,
+range_size,The total area of the mapped range of the species ,km^2,Avonet,,
+lifespan,maximum observed lifespan,years,Dubovyk,,
+average_mass,"the average value across males, females, and unsexed individuals in the database",g,Birdbase,small species negatively impacted,Franklin et al. 2021
+hand_wing_index,"100*DK/Lw, where DK is Kipp’s distance and Lw is wing length (i.e., Kipp’s distance corrected for wing size). Proxy for dispersal ability",,Avonet,Higher dispersing species will be negatively afefcted,Franklin et al. 2021
+hand_wing_index,"100*DK/Lw, where DK is Kipp’s distance and Lw is wing length (i.e., Kipp’s distance corrected for wing size). Proxy for dispersal ability",,Avonet,Higher dispersing species will be postitively afefcted because they can disperse to preferred habitat,Franklin et al . 2021; Puig-Gironès et al. 2023
+live_tree_nesting_use, % of nesting preference for live trees out of 100%,%,Dubovyk,Species that build nests in live tree foliage will be negtaively impacted,Smucker et al 2005; Latif et al. 2021; Hannon et al. 2005
+snag_nesting_use,% of nesting preference for snags out of 100%,%,Dubovyk,Snag nesters will be benefited by increased availibility of dead trees ,Fontaine et al. 2009; Kotliar et al. 2002; Schieck & Song 2006; Latif et al. 2021; Knaggs et al. 2020; Farris et al. 2009; Hannon et al. 2005
+nsdeci,% of nesting preference for deciduous trees,%,Dubovyk,,
+nsconi,% of nesting preference for coniferous trees,%,Dubovyk,Fire will decrease availibility of conifers (late successional stage),Fontaine et al. 2009
+cavity_nester,is species a cavity nester,0 or 1,EltonTraits,Cavity nesters will be benefited by increased availibility of dead trees ,Fontaine et al. 2009; Kotliar et al. 2002; Schieck & Song 2006; Latif et al. 2021; Knaggs et al. 2020; Azeria et al. 2011; Duchac et al. 2021; Bunnell et al. 1995; Hannon et al. 2005
+ground_nester,is species a ground nester,0 or 1,EltonTraits,Ground nesters will be positvely increased by fire y the increase in open habitat,Latif et al. 2021;
+shrub_nester,is species a shrub nester,0 or 1,EltonTraits,Shrub nesters are postively impacted because of increased shrub regorwth,Fontaine et al. 2009; Schieck & Song 2006; Latif et al. 2021;
+shrub_nester,is species a shrub nester,0 or 1,EltonTraits,Shrub nesters are negatively imapcted because of loss of understory,Morissette et al. 2002; Brunk et al. 2023; 
+old_growth,is the species associated with old growth forests? ,0 or 1,"Schuster & Arcese, 2013 and https://databasin.org/datasets/302399b1e9164ce6ae94347d32852b48/",Old growth associated species will be negatively affected,Fontaine et al. 2009; Kotliar et al. 2002; Schieck & Song 2006; Morissette et al. 2002; Seavy & Alexander 2014; Stephens et al. 2019; Cadieux et al. 2020; Knaggs et al. 2020;  Batista et al. 2023; Gyug et al. 2012; Bunnell et al. 1995; DellaSala et al. 2021
+for_strat_ground,Prevalence of: Foraging on ground,%,EltonTraits,Ground foragers will be positively affected,Latif et al. 2021; Azeria et al. 2011; Rainsford et al. 2011; Edenius et al. 2011; 
+for_stat_understory,"Prevalence of: Foraging below 2m in understory in forest, forest edges, bushes or shrubs",%,EltonTraits,Understory  foragers will be positively affected,Latif et al. 2021;
+for_strat_midhigh,"Prevalence of: Foraging in mid to high levels in trees or high bushes (2m upward), but below canopy",%,EltonTraits,Fire will negatovely impact mih high foragers ,Rainsford et al. 2011; 
+for_strat_canopy,Prevalence of: Foraging in or just above (from) tree canopy,%,EltonTraits,Fire will negatiovely impact canopy species,Latif et al. 2021; Azeria et al. 2011; Rainsford et al. 2011; Edenius et al. 2011; Hannon et al. 2005
+Diet.Seed,"	
+Percent use of: Seed, maize, nuts, spores, wheat, grains",0 or 1,EltonTraits,Seed availibility increased after fire,Smucker et al. 2005; Kotliar et al. 2002
+Diet.Nect,"Percent use of: Nectar, pollen, plant exudates, gums
+",0 or 1,EltonTraits,"Increased flowers (from early succesion plants, ie fireweed) after fire will benefit nectivores",Kotliar et al. 2002
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,large home range:,Kotliar et al. 2002; Puig-Gironès et al. 2023; Batista et al. 2023: large home range,,,

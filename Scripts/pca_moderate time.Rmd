@@ -251,8 +251,16 @@ loadings_long <- loadings %>%
 
 ggsave(here("Figures", "PCA", "loadings bar plot.medium.png"), plot = loadings.bar, width = 15, height =15, dpi = 300)
 
-```
+loadings %>%  arrange(desc(abs(PC1)))
 
+
+```
+# Highest absolute loadings for PC! Positive - associated with negative responses, negative, associated with positive responses
+habitat_density	-0.31424517		(lower number for habitat density indicates a density habitat, so dense? habitats contribute to postitive/null responses)
+lifespan	-0.29169478	(lower lifespans are more positive/null responses)
+live_tree_nesting_use	0.27513849	(higher live tree nesting associated with negative responses)
+average_mass	-0.27241232	(lower mass are more positive/null responses)
+ground_nester	-0.25813459	(ground nesters are associated with postitve responses)
 ```{r}
 bc <- traits %>% select(common_name, where(is.numeric), -elevational_range, -nest_tree_use, -kipps_distance, -repro_age, -clutches_per_year, -null_medium, -negative_medium, -positive_medium) %>% 
   # mutate(null = NA,
@@ -412,6 +420,8 @@ loadings <- loadings %>%
 ggsave(here("Figures", "PCA", "PCA_end fig medium.png"), plot = medium, width = 18, height =8, dpi = 300)
 
 ```
+
+
 
 fit: aov(formula = PC1 ~ fire_response, data = pca_scores)
 
