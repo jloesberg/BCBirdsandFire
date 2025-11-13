@@ -16,11 +16,11 @@ traits$habitat_density[traits$habitat_density == "dense"] <- 1
 traits$habitat_density[traits$habitat_density == "semiopen"] <- 2
 traits$habitat_density[traits$habitat_density == "open"] <- 3
 traits <- traits %>% 
-   mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
-          ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
-          shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0)) %>%
-    mutate(habitat_density = as.numeric(habitat_density)) 
-
+    mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
+   #        ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
+   #        shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0)) %>%
+    habitat_density = as.numeric(habitat_density))
+traits2 <- traits
 
 ##
 positive_short <- c("Acorn Woodpecker", "American Kestrel", "American Robin", "American Three-toed Woodpecker", "Black-backed Woodpecker", "Black-capped Chickadee", "Black-throated Gray Warbler", "Brewer's Blackbird", "Brewer's Sparrow", "Brown Creeper", "Canada Jay", "Cassin's Finch", "Cedar Waxwing", "Chestnut-sided Warbler", "Chipping Sparrow", "Connecticut Warbler", "Dark-eyed Junco", "Downy Woodpecker", "Dusky Flycatcher", "Eastern Bluebird", "Fox Sparrow", "Green-tailed Towhee", "Hairy Woodpecker", "Hermit Thrush", "Hermit Warbler", "Northern House Wren", "Lazuli Bunting", "Least Flycatcher", "Lewis's Woodpecker", "Lincoln's Sparrow", "MacGillivray's Warbler", "Mountain Bluebird", "Mountain Chickadee", "Mountain Quail", "Nashville Warbler", "Northern Flicker", "Northern Pygmy-Owl", "Olive-sided Flycatcher", "Pine Siskin", "Redpoll", "Red-breasted Nuthatch", "Red-winged Blackbird", "Rock Wren", "Rufous Hummingbird", "Savannah Sparrow", "Say's Phoebe", "Song Sparrow", "Spotted Towhee", "Steller's Jay", "Tennessee Warbler", "Townsend's Solitaire","Tree Swallow", "Turkey Vulture", "Veery", "Warbling Vireo", "Western Bluebird", "Western Screech-Owl", "Western Tanager", "Western Wood-Pewee", "White-breasted Nuthatch", "White-crowned Sparrow", "White-headed Woodpecker", "White-throated Sparrow", "Winter Wren", "Yellow-bellied Sapsucker", "Yellow-rumped Warbler")
@@ -43,8 +43,8 @@ traits <- traits %>%
 ```
 
 ```{r}
-trait.pca <- traits %>% select(common_name, where(is.numeric), -elevational_range,-positive_short, -negative_short, -null_short, -nest_tree_use, -kipps_distance, -repro_age, -clutches_per_year)
-
+trait.pca <- traits %>% 
+  select(common_name, where(is.numeric), -elevational_range,-positive_short, -negative_short, -null_short,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb)
 # trait_list <- trait.pca 
 # trait_list <- trait_list[1, ]
 # write.csv(trait_list, here("Data", "cleaned", "traits.for.pca.csv"), row.names = FALSE)
@@ -237,33 +237,32 @@ loadings_long <- loadings %>%
   pivot_longer(cols = starts_with("PC"), 
                names_to = "PC", 
                values_to = "loading") %>%
-  filter(PC %in% paste0("PC", 1:5))   # keep only PCs 1-5
+  filter(PC %in% paste0("PC", 1:2))   # keep only PCs 1-5
 
 (loadings.bar <- ggplot(loadings_long, aes(x = trait, y = loading, fill = PC)) +
   geom_col(position = "dodge") +   # side-by-side bars per PC
   coord_flip() +                   # horizontal bars
-  labs(x = "Trait", y = "Loading", 
-       title = "PCA Loadings per Trait") +
+  labs(x = "Trait", y = "Loading") +
   theme_bw(base_size = 14) +
-  scale_fill_brewer(palette = "Set2")+facet_wrap(~PC)+
+  scale_y_continuous(limits = c(-0.5, 0.5), breaks = seq(-0.5, 0.5, 0.25)) +  # set range and breaks
+  scale_fill_manual(values = c("#a1d99b", "#688c64")) +  # set all bars to green
+  facet_wrap(~PC)+
     theme(legend.position = "none"))
 
-ggsave(here("Figures", "PCA", "loadings bar plot.short.png"), plot = loadings.bar, width = 15, height =15, dpi = 300)
+ggsave(here("Figures", "PCA", "loadings bar plot.short.png"), plot = loadings.bar, width = 6, height =5, dpi = 300)
 loadings %>%  arrange(desc(abs(PC1)))
 
 ```
-Highest absolute PC1 loadings
-habitat_density	0.30469907 (higher number for habitat density indicates a sparse habitat, so dense habitats contribute to null responses)
-average_mass	0.30263854 (larger = null, smaller = negative)
-lifespan	0.27995496
-live_tree_nesting_use	-0.26461940	
-for_strat_midhigh	-0.24612471
+
+
+
 ```{r}
-bc <- traits %>% select(common_name, where(is.numeric), -elevational_range, -nest_tree_use, -kipps_distance, -repro_age, -clutches_per_year, -null_short, -negative_short, -positive_short) %>% 
+bc <- traits2 %>%  
+  select(common_name, where(is.numeric), -elevational_range,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb) %>% 
   # mutate(null = NA,
   #        positive = NA,
   #        negative = NA) %>% 
-  filter(if_all(1:22, ~ !is.na(.)))
+  drop_na()  
 
 #plotting all spp on this pca:
 bc_scaled <- scale(bc[,-1],
@@ -352,7 +351,7 @@ ggsave(here("Figures", "PCA", "PCA_all response patchwork.short.png"), plot = pc
 
 (with.mix <- ggplot(pca_scores) +
   geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
-  geom_point(aes(PC1, PC2), color = "grey80") +
+  geom_point(aes(PC1, PC2), color = "grey50") +
   geom_point(data = subset(pca_scores, positive == 1),
              aes(PC1, PC2), color = "#0072B2", size = 3, alpha = 0.8) +
   geom_point(data = subset(pca_scores, negative == 1),
@@ -361,7 +360,7 @@ ggsave(here("Figures", "PCA", "PCA_all response patchwork.short.png"), plot = pc
              aes(PC1, PC2), color = "darkmagenta", size = 3, alpha = 0.8)+
   geom_point(data = centers, aes(PC1, PC2), size = 5, color = "white", shape = 16) +
   geom_point(data = centers, aes(PC1, PC2, color = group), size = 7, shape = 8) +
-  scale_color_manual(values = c("darkmagenta", "#D55E00","grey80","#0072B2")) +
+  scale_color_manual(values = c("darkmagenta", "#D55E00","grey50","#0072B2")) +
   theme_bw() +
   theme(legend.position="bottom")+
   labs(color = "Fire Response",
@@ -402,27 +401,74 @@ loadings <- loadings %>%
                aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
                arrow = arrow(length = unit(0.3, "cm")),
                color = "black") +
-  geom_text(data = loadings,
-            aes(x = PC1_arrow * 1.1, y = PC2_arrow * 1.1, label = trait),
-            color = "black", size = 3) +
+  geom_text_repel(data = loadings,
+                  aes(x = PC1_arrow, y = PC2_arrow, label = trait),
+                  color = "black",
+                  size = 4,
+                  segment.color = "grey50",    # line from label to point
+                  segment.size = 0.5,
+                  segment.alpha = 0.8,
+                  nudge_x = 0,                 # optional small nudge
+                  nudge_y = 0,
+                  box.padding = 0.5,
+                  point.padding = 0.5,
+                  max.overlaps = 20) +
   geom_point(data = centers, aes(PC1, PC2, color = group), size = 6, shape = 8) +
   theme_bw() +
-  scale_color_manual(values = c("darkmagenta", "#D55E00","grey80","#0072B2")) +
-  labs(x = "PC1", y = "PC2"))
+  theme(legend.position = "none")+
+  scale_color_manual(values = c("darkmagenta", "#D55E00","grey50","#0072B2")) +
+  labs(x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
+    y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")))
 
-(short <- with.mix+f2
-)
+(short <- with.mix+f2+  
+  plot_layout(guides = "collect") +
+  plot_annotation(theme = theme(legend.position = "bottom"), tag_levels = "A"))
 ggsave(here("Figures", "PCA", "PCA_end fig short.png"), plot = short, width = 18, height =8, dpi = 300)
 
 ```
+> anova_pc1 <- aov(PC1 ~ fire_response, data = pca_scores)
+> summary(anova_pc1)
+               Df Sum Sq Mean Sq F value   Pr(>F)    
+fire_response   3     88  29.346   5.947 0.000807 ***
+Residuals     122    602   4.934                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> # Post-hoc (Tukey) test for pairwise comparisons
+> TukeyHSD(anova_pc1)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
 
 Fit: aov(formula = PC1 ~ fire_response, data = pca_scores)
 
 $fire_response
                         diff        lwr        upr     p adj
-negative-mixed     0.9190779 -1.0118665  2.8500222 0.6028624
-neutral-mixed      3.3010379  1.5193368  5.0827390 0.0000240
-positive-mixed     1.9195253  0.2023417  3.6367089 0.0219339
-neutral-negative   2.3819601  0.9404929  3.8234272 0.0001976
-positive-negative  1.0004475 -0.3604671  2.3613620 0.2272206
-positive-neutral  -1.3815126 -2.5208111 -0.2422142 0.010634
+negative-mixed    -0.7273669 -2.8038070  1.3490733 0.7982501
+neutral-mixed     -2.6291953 -4.5451468 -0.7132438 0.0028012
+positive-mixed    -1.5079571 -3.3545297  0.3386156 0.1503312
+neutral-negative  -1.9018284 -3.4519095 -0.3517473 0.0094896
+positive-negative -0.7805902 -2.2440490  0.6828686 0.5084192
+positive-neutral   1.1212382 -0.1039059  2.3463823 0.0856007
+
+> anova_pc2 <- aov(PC2~ fire_response, data = pca_scores)
+> summary(anova_pc2)
+               Df Sum Sq Mean Sq F value  Pr(>F)   
+fire_response   3   40.9  13.617   4.443 0.00533 **
+Residuals     122  373.9   3.065                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> 
+> # Post-hoc (Tukey) test for pairwise comparisons
+> TukeyHSD(anova_pc2)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = PC2 ~ fire_response, data = pca_scores)
+
+$fire_response
+                        diff        lwr        upr     p adj
+negative-mixed    -0.6174821 -2.2539641  1.0190000 0.7594761
+neutral-mixed     -1.7025504 -3.2125482 -0.1925525 0.0204195
+positive-mixed    -1.5777405 -3.0330595 -0.1224214 0.0280118
+neutral-negative  -1.0850683 -2.3067167  0.1365801 0.1005472
+positive-negative -0.9602584 -2.1136382  0.1931213 0.1378861
+positive-neutral   0.1248099 -0.8407495  1.0903692 0.9867910

@@ -35,13 +35,13 @@ birdlist <- birdlist%>%
 dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk", "Dubovyk_trait_database.csv")) #> nest <- dtrait %>% select(name, eng_name, nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nsdeci, nsconi, nssnag, nsfloat, nscact, nstang, ntree, nesting.location)
 
 dtrait <- dtrait %>% 
-  mutate(ntree = nsdeci+nsconi,
-         nest.tree.use = (ntree+nssnag)/100, #to what scale do they use trees to nest? Essentially adding the % they use deciduous, coniferous, and snags
-         live_tree_nesting_use = ntree/100,
-         snag_nesting_use = nssnag/100) %>% 
-  select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nssnag, nscact, nstang, nsfloat, ntree, attem, eng_name,nest.tree.use, live_tree_nesting_use, snag_nesting_use, fmhawk, fmfogl, fmbagl, fstimb, nsdeci,nsconi) %>% 
+  mutate(nstree = nsdeci+nsconi,
+         any_tree_nest = nstree+nssnag,  #to what scale do they use trees to nest? Essentially adding the % they use deciduous, coniferous, and snags
+         nsgroun = nsgroun+nsgrass) %>% 
+  select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nsbank, nsgroun, nsclif, nsbuild, nsshru, nssnag, nscact, nstang, nsfloat, nstree, attem, eng_name,any_tree_nest, fmhawk, fmfogl, fmbagl, fstimb, nsdeci,nsconi) %>% 
   rename(Elton_ID = et_id,lifespan = mlife, ReproAge = matage,  nest.type = nest, clutches.per.year = attem,
-         bank = nsbank, ground = nsgroun, grass = nsgrass, cliff = nsclif, human.structure = nsbuild, shrub = nsshru, snag = nssnag, float = nsfloat, cactus = nscact, tangle = nstang, tree = ntree)
+         bank_nest = nsbank, ground_nest = nsgroun, cliff_nest = nsclif, human.structure_nest = nsbuild, shrub_nest = nsshru, snag_nest = nssnag, float_nest = nsfloat, cactus_nest = nscact, tangle_nest = nstang, live_tree_nest = nstree, conifer_nest = nsconi, deciduous_nest = nsdeci, for_hawking = fmhawk, for_foliage_gleaning =fmfogl, for_bark_gleaning = fmbagl) 
+#note - here grass nesting is included in ground nesting
 
 #correcting some taxonony
 dtrait$synonyms[dtrait$name=="Bubulcus ibis"] <- "Ardea ibis"
@@ -67,9 +67,9 @@ dtrait <- dtrait %>%
 
 
 #get nesting substrates
-cols_to_check <- c("bank", "ground", "grass", 'cliff', 'human.structure', "shrub", "float", "snag", 'cactus', "tangle", "tree")
+cols_to_check <- c("bank_nest", "ground_nest", 'cliff_nest', 'human.structure_nest', "shrub_nest", "float_nest", "snag_nest", 'cactus_nest', "tangle_nest", "live_tree_nest", "any_tree_nest")
 dtrait <- dtrait %>%
-    mutate(majority.nesting.location = if_else(ground>51, "ground", if_else(grass>51, "grass", if_else(shrub>51, "shrub", if_else(tree>51, "tree", if_else(snag>51, "snag", if_else(bank>51, "bank", if_else(cliff>51, "cliff", if_else(human.structure>51, "human.structure", if_else(tangle>51, "tangle", if_else(float>51, "float", NA))))))))))) %>%
+    mutate(majority.nesting.location = ifelse(ground_nest>51, "ground", if_else(shrub_nest>51, "shrub", if_else(live_tree_nest>51, "tree", if_else(snag_nest>51, "snag", if_else(bank_nest>51, "bank", if_else(cliff_nest>51, "cliff", if_else(human.structure_nest>51, "human.structure", if_else(tangle_nest>51, "tangle", if_else(float_nest>51, "float", if_else(any_tree_nest>51, "tree", NA))))))))))) %>%
   rowwise() %>%
   mutate(
     row_values = list(c_across(all_of(cols_to_check))),
@@ -83,15 +83,16 @@ dtrait <- dtrait %>%
       # If FALSE: Assign the column name
       cols_to_check[sorted_indices[2]])) %>% 
     ungroup() %>%
-  select(-c(row_values, sorted_indices, bank, ground, grass, cliff, human.structure, shrub, float, snag, cactus, tangle, tree)) %>%
+ select(-c(row_values, sorted_indices)) %>%
   ungroup()
 ###########################################################################################
 
 #Ecology data paper - ELTON TRAITS
 eco_t <- read.delim(here("Data", "TraitDatabases","EltonTraits", "Ecology_BirdFuncDat.txt"), sep = "\t", header = T)
 eco_t <- eco_t %>% 
-  mutate(ForStrat.water = ForStrat.watbelowsurf+ForStrat.wataroundsurf) %>% 
-  select(SpecID, Scientific, English, Diet.Inv, Diet.Nect, Diet.Seed, starts_with("ForStrat"), -c(ForStrat.Source, ForStrat.SpecLevel, ForStrat.EnteredBy, ForStrat.watbelowsurf, ForStrat.wataroundsurf)) %>% 
+  mutate(ForStrat.water = ForStrat.watbelowsurf+ForStrat.wataroundsurf,
+          ForStrat.canopy = ForStrat.midhigh+ ForStrat.canopy) %>% 
+  select(SpecID, Scientific, English, Diet.Inv, Diet.Nect, Diet.Seed, starts_with("ForStrat"), -c(ForStrat.Source, ForStrat.SpecLevel, ForStrat.EnteredBy, ForStrat.watbelowsurf, ForStrat.wataroundsurf, ForStrat.midhigh)) %>% 
   rename(Elton_ID = SpecID, eng_name = English) %>% 
   filter(!is.na(Elton_ID))
 eco_t$Scientific[eco_t$Elton_ID=="9750"] <- "Troglodytes hiemalis"
@@ -106,7 +107,6 @@ eco_t <- eco_t %>%
   mutate(majority.foraging.location = case_when(
       ForStrat.ground    > 51 ~ "ground",
       ForStrat.understory > 51 ~ "understory",
-      ForStrat.midhigh   > 51 ~ "midhigh",
       ForStrat.canopy    > 51 ~ "canopy",
       ForStrat.aerial    > 51 ~ "aerial",
       ForStrat.water     > 51 ~ "water",
@@ -288,7 +288,7 @@ bctraits.all <- left_join(bctraits3, bctrait)
 #cleanign it up a bit
 bctraits.all <- bctraits.all %>% 
   rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific, mass_g= Mass ) %>% 
-  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category,nest.tree.use, live_tree_nesting_use, snag_nesting_use,majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name,  fmhawk, fmfogl, fmbagl, fstimb, Diet.Inv, Diet.Nect, Diet.Seed,nsdeci,nsconi, ForStrat.ground, ForStrat.understory, ForStrat.midhigh, ForStrat.canopy)
+  select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category, any_tree_nest, ground_nest, shrub_nest, snag_nest, live_tree_nest, conifer_nest, deciduous_nest, majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name,  for_hawking, for_foliage_gleaning, for_bark_gleaning, fstimb, Diet.Inv, Diet.Nect, Diet.Seed, ForStrat.ground, ForStrat.understory, ForStrat.canopy)
 
 ###A few of these species don't have data in these databases: filling in from other sources
 #lots of missing data for Pacific Golden-Plover
@@ -321,28 +321,30 @@ bctraits.all$clutches.per.year[bctraits.all$common_name=="Pacific Wren"] <- 1 #c
 bctraits.all$nest.type[bctraits.all$common_name=="Pacific Wren"] <- "cavity"
 bctraits.all$nest.category[bctraits.all$common_name=="Pacific Wren"] <- "cavity"
 #bctraits.all$Diet.5Cat[bctraits.all$common_name=="Pacific Wren"] <- "Invertebrate"
-bctraits.all$nest.tree.use[bctraits.all$common_name=="Pacific Wren"] <- .5
-bctraits.all$live_tree_nesting_use[bctraits.all$common_name=="Pacific Wren"] <- .2
-bctraits.all$snag_nesting_use[bctraits.all$common_name=="Pacific Wren"] <- .3
+bctraits.all$any_tree_nest[bctraits.all$common_name=="Pacific Wren"] <- 50
+bctraits.all$live_tree_nest[bctraits.all$common_name=="Pacific Wren"] <- 20
+bctraits.all$snag_nest[bctraits.all$common_name=="Pacific Wren"] <- 30
 bctraits.all$most.common.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "snag"
 bctraits.all$second.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "ground"
 bctraits.all$most.common.foraging.location[bctraits.all$common_name=="Pacific Wren"] <- "ground"
 bctraits.all$second.foraging.location[bctraits.all$common_name=="Pacific Wren"] <- "understory"
 bctraits.all$ReproAge[bctraits.all$common_name=="Pacific Wren"] <- 1 #these are from winter wren
-bctraits.all$fmhawk[bctraits.all$common_name=="Pacific Wren"] <- 0
-bctraits.all$fmfogl[bctraits.all$common_name=="Pacific Wren"] <- 40
-bctraits.all$fmbagl[bctraits.all$common_name=="Pacific Wren"] <- 0
-bctraits.all$fstimb[bctraits.all$common_name=="Pacific Wren"] <- 10
+bctraits.all$for_hawking[bctraits.all$common_name=="Pacific Wren"] <- 0
+bctraits.all$for_foliage_gleaning[bctraits.all$common_name=="Pacific Wren"] <- 40
+bctraits.all$for_bark_gleaning[bctraits.all$common_name=="Pacific Wren"] <- 0
+#bctraits.all$fstimb[bctraits.all$common_name=="Pacific Wren"] <- 10
 # bctraits.all$fcinvert[bctraits.all$common_name=="Pacific Wren"] <- 60
-bctraits.all$nsconi[bctraits.all$common_name=="Pacific Wren"] <- 10
-bctraits.all$nsdeci[bctraits.all$common_name=="Pacific Wren"] <- 10
+bctraits.all$conifer_nest[bctraits.all$common_name=="Pacific Wren"] <- 10
+bctraits.all$deciduous_nest[bctraits.all$common_name=="Pacific Wren"] <- 10
 bctraits.all$ForStrat.ground[bctraits.all$common_name=="Pacific Wren"] <- 50
 bctraits.all$ForStrat.understory[bctraits.all$common_name=="Pacific Wren"] <- 50
-bctraits.all$ForStrat.midhigh[bctraits.all$common_name=="Pacific Wren"] <- 0
+#bctraits.all$ForStrat.midhigh[bctraits.all$common_name=="Pacific Wren"] <- 0
 bctraits.all$ForStrat.canopy[bctraits.all$common_name=="Pacific Wren"] <- 0
 bctraits.all$Diet.Inv[bctraits.all$common_name=="Pacific Wren"] <- 60
 bctraits.all$Diet.Nect[bctraits.all$common_name=="Pacific Wren"] <- 0
 bctraits.all$Diet.Seed[bctraits.all$common_name=="Pacific Wren"] <- 10
+bctraits.all$ground_nest[bctraits.all$common_name=="Pacific Wren"] <- 20
+bctraits.all$shrub_nest[bctraits.all$common_name=="Pacific Wren"] <- 0
 ```
 
 ```{r}
@@ -388,7 +390,7 @@ bctraits.all <- left_join(bctraits.all, birdbase.bc)
 bctraits.all <- bctraits.all %>% 
  # rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific ) %>% 
   #select(AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name) #uncheck this to include these other names/database IDs
-  select(Order, Family, sci_name, common_name, status, iucn.2024, Primary.Lifestyle, primary_habitat, Habitat.Density, forest.use, habitat.breadth,  fmhawk, fmfogl, fmbagl, primary_diet, diet.breadth, Eco.Spec.Index,Trophic.Level, Trophic.Niche,  Migration, Range.Size, elevational_range, lifespan, ReproAge, average_mass,Kipps.Distance, Hand.Wing.Index, clutches.per.year, nest.tree.use, live_tree_nesting_use, snag_nesting_use, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.type, nest.category, majority.foraging.location, most.common.foraging.location, Diet.Inv, Diet.Nect, Diet.Seed, second.foraging.location, nsdeci,nsconi, ForStrat.ground, ForStrat.understory, ForStrat.midhigh, ForStrat.canopy)
+  select(Order, Family, sci_name, common_name, iucn.2024, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category, any_tree_nest, ground_nest, shrub_nest, snag_nest, live_tree_nest, conifer_nest, deciduous_nest, majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name,  for_hawking, for_foliage_gleaning, for_bark_gleaning, fstimb, Diet.Inv, Diet.Nect, Diet.Seed, ForStrat.ground, ForStrat.understory, ForStrat.canopy, elevational_range, forest.use, primary_habitat, habitat.breadth, primary_diet,diet.breadth, Eco.Spec.Index)
 
 old_growth <-  c("American Three-toed Woodpecker", "Bay-breasted Warbler", "Black-capped Chickadee", "Boreal Chickadee", "Boreal Owl", "Brown Creeper", "Canada Warbler", "Chestnut-backed Chickadee", "Dusky Grouse", "Golden-crowned Kinglet", "Great Horned Owl", "Hairy Woodpecker", "Hammond's Flycatcher", "Hermit Thrush", "Lewis's Woodpecker", "American Goshawk", "Northern Waterthrush", "Western Flycatcher", "Pileated Woodpecker", "Red-breasted Nuthatch", "Red-breasted Sapsucker", "Ruby-crowned Kinglet", "Spruce Grouse", "Swainson's Thrush", "Townsend's Warbler", "Varied Thrush", "Vaux's Swift", "White-breasted Nuthatch")
 missing_names <- old_growth[!(old_growth %in% bctraits.all$common_name)] #do all these names appear in the BC list?
