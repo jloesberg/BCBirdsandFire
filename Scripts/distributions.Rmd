@@ -16,38 +16,13 @@ library(tidyterra)
 
 ```
 
-```{r OSF}
-
-osf <- rast(here("Data", "distributionExamples", "PacificBirds-BC_Olive-sided-Flycatcher_mean_seasonal_abundance_2023_breeding.tif"))
-
-plot(osf, main = "Olive-sided Flycatcher Mean Seasonal Abundance")
-
-#add bc boundary
-bc <- bcmaps::bc_bound() %>%
-  vect()
-# 
-bc_proj<- project(bc, osf)
-osf.bc <- mask(crop(osf, bc_proj), bc_proj)
-osf_final <- project(osf.bc, crs(bc))
-# 
-
-plot(osf_final,
-     main = "Olive-sided Flycatcher",  	col = viridis::viridis(100, option = "D"))
-lines(bc,
-      col = "black",
-      lwd = 2)
-# terra::writeRaster(
-#   x = osf_final,
-#   filename = here("Maps", "osf_abundance_BC_clip.tif"), # Set your desired output path
-#   filetype = "GTiff",     # Specify GeoTIFF format
-#   overwrite = TRUE         # Allows R to overwrite the file if it already exists
-# )
-```
-
 ```{r FWI}
 t.26 <- rast(here("Data","ClimateDataCanada","May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050_.nc")) # for terra package
 print(t.26)
 #plot(t.26)
+#add bc boundary
+bc <- bcmaps::bc_bound() %>%
+  vect()
 bc_proj <- project(bc, t.26)
 t.26bc <- mask(crop(t.26, bc_proj), bc_proj)
 t.26bc <- project(t.26bc, crs(bc)) #turns it back to the BC specific projection
@@ -55,20 +30,42 @@ plot(t.26bc, main = "BC May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050
 lines(bc, col = "black", lwd = 2)
 
 climate_layer <- t.26bc[[1]] 
-climate_aligned <- resample(climate_layer, osf_final, method = "near") 
-risk_map <- osf_final * climate_aligned
+
 ```
 
-```{r plot version}
-png(here("Maps", "try1.png"), width = 3000, height = 1000, pointsize = 24)
+```{r OSF}
+osf <- rast(here("Data", "ebird_distributions", "Olive-sided_Flycatcher_abundance_full-year_max_3km_BC.tif"))
+plot(osf, main = "Olive-sided Flycatcher Mean Seasonal Abundance")
+
+
+# 
+bc_proj<- project(bc, osf)
+osf.bc <- mask(crop(osf, bc_proj), bc_proj)
+osf_final <- project(osf.bc, crs(bc)) %>%  trim()
+# 
+#png("Olive_sided_Flycatcher.png", width = 1600, height = 1200, res = 200)
+plot(osf_final,
+     main = "Olive-sided Flycatcher",  	col = viridis::viridis(100, option = "D"))
+lines(bc,
+      col = "black",
+      lwd = 2)
+
+#
+climate_aligned <- resample(climate_layer, osf_final, method = "near") 
+risk_map <- osf_final * climate_aligned
+##
+
+png(here("Maps", "nov.presentation", "osf.panel.png"), width = 3000, height = 1000, pointsize = 24)
 par(mfrow = c(1, 3)) 
 # Plot Map 2: Climate Data
+
 plot(climate_aligned, 
      main = "FWI RCP2.6 2021-2050",
      col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
 )
 lines(bc, col = "black", lwd = 1.5)
-# Plot Map 1: Bird Abundance (using your preferred colors)
+
+# Plot Map 1: Bird Abundance
 plot(osf_final, 
      main = "Olive-sided Flycatcher ",
      col = rev(hcl.colors(100, "Blues")) 
@@ -76,13 +73,296 @@ plot(osf_final,
 lines(bc, col = "black", lwd = 1.5)
 
 # Plot the resulting composite map
+
 plot(risk_map, 
      main = "FWI * Abundance",
      col = rev(hcl.colors(100, "Reds"))
 )
 lines(bc, col = "black", lwd = 1.5)
 
+#individual maps
+png(here("Maps", "nov.presentation", "osf.risk.png"), width = 1000, height = 1000, pointsize = 24)
+#risk
+plot(risk_map, 
+     main = "Olive-sided Flycatcher Risk",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
 
+#fwi
+png(here("Maps", "nov.presentation", "fwi.png"), width = 1000, height = 1000, pointsize = 24)
+plot(climate_aligned, 
+     main = "FWI RCP2.6 2021-2050",
+     col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
+)
+lines(bc, col = "black", lwd = 1.5)
+
+#osf
+png(here("Maps", "nov.presentation", "osf.png"), width = 1000, height = 1000, pointsize = 24)
+plot(osf_final, 
+     main = "Olive-sided Flycatcher ",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+
+
+```
+
+```{r bbw}
+bbw <- rast(here("Data", "ebird_distributions", "Black-backed_Woodpecker_abundance_resident_seasonal_max_3km_BC.tif"))
+plot(bbw, main = "Black-backed Woodpecker Mean Annual Abundance")
+
+#
+bc_proj<- project(bc, bbw)
+bbw.bc <- mask(crop(bbw, bc_proj), bc_proj)
+bbw_final <- project(bbw.bc, crs(bc)) %>%  trim()
+# 
+plot(bbw_final,
+     main = "Black-backed Woodpecker",  	col = viridis::viridis(100, option = "D"))
+lines(bc,
+      col = "black",
+      lwd = 2)
+
+#
+climate_aligned <- resample(climate_layer, bbw_final, method = "near") 
+risk_map <- bbw_final * climate_aligned
+##
+
+png(here("Maps", "nov.presentation", "bbw.panel.png"), width = 3000, height = 1000, pointsize = 24)
+par(mfrow = c(1, 3)) 
+# Plot Map 2: Climate Data
+
+plot(climate_aligned, 
+     main = "FWI RCP2.6 2021-2050",
+     col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot Map 1: Bird Abundance
+plot(bbw_final, 
+     main = "Black-backed Woodpecker",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot the resulting composite map
+
+plot(risk_map, 
+     main = "FWI * Abundance",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+#individual maps
+png(here("Maps", "nov.presentation", "bbw.risk.png"), width = 1000, height = 1000, pointsize = 24)
+#risk
+plot(risk_map, 
+     main = "Black-backed Woodpecker Risk",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+#abundance
+png(here("Maps", "nov.presentation", "bbw.png"), width = 1000, height = 1000, pointsize = 24)
+plot(bbw_final, 
+     main = "Black-backed Woodpecker",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+
+
+```
+
+```{r lw}
+lw <- rast(here("Data", "ebird_distributions", "Lewis's_Woodpecker_abundance_full-year_max_3km_BC.tif"))
+plot(lw, main = "Lewis's Woodpecker Abundance")
+
+#
+bc_proj<- project(bc, lw)
+lw.bc <- mask(crop(lw, bc_proj), bc_proj)
+lw_final <- project(lw.bc, crs(bc)) %>%  trim()
+# 
+plot(lw_final,
+     main = "Lewis's Woodpecker",  	col = viridis::viridis(100, option = "D"))
+lines(bc,
+      col = "black",
+      lwd = 2)
+
+#
+climate_aligned <- resample(climate_layer, lw_final, method = "near") 
+risk_map <- lw_final * climate_aligned
+##
+
+png(here("Maps", "nov.presentation", "lw.panel.png"), width = 3000, height = 1000, pointsize = 24)
+par(mfrow = c(1, 3)) 
+# Plot Map 2: Climate Data
+
+plot(climate_aligned, 
+     main = "FWI RCP2.6 2021-2050",
+     col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot Map 1: Bird Abundance
+plot(lw_final, 
+     main = "Lewis's Woodpecker",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot the resulting composite map
+
+plot(risk_map, 
+     main = "FWI * Abundance",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+#individual maps
+png(here("Maps", "nov.presentation", "lw.risk.png"), width = 1000, height = 1000, pointsize = 24)
+#risk
+plot(risk_map, 
+     main = "Lewis's Woodpecker Risk",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+#abundance
+png(here("Maps", "nov.presentation", "lw.png"), width = 1000, height = 1000, pointsize = 24)
+plot(lw_final, 
+     main = "Lewis's Woodpecker",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+
+
+```
+
+```{r rck}
+rck <- rast(here("Data", "ebird_distributions", "Ruby-crowned_Kinglet_abundance_full-year_max_3km_BC.tif"))
+plot(rck, main = "Ruby-crowned Kinglet Abundance")
+
+#
+bc_proj<- project(bc, rck)
+rck.bc <- mask(crop(rck, bc_proj), bc_proj)
+rck_final <- project(rck.bc, crs(bc)) %>%  trim()
+# 
+plot(rck_final,
+     main = "Ruby-crowned Kinglet",  	col = viridis::viridis(100, option = "D"))
+lines(bc,
+      col = "black",
+      rckd = 2)
+
+#
+climate_aligned <- resample(climate_layer, rck_final, method = "near") 
+risk_map <- rck_final * climate_aligned
+##
+
+png(here("Maps", "nov.presentation", "rck.panel.png"), width = 3000, height = 1000, pointsize = 24)
+par(mfrow = c(1, 3)) 
+# Plot Map 2: Climate Data
+
+plot(climate_aligned, 
+     main = "FWI RCP2.6 2021-2050",
+     col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot Map 1: Bird Abundance
+plot(rck_final, 
+     main = "Ruby-crowned Kinglet",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot the resulting composite map
+
+plot(risk_map, 
+     main = "Ruby-crowned Kinglet Risk",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+#individual maps
+png(here("Maps", "nov.presentation", "rck.risk.png"), width = 1000, height = 1000, pointsize = 24)
+#risk
+plot(risk_map, 
+     main = "Ruby-crowned Kinglet Risk",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+#abundance
+png(here("Maps", "nov.presentation", "rck.png"), width = 1000, height = 1000, pointsize = 24)
+plot(rck_final, 
+     main = "Ruby-crowned Kinglet",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+```
+
+
+```{r rck}
+wwp <- rast(here("Data", "ebird_distributions", "Western_Wood-Pewee_abundance_full-year_max_3km_BC.tif"))
+plot(wwp, main = "Western Wood-Pewee Abundance")
+
+#
+bc_proj<- project(bc, wwp)
+wwp.bc <- mask(crop(wwp, bc_proj), bc_proj)
+wwp_final <- project(wwp.bc, crs(bc)) %>%  trim()
+# 
+plot(wwp_final,
+     main = "Western Wood-Pewee",  	col = viridis::viridis(100, option = "D"))
+lines(bc,
+      col = "black",
+      lwd = 2)
+
+#
+climate_aligned <- resample(climate_layer, wwp_final, method = "near") 
+risk_map <- wwp_final * climate_aligned
+##
+
+png(here("Maps", "nov.presentation", "wwp.panel.png"), width = 3000, height = 1000, pointsize = 24)
+par(mfrow = c(1, 3)) 
+# Plot Map 2: Climate Data
+
+plot(climate_aligned, 
+     main = "FWI RCP2.6 2021-2050",
+     col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot Map 1: Bird Abundance
+plot(wwp_final, 
+     main = "Western Wood-Pewee",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
+
+# Plot the resulting composite map
+
+plot(risk_map, 
+     main = "Western Wood-Pewee Risk",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+#individual maps
+png(here("Maps", "nov.presentation", "wwp.risk.png"), width = 1000, height = 1000, pointsize = 24)
+#risk
+plot(risk_map, 
+     main = "Western Wood-Pewee Risk",
+     col = rev(hcl.colors(100, "Reds"))
+)
+lines(bc, col = "black", lwd = 1.5)
+
+#abundance
+png(here("Maps", "nov.presentation", "wwp.png"), width = 1000, height = 1000, pointsize = 24)
+plot(wwp_final, 
+     main = "Western Wood-Pewee",
+     col = rev(hcl.colors(100, "Blues")) 
+)
+lines(bc, col = "black", lwd = 1.5)
 ```
 
 ```{r}
@@ -97,27 +377,49 @@ climate_aligned <- resample(climate_layer, osf_final, method = "near")
 
 combined_raster_stack <- c(osf_final, climate_aligned)
 ggplot() +
-  geom_spatraster(data = climate_layer) +
+  geom_spatraster(data = climate_aligned) +  # use aligned raster
   scale_fill_viridis_c(
     na.value = "transparent",
-    option = "A", # Magma/Heat color scheme
+    option = "A",   # Magma/Heat color scheme
     name = "FWI Value",
-    guide = guide_colorbar(direction = "horizontal", title.position = "top") # Set up first legend
+    guide = guide_colorbar(direction = "horizontal", title.position = "top")
   ) +
-
-  # C. Top Layer: BC Boundary
   geom_sf(data = bc, 
           fill = NA, 
-          color = "black", # Use a contrasting color for the boundary
+          color = "black",
           linewidth = 0.75) +
-  
-  # D. Theming
-  coord_sf(expand = FALSE) + 
+  coord_sf(expand = FALSE) +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.box = "horizontal")
+
+# Combine
+combined_stack <- c(osf_final, climate_aligned)
+
+# Convert to data frame for ggplot
+combined_df <- as.data.frame(combined_stack, xy = TRUE, na.rm = TRUE)
+
+# Pivot longer for faceting
+library(tidyr)
+combined_long <- combined_df %>%
+  pivot_longer(cols = c("Abundance", "FWI_2050"), 
+               names_to = "Layer", values_to = "Value")
+
+# Plot with facets
+ggplot(combined_long, aes(x = x, y = y, fill = Value)) +
+  geom_raster() +
+  geom_sf(data = bc, fill = NA, color = "black", linewidth = 0.75) +
+  scale_fill_viridis_c(option = "A", na.value = "transparent") +
+  facet_wrap(~Layer) +
+  coord_sf(expand = FALSE) +
   theme_bw() +
   theme(legend.position = "bottom",
         legend.box = "horizontal")
 ```
 
+
+
+###
 ```{r}
 ci <- rast(here("Data", "distributionExamples", "CIJV_all-bird-groups_all-species-priority_all-species-conservation_richness_annual-max.tif"))
 plot(ci)
