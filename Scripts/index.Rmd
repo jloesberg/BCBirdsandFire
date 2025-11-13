@@ -174,3 +174,61 @@ ggsave(here("Figures", "index.tyrannidae.png"), plot = tyran, width = 8, height 
 
 
 ```
+
+```{r}
+family_summary <- index %>%
+  group_by(family) %>%
+  summarise(mean_index = mean(index_sum, na.rm = TRUE),
+            sd_index = sd(index_sum, na.rm = TRUE),
+            .groups = "drop")
+
+(family <- ggplot(family_summary, aes(x = mean_index, 
+                           y = reorder(family, mean_index))) +
+  geom_vline(xintercept = 0, color = "black", linewidth = 0.75) +
+  geom_errorbarh(aes(xmin = mean_index - sd_index, 
+                     xmax = mean_index + sd_index),
+                 color = "gray30", height = 0.4, linewidth = 0.8) +
+  geom_point(aes(color = mean_index), size = 3) +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue",
+                        midpoint = 0, name = "Mean Index") +
+  labs(x = "Fire Vulnerability Index Score",
+       y = "Family") +
+  theme_classic(base_size = 12) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text.y = element_text(size = 10),
+        legend.position = "bottom"))
+
+ggsave(here("Figures", "index.familt errorbars.png"), plot = family, width = 8, height =8)
+
+```
+```{r}
+# Select top 5 and bottom 5 species by index_sum
+top_bottom <- index %>%
+  arrange(desc(index_sum)) %>%
+  slice_head(n = 5) %>%
+  bind_rows(
+    index %>%
+      arrange(index_sum) %>%
+      slice_head(n = 5)
+  )
+
+# Plot
+(most <- ggplot(top_bottom, aes(
+  x = reorder(common_name, index_sum),
+  y = index_sum,
+  fill = index_sum
+)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_viridis_c(option = "C", name = "Index Sum") +
+  theme_bw(base_size = 14) +
+  labs(
+    x = "Species",
+    y = "Index",
+    title = "Most affected species", fill = "Index"
+  ))
+
+ggsave(here("Figures", "index.most.png"), plot = most, width = 8, height =8)
+
+```
+
