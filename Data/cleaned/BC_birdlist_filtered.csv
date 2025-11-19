@@ -1,0 +1,243 @@
+"Order","Family","common_name","sci_name","status"
+"ANSERIFORMES","Anatidae","Snow Goose","Anser caerulescens",NA
+"ANSERIFORMES","Anatidae","Ross's Goose","Anser rossii",NA
+"ANSERIFORMES","Anatidae","Greater White-fronted Goose","Anser albifrons",NA
+"ANSERIFORMES","Anatidae","Brant","Branta bernicla",NA
+"ANSERIFORMES","Anatidae","Canada Goose","Branta canadensis",NA
+"ANSERIFORMES","Anatidae","Trumpeter Swan","Cygnus buccinator",NA
+"ANSERIFORMES","Anatidae","Tundra Swan","Cygnus columbianus",NA
+"ANSERIFORMES","Anatidae","Wood Duck","Aix sponsa",NA
+"ANSERIFORMES","Anatidae","Blue-winged Teal","Spatula discors",NA
+"ANSERIFORMES","Anatidae","Cinnamon Teal","Spatula cyanoptera",NA
+"ANSERIFORMES","Anatidae","Northern Shoveler","Spatula clypeata",NA
+"ANSERIFORMES","Anatidae","Gadwall","Mareca strepera",NA
+"ANSERIFORMES","Anatidae","Eurasian Wigeon","Mareca penelope",NA
+"ANSERIFORMES","Anatidae","American Wigeon","Mareca americana",NA
+"ANSERIFORMES","Anatidae","Mallard","Anas platyrhynchos",NA
+"ANSERIFORMES","Anatidae","Northern Pintail","Anas acuta",NA
+"ANSERIFORMES","Anatidae","Green-winged Teal","Anas crecca",NA
+"ANSERIFORMES","Anatidae","Canvasback","Aythya valisineria",NA
+"ANSERIFORMES","Anatidae","Redhead","Aythya americana",NA
+"ANSERIFORMES","Anatidae","Ring-necked Duck","Aythya collaris",NA
+"ANSERIFORMES","Anatidae","Lesser Scaup","Aythya affinis",NA
+"ANSERIFORMES","Anatidae","Harlequin Duck","Histrionicus histrionicus",NA
+"ANSERIFORMES","Anatidae","Surf Scoter","Melanitta perspicillata",NA
+"ANSERIFORMES","Anatidae","White-winged Scoter","Melanitta deglandi",NA
+"ANSERIFORMES","Anatidae","Black Scoter","Melanitta americana","Near-threatened"
+"ANSERIFORMES","Anatidae","Long-tailed Duck","Clangula hyemalis","Vulnerable"
+"ANSERIFORMES","Anatidae","Bufflehead","Bucephala albeola",NA
+"ANSERIFORMES","Anatidae","Common Goldeneye","Bucephala clangula",NA
+"ANSERIFORMES","Anatidae","Barrow's Goldeneye","Bucephala islandica",NA
+"ANSERIFORMES","Anatidae","Hooded Merganser","Lophodytes cucullatus",NA
+"ANSERIFORMES","Anatidae","Common Merganser","Mergus merganser",NA
+"ANSERIFORMES","Anatidae","Red-breasted Merganser","Mergus serrator",NA
+"ANSERIFORMES","Anatidae","Ruddy Duck","Oxyura jamaicensis",NA
+"GALLIFORMES","Phasianidae","Ruffed Grouse","Bonasa umbellus",NA
+"GALLIFORMES","Phasianidae","Dusky Grouse","Dendragapus obscurus",NA
+"GALLIFORMES","Phasianidae","Sooty Grouse","Dendragapus fuliginosus",NA
+"GALLIFORMES","Phasianidae","Sharp-tailed Grouse","Tympanuchus phasianellus",NA
+"GALLIFORMES","Phasianidae","White-tailed Ptarmigan","Lagopus leucura",NA
+"GALLIFORMES","Phasianidae","Willow Ptarmigan","Lagopus lagopus",NA
+"GALLIFORMES","Phasianidae","Rock Ptarmigan","Lagopus muta",NA
+"GALLIFORMES","Phasianidae","Spruce Grouse","Canachites canadensis",NA
+"COLUMBIFORMES","Columbidae","Band-tailed Pigeon","Patagioenas fasciata",NA
+"COLUMBIFORMES","Columbidae","Mourning Dove","Zenaida macroura",NA
+"CAPRIMULGIFORMES","Caprimulgidae","Common Nighthawk","Chordeiles minor",NA
+"CAPRIMULGIFORMES","Caprimulgidae","Common Poorwill","Phalaenoptilus nuttallii",NA
+"APODIFORMES","Apodidae","Black Swift","Cypseloides niger","Vulnerable"
+"APODIFORMES","Apodidae","Vaux's Swift","Chaetura vauxi",NA
+"APODIFORMES","Apodidae","White-throated Swift","Aeronautes saxatalis",NA
+"APODIFORMES","Trochilidae","Black-chinned Hummingbird","Archilochus alexandri",NA
+"APODIFORMES","Trochilidae","Anna's Hummingbird","Calypte anna",NA
+"APODIFORMES","Trochilidae","Calliope Hummingbird","Selasphorus calliope",NA
+"APODIFORMES","Trochilidae","Rufous Hummingbird","Selasphorus rufus","Near-threatened"
+"GRUIFORMES","Rallidae","Virginia Rail","Rallus limicola",NA
+"GRUIFORMES","Rallidae","Sora","Porzana carolina",NA
+"GRUIFORMES","Rallidae","American Coot","Fulica americana",NA
+"GRUIFORMES","Rallidae","Yellow Rail","Coturnicops noveboracensis",NA
+"GRUIFORMES","Gruidae","Sandhill Crane","Antigone canadensis",NA
+"GAVIIFORMES","Gaviidae","Red-throated Loon","Gavia stellata",NA
+"GAVIIFORMES","Gaviidae","Pacific Loon","Gavia pacifica",NA
+"GAVIIFORMES","Gaviidae","Common Loon","Gavia immer",NA
+"CATHARTIFORMES","Cathartidae","Turkey Vulture","Cathartes aura",NA
+"ACCIPITRIFORMES","Pandionidae","Osprey","Pandion haliaetus",NA
+"ACCIPITRIFORMES","Accipitridae","Golden Eagle","Aquila chrysaetos",NA
+"ACCIPITRIFORMES","Accipitridae","Sharp-shinned Hawk","Accipiter striatus",NA
+"ACCIPITRIFORMES","Accipitridae","Cooper's Hawk","Astur cooperii",NA
+"ACCIPITRIFORMES","Accipitridae","American Goshawk","Astur atricapillus",NA
+"ACCIPITRIFORMES","Accipitridae","Northern Harrier","Circus hudsonius",NA
+"ACCIPITRIFORMES","Accipitridae","Bald Eagle","Haliaeetus leucocephalus",NA
+"ACCIPITRIFORMES","Accipitridae","Swainson's Hawk","Buteo swainsoni",NA
+"ACCIPITRIFORMES","Accipitridae","Red-tailed Hawk","Buteo jamaicensis",NA
+"ACCIPITRIFORMES","Accipitridae","Rough-legged Hawk","Buteo lagopus",NA
+"STRIGIFORMES","Tytonidae","American Barn Owl","Tyto furcata",NA
+"STRIGIFORMES","Strigidae","Flammulated Owl","Psiloscops flammeolus",NA
+"STRIGIFORMES","Strigidae","Western Screech-Owl","Megascops kennicottii",NA
+"STRIGIFORMES","Strigidae","Snowy Owl","Bubo scandiacus","Vulnerable"
+"STRIGIFORMES","Strigidae","Great Horned Owl","Bubo virginianus",NA
+"STRIGIFORMES","Strigidae","Northern Hawk Owl","Surnia ulula",NA
+"STRIGIFORMES","Strigidae","Northern Pygmy-Owl","Glaucidium gnoma",NA
+"STRIGIFORMES","Strigidae","Barred Owl","Strix varia",NA
+"STRIGIFORMES","Strigidae","Great Gray Owl","Strix nebulosa",NA
+"STRIGIFORMES","Strigidae","Long-eared Owl","Asio otus",NA
+"STRIGIFORMES","Strigidae","Short-eared Owl","Asio flammeus",NA
+"STRIGIFORMES","Strigidae","Boreal Owl","Aegolius funereus",NA
+"STRIGIFORMES","Strigidae","Northern Saw-whet Owl","Aegolius acadicus",NA
+"CORACIIFORMES","Alcedinidae","Belted Kingfisher","Megaceryle alcyon",NA
+"PICIFORMES","Picidae","Williamson's Sapsucker","Sphyrapicus thyroideus",NA
+"PICIFORMES","Picidae","Yellow-bellied Sapsucker","Sphyrapicus varius",NA
+"PICIFORMES","Picidae","Red-naped Sapsucker","Sphyrapicus nuchalis",NA
+"PICIFORMES","Picidae","Red-breasted Sapsucker","Sphyrapicus ruber",NA
+"PICIFORMES","Picidae","Lewis's Woodpecker","Melanerpes lewis",NA
+"PICIFORMES","Picidae","American Three-toed Woodpecker","Picoides dorsalis",NA
+"PICIFORMES","Picidae","Black-backed Woodpecker","Picoides arcticus",NA
+"PICIFORMES","Picidae","Downy Woodpecker","Dryobates pubescens",NA
+"PICIFORMES","Picidae","Hairy Woodpecker","Dryobates villosus",NA
+"PICIFORMES","Picidae","Pileated Woodpecker","Dryocopus pileatus",NA
+"PICIFORMES","Picidae","Northern Flicker","Colaptes auratus",NA
+"FALCONIFORMES","Falconidae","American Kestrel","Falco sparverius",NA
+"FALCONIFORMES","Falconidae","Merlin","Falco columbarius",NA
+"FALCONIFORMES","Falconidae","Gyrfalcon","Falco rusticolus",NA
+"FALCONIFORMES","Falconidae","Peregrine Falcon","Falco peregrinus",NA
+"FALCONIFORMES","Falconidae","Prairie Falcon","Falco mexicanus",NA
+"PASSERIFORMES","Tyrannidae","Olive-sided Flycatcher","Contopus cooperi","Near-threatened"
+"PASSERIFORMES","Tyrannidae","Western Wood-Pewee","Contopus sordidulus",NA
+"PASSERIFORMES","Tyrannidae","Yellow-bellied Flycatcher","Empidonax flaviventris",NA
+"PASSERIFORMES","Tyrannidae","Alder Flycatcher","Empidonax alnorum",NA
+"PASSERIFORMES","Tyrannidae","Willow Flycatcher","Empidonax traillii",NA
+"PASSERIFORMES","Tyrannidae","Least Flycatcher","Empidonax minimus",NA
+"PASSERIFORMES","Tyrannidae","Hammond's Flycatcher","Empidonax hammondii",NA
+"PASSERIFORMES","Tyrannidae","Dusky Flycatcher","Empidonax oberholseri",NA
+"PASSERIFORMES","Tyrannidae","Eastern Phoebe","Sayornis phoebe",NA
+"PASSERIFORMES","Tyrannidae","Say's Phoebe","Sayornis saya",NA
+"PASSERIFORMES","Tyrannidae","Tropical Kingbird","Tyrannus melancholicus",NA
+"PASSERIFORMES","Tyrannidae","Western Kingbird","Tyrannus verticalis",NA
+"PASSERIFORMES","Tyrannidae","Eastern Kingbird","Tyrannus tyrannus",NA
+"PASSERIFORMES","Vireonidae","Hutton's Vireo","Vireo huttoni",NA
+"PASSERIFORMES","Vireonidae","Cassin's Vireo","Vireo cassinii",NA
+"PASSERIFORMES","Vireonidae","Philadelphia Vireo","Vireo philadelphicus",NA
+"PASSERIFORMES","Vireonidae","Warbling Vireo","Vireo gilvus",NA
+"PASSERIFORMES","Vireonidae","Red-eyed Vireo","Vireo olivaceus",NA
+"PASSERIFORMES","Laniidae","Northern Shrike","Lanius borealis",NA
+"PASSERIFORMES","Corvidae","Canada Jay","Perisoreus canadensis",NA
+"PASSERIFORMES","Corvidae","Steller's Jay","Cyanocitta stelleri",NA
+"PASSERIFORMES","Corvidae","Blue Jay","Cyanocitta cristata",NA
+"PASSERIFORMES","Corvidae","Black-billed Magpie","Pica hudsonia",NA
+"PASSERIFORMES","Corvidae","Clark's Nutcracker","Nucifraga columbiana",NA
+"PASSERIFORMES","Corvidae","American Crow","Corvus brachyrhynchos",NA
+"PASSERIFORMES","Corvidae","Common Raven","Corvus corax",NA
+"PASSERIFORMES","Paridae","Black-capped Chickadee","Poecile atricapillus",NA
+"PASSERIFORMES","Paridae","Mountain Chickadee","Poecile gambeli",NA
+"PASSERIFORMES","Paridae","Chestnut-backed Chickadee","Poecile rufescens",NA
+"PASSERIFORMES","Paridae","Boreal Chickadee","Poecile hudsonicus",NA
+"PASSERIFORMES","Alaudidae","Horned Lark","Eremophila alpestris",NA
+"PASSERIFORMES","Hirundinidae","Bank Swallow","Riparia riparia",NA
+"PASSERIFORMES","Hirundinidae","Tree Swallow","Tachycineta bicolor",NA
+"PASSERIFORMES","Hirundinidae","Violet-green Swallow","Tachycineta thalassina",NA
+"PASSERIFORMES","Hirundinidae","Purple Martin","Progne subis",NA
+"PASSERIFORMES","Hirundinidae","Northern Rough-winged Swallow","Stelgidopteryx serripennis",NA
+"PASSERIFORMES","Hirundinidae","Barn Swallow","Hirundo rustica",NA
+"PASSERIFORMES","Hirundinidae","Cliff Swallow","Petrochelidon pyrrhonota",NA
+"PASSERIFORMES","Aegithalidae","Bushtit","Psaltriparus minimus",NA
+"PASSERIFORMES","Regulidae","Ruby-crowned Kinglet","Corthylio calendula",NA
+"PASSERIFORMES","Regulidae","Golden-crowned Kinglet","Regulus satrapa",NA
+"PASSERIFORMES","Sittidae","White-breasted Nuthatch","Sitta carolinensis",NA
+"PASSERIFORMES","Sittidae","Pygmy Nuthatch","Sitta pygmaea",NA
+"PASSERIFORMES","Sittidae","Red-breasted Nuthatch","Sitta canadensis",NA
+"PASSERIFORMES","Certhiidae","Brown Creeper","Certhia americana",NA
+"PASSERIFORMES","Troglodytidae","Rock Wren","Salpinctes obsoletus",NA
+"PASSERIFORMES","Troglodytidae","Canyon Wren","Catherpes mexicanus",NA
+"PASSERIFORMES","Troglodytidae","Northern House Wren","Troglodytes aedon",NA
+"PASSERIFORMES","Troglodytidae","Pacific Wren","Troglodytes pacificus",NA
+"PASSERIFORMES","Troglodytidae","Winter Wren","Troglodytes hiemalis",NA
+"PASSERIFORMES","Troglodytidae","Marsh Wren","Cistothorus palustris",NA
+"PASSERIFORMES","Troglodytidae","Bewick's Wren","Thryomanes bewickii",NA
+"PASSERIFORMES","Cinclidae","American Dipper","Cinclus mexicanus",NA
+"PASSERIFORMES","Mimidae","Gray Catbird","Dumetella carolinensis",NA
+"PASSERIFORMES","Mimidae","Sage Thrasher","Oreoscoptes montanus",NA
+"PASSERIFORMES","Mimidae","Northern Mockingbird","Mimus polyglottos",NA
+"PASSERIFORMES","Turdidae","Western Bluebird","Sialia mexicana",NA
+"PASSERIFORMES","Turdidae","Mountain Bluebird","Sialia currucoides",NA
+"PASSERIFORMES","Turdidae","Townsend's Solitaire","Myadestes townsendi",NA
+"PASSERIFORMES","Turdidae","Varied Thrush","Ixoreus naevius",NA
+"PASSERIFORMES","Turdidae","Veery","Catharus fuscescens",NA
+"PASSERIFORMES","Turdidae","Gray-cheeked Thrush","Catharus minimus",NA
+"PASSERIFORMES","Turdidae","Swainson's Thrush","Catharus ustulatus",NA
+"PASSERIFORMES","Turdidae","Hermit Thrush","Catharus guttatus",NA
+"PASSERIFORMES","Turdidae","American Robin","Turdus migratorius",NA
+"PASSERIFORMES","Muscicapidae","Northern Wheatear","Oenanthe oenanthe",NA
+"PASSERIFORMES","Bombycillidae","Bohemian Waxwing","Bombycilla garrulus",NA
+"PASSERIFORMES","Bombycillidae","Cedar Waxwing","Bombycilla cedrorum",NA
+"PASSERIFORMES","Motacillidae","American Pipit","Anthus rubescens",NA
+"PASSERIFORMES","Motacillidae","Sprague's Pipit","Anthus spragueii","Vulnerable"
+"PASSERIFORMES","Fringillidae","Evening Grosbeak","Coccothraustes vespertinus","Vulnerable"
+"PASSERIFORMES","Fringillidae","Pine Grosbeak","Pinicola enucleator",NA
+"PASSERIFORMES","Fringillidae","Gray-crowned Rosy-Finch","Leucosticte tephrocotis",NA
+"PASSERIFORMES","Fringillidae","House Finch","Haemorhous mexicanus",NA
+"PASSERIFORMES","Fringillidae","Purple Finch","Haemorhous purpureus",NA
+"PASSERIFORMES","Fringillidae","Cassin's Finch","Haemorhous cassinii",NA
+"PASSERIFORMES","Fringillidae","Red Crossbill","Loxia curvirostra",NA
+"PASSERIFORMES","Fringillidae","White-winged Crossbill","Loxia leucoptera",NA
+"PASSERIFORMES","Fringillidae","Pine Siskin","Spinus pinus",NA
+"PASSERIFORMES","Fringillidae","American Goldfinch","Spinus tristis",NA
+"PASSERIFORMES","Calcariidae","Lapland Longspur","Calcarius lapponicus",NA
+"PASSERIFORMES","Calcariidae","Smith's Longspur","Calcarius pictus",NA
+"PASSERIFORMES","Calcariidae","Snow Bunting","Plectrophenax nivalis",NA
+"PASSERIFORMES","Passerellidae","Grasshopper Sparrow","Ammodramus savannarum",NA
+"PASSERIFORMES","Passerellidae","Chipping Sparrow","Spizella passerina",NA
+"PASSERIFORMES","Passerellidae","Clay-colored Sparrow","Spizella pallida",NA
+"PASSERIFORMES","Passerellidae","Brewer's Sparrow","Spizella breweri",NA
+"PASSERIFORMES","Passerellidae","Lark Sparrow","Chondestes grammacus",NA
+"PASSERIFORMES","Passerellidae","American Tree Sparrow","Spizelloides arborea",NA
+"PASSERIFORMES","Passerellidae","Fox Sparrow","Passerella iliaca",NA
+"PASSERIFORMES","Passerellidae","Dark-eyed Junco","Junco hyemalis",NA
+"PASSERIFORMES","Passerellidae","White-crowned Sparrow","Zonotrichia leucophrys",NA
+"PASSERIFORMES","Passerellidae","Golden-crowned Sparrow","Zonotrichia atricapilla",NA
+"PASSERIFORMES","Passerellidae","Harris's Sparrow","Zonotrichia querula","Near-threatened"
+"PASSERIFORMES","Passerellidae","White-throated Sparrow","Zonotrichia albicollis",NA
+"PASSERIFORMES","Passerellidae","Vesper Sparrow","Pooecetes gramineus",NA
+"PASSERIFORMES","Passerellidae","LeConte's Sparrow","Ammospiza leconteii",NA
+"PASSERIFORMES","Passerellidae","Nelson's Sparrow","Ammospiza nelsoni",NA
+"PASSERIFORMES","Passerellidae","Savannah Sparrow","Passerculus sandwichensis",NA
+"PASSERIFORMES","Passerellidae","Song Sparrow","Melospiza melodia",NA
+"PASSERIFORMES","Passerellidae","Lincoln's Sparrow","Melospiza lincolnii",NA
+"PASSERIFORMES","Passerellidae","Swamp Sparrow","Melospiza georgiana",NA
+"PASSERIFORMES","Passerellidae","Spotted Towhee","Pipilo maculatus",NA
+"PASSERIFORMES","Icteriidae","Yellow-breasted Chat","Icteria virens",NA
+"PASSERIFORMES","Icteridae","Yellow-headed Blackbird","Xanthocephalus xanthocephalus",NA
+"PASSERIFORMES","Icteridae","Bobolink","Dolichonyx oryzivorus",NA
+"PASSERIFORMES","Icteridae","Western Meadowlark","Sturnella neglecta",NA
+"PASSERIFORMES","Icteridae","Bullock's Oriole","Icterus bullockii",NA
+"PASSERIFORMES","Icteridae","Baltimore Oriole","Icterus galbula",NA
+"PASSERIFORMES","Icteridae","Red-winged Blackbird","Agelaius phoeniceus",NA
+"PASSERIFORMES","Icteridae","Brown-headed Cowbird","Molothrus ater",NA
+"PASSERIFORMES","Icteridae","Rusty Blackbird","Euphagus carolinus","Vulnerable"
+"PASSERIFORMES","Icteridae","Brewer's Blackbird","Euphagus cyanocephalus",NA
+"PASSERIFORMES","Icteridae","Common Grackle","Quiscalus quiscula","Near-threatened"
+"PASSERIFORMES","Parulidae","Ovenbird","Seiurus aurocapilla",NA
+"PASSERIFORMES","Parulidae","Northern Waterthrush","Parkesia noveboracensis",NA
+"PASSERIFORMES","Parulidae","Black-and-white Warbler","Mniotilta varia",NA
+"PASSERIFORMES","Parulidae","Tennessee Warbler","Leiothlypis peregrina",NA
+"PASSERIFORMES","Parulidae","Orange-crowned Warbler","Leiothlypis celata",NA
+"PASSERIFORMES","Parulidae","Nashville Warbler","Leiothlypis ruficapilla",NA
+"PASSERIFORMES","Parulidae","Connecticut Warbler","Oporornis agilis",NA
+"PASSERIFORMES","Parulidae","MacGillivray's Warbler","Geothlypis tolmiei",NA
+"PASSERIFORMES","Parulidae","Mourning Warbler","Geothlypis philadelphia",NA
+"PASSERIFORMES","Parulidae","Common Yellowthroat","Geothlypis trichas",NA
+"PASSERIFORMES","Parulidae","American Redstart","Setophaga ruticilla",NA
+"PASSERIFORMES","Parulidae","Cape May Warbler","Setophaga tigrina",NA
+"PASSERIFORMES","Parulidae","Magnolia Warbler","Setophaga magnolia",NA
+"PASSERIFORMES","Parulidae","Bay-breasted Warbler","Setophaga castanea",NA
+"PASSERIFORMES","Parulidae","Yellow Warbler","Setophaga petechia",NA
+"PASSERIFORMES","Parulidae","Blackpoll Warbler","Setophaga striata","Near-threatened"
+"PASSERIFORMES","Parulidae","Palm Warbler","Setophaga palmarum",NA
+"PASSERIFORMES","Parulidae","Yellow-rumped Warbler","Setophaga coronata",NA
+"PASSERIFORMES","Parulidae","Black-throated Gray Warbler","Setophaga nigrescens",NA
+"PASSERIFORMES","Parulidae","Townsend's Warbler","Setophaga townsendi",NA
+"PASSERIFORMES","Parulidae","Black-throated Green Warbler","Setophaga virens",NA
+"PASSERIFORMES","Parulidae","Canada Warbler","Cardellina canadensis",NA
+"PASSERIFORMES","Parulidae","Wilson's Warbler","Cardellina pusilla",NA
+"PASSERIFORMES","Cardinalidae","Western Tanager","Piranga ludoviciana",NA
+"PASSERIFORMES","Cardinalidae","Rose-breasted Grosbeak","Pheucticus ludovicianus",NA
+"PASSERIFORMES","Cardinalidae","Black-headed Grosbeak","Pheucticus melanocephalus",NA
+"PASSERIFORMES","Cardinalidae","Lazuli Bunting","Passerina amoena",NA

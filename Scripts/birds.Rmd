@@ -21,18 +21,44 @@ nest type (ground, open-cup, cavity), nest location (ground, mid-canopy, canopy)
 Plus: Range size, population estimate, nest type, specialization to habitat, migration
 
 ```{r read in bc bird list}
-birdlist <- read.csv(here("Data", "BirdLists", "bc_birds_checklist.csv"))
+birdlist <- read.csv(here("Data", "BirdLists", "bc_birds_checklist.csv"), na.strings = c("", "NA"))
+birdlist <- birdlist[rowSums(is.na(birdlist)) != ncol(birdlist), ]
+
 #test <- read.csv(here("Data", "BirdLists", "bc_birds_avibase_clements_2025.csv"))
 birdlist <- birdlist%>%
-  filter(if_any(everything(), ~ . != "" & !is.na(.)))
+  filter(if_any(everything(), ~ . != "" & !is.na(.))) 
+birdlist$Family <- sub("^\\s+", "", birdlist$Family)
 #duplicated(birdlist$common_name)#no duplicated, 567 birds
 
 #setdiff(birdlist$sci_name, test$sci_name)
+remove_species <- c(
+  "American Black Duck",
+  "Acorn Woodpecker",
+  "Blue-headed Vireo",
+  "Hermit Warbler",
+  "Chestnut-sided Warbler",
+  "Nelson’s Sparrow",
+  "Green-tailed Towhee",
+  "Redpoll",
+  "Mountain Quail"
+)
+remove_orders <- c("CHARADRIIFORMES", "PODICIPEDIFORMES", "PROCELLARIIFORMES", "SULIFORMES", "PELECANIFORMES")
+#filtering out the rare etc species
+birdlist_filtered <- birdlist %>% 
+  filter(is.na(status) | status %in% c("Vulnerable", "Endangered", "Near-threatened")) %>% 
+  filter(!common_name %in% remove_species)%>% 
+  filter(!Order %in% remove_orders)
+write.csv(birdlist, here("Data", "cleaned", "BC_birdlist_avibase.csv"), row.names = FALSE)
+write.csv(birdlist_filtered, here("Data", "cleaned", "BC_birdlist_filtered.csv"), row.names = FALSE)
 
+birdlist <- birdlist_filtered
+remove(birdlist_filtered)
 ```
 
 ```{r read in trait data base available databases}
 dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk", "Dubovyk_trait_database.csv")) #> nest <- dtrait %>% select(name, eng_name, nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nsdeci, nsconi, nssnag, nsfloat, nscact, nstang, ntree, nesting.location)
+dtrait2 <- dtrait %>% 
+  select(name, eng_name, 39:96, -fcfish, -fpdiur, -fpnoct, -klepto)
 
 dtrait <- dtrait %>% 
   mutate(nstree = nsdeci+nsconi,
