@@ -210,9 +210,7 @@ top_bottom <- index %>%
     index %>%
       arrange(index_sum) %>%
       slice_head(n = 10)
-  ) %>% 
-  filter(common_name != "Mexican Violetear", 
-         common_name != "Calliope Hummingbird")
+  )
 
 # Plot
 (most <- ggplot(top_bottom, aes(

@@ -9,6 +9,8 @@ library(here)
 library(tidyverse)
 library(patchwork)
 library(ggrepel)
+library(corrplot)
+library(GGally)
 ```
 
 ```{r}
@@ -52,6 +54,58 @@ traits <- traits %>%
 
 
 ```
+
+```{r CORRELATION TEST}
+trait.pca <- traits %>% 
+  select(common_name, where(is.numeric), -elevational_range,-positive, -negative, -null,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb)
+###################################################################################
+#MAKE CORRELATION MATRIX
+# M<-cor(trait.pca[,-1])
+# res1 <- cor.mtest(trait.pca[,-1], conf.level = 0.95)
+# ord <- corrMatOrder(M, order = "AOE")
+# 
+# png(here("Figures", "PCA","correlation analysis", "corrplot_output.png"), width = 2000, height = 2000, res = 150)
+# corrplot(M, p.mat = res1$p, method="circle",type="upper",insig = "p-value", sig.level=-1)
+# #so yes, some are correlated! onwards
+# 
+# png(here("Figures", "PCA", "correlation analysis", "scatterplot_output.png"), width = 3000, height = 3000, res = 150)
+# par(oma = c(8, 8, 8, 8),      # huge outer margins for labels
+#     mar = c(4, 4, 2, 2),
+#     cex.labels = 2,           # bigger variable names
+#     cex.axis = 1.2,
+#     cex = 1.2)
+# 
+# pairs(trait.pca[,-1],
+#       upper.panel = NULL,
+#       pch = 20,
+#       cex = 1.2)
+# 
+# 
+# 
+# ggpairs(
+#   trait.pca[,-1],
+#   upper = list(
+#     continuous = wrap("cor", size = 4)   # top triangle = correlation coefficients
+#   ),
+#   lower = list(
+#     continuous = wrap("points", alpha = 0.5, size = 1)   # bottom = scatterplots
+#   ),
+#   diag = list(
+#     continuous = wrap("densityDiag")     # diagonal = density plots
+#   )
+# )
+
+png(here("Figures", "PCA", "correlation analysis", "scatterplot_output.png"), width = 3000, height = 3000, res = 150)
+
+ggpairs(
+  trait.pca[,-1],
+  upper = list(continuous = "cor"),  # correlation matrix
+  lower = list(continuous = "points"),
+  diag  = list(continuous = "densityDiag")
+)
+
+```
+
 
 ```{r}
 trait.pca <- traits %>% 
