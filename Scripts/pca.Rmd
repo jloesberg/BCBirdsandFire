@@ -20,7 +20,7 @@ traits <- traits %>%
     mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
    #        ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
    #        shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0)) %>%
-    habitat_density = as.numeric(habitat_density))
+    habitat_density = as.numeric(habitat_density)) 
 # old_growth <-  c("American Three-toed Woodpecker", "Bay-breasted Warbler", "Black-capped Chickadee", "Boreal Chickadee", "Boreal Owl", "Brown Creeper", "Canada Warbler", "Chestnut-backed Chickadee", "Dusky Grouse", "Golden-crowned Kinglet", "Great Horned Owl", "Hairy Woodpecker", "Hammond's Flycatcher", "Hermit Thrush", "Lewis's Woodpecker", "American Goshawk", "Northern Waterthrush", "Western Flycatcher", "Pileated Woodpecker", "Red-breasted Nuthatch", "Red-breasted Sapsucker", "Ruby-crowned Kinglet", "Spruce Grouse", "Swainson's Thrush", "Townsend's Warbler", "Varied Thrush", "Vaux's Swift", "White-breasted Nuthatch")
 # missing_names <- old_growth[!(old_growth %in% traits$common_name)] #do all these names appear in the BC list?
 traits2 <- traits
