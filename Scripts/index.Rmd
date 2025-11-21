@@ -109,7 +109,7 @@ index <- bctraits.all %>%
   ))
 #Picidae
 
-(woodpeckers <- index %>% filter(family == " Picidae") %>% 
+(woodpeckers <- index %>% filter(family == "Picidae") %>% 
     ggplot(aes(x = index_sum, 
                   y = reorder(common_name, index_sum), 
                   color = index_sum)) +
@@ -129,7 +129,7 @@ index <- bctraits.all %>%
 
 #Tyrannidae
 
-(tyran <- index %>% filter(family == " Tyrannidae") %>% 
+(tyran <- index %>% filter(family == "Tyrannidae") %>% 
     ggplot(aes(x = index_sum, 
                   y = reorder(common_name, index_sum), 
                   color = index_sum)) +
@@ -149,7 +149,7 @@ index <- bctraits.all %>%
 
 ##	Anatidae
 
-(ana <- index %>% filter(family == " Anatidae") %>% 
+(ana <- index %>% filter(family == "Anatidae") %>% 
     ggplot(aes(x = index_sum, 
                   y = reorder(common_name, index_sum), 
                   color = index_sum)) +
@@ -221,14 +221,20 @@ top_bottom <- index %>%
   fill = index_sum)) +
   geom_col() +
   coord_flip() +
-  scale_fill_viridis_c(option = "C", name = "Index Sum") +
+  scale_fill_gradient2(
+    low = "red",
+    mid = "gray",
+    high = "blue",
+    midpoint = 0,
+    name = "Index Score"
+  ) +
   theme_bw(base_size = 14) +
   labs(
     x = "Species",
     y = "Index",
-    title = "Most affected species", fill = "Index"
+    title = "Most affected species",
+    fill = "Index"
   ))
-
 ggsave(here("Figures", "index.most10.png"), plot = most, width = 8, height =8)
 
 ```
