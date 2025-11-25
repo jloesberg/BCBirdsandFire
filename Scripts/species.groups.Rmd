@@ -1,0 +1,242 @@
+---
+title: "species_groups"
+author: "Jenna Loesberg"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+---
+```{r, include=FALSE}
+library(here)
+library(tidyverse)
+```
+
+
+```{r, echo = FALSE}
+traits <- read.csv(here("Data", "cleaned", "BC_bird_traits.csv"))
+```
+
+Figure out which BC species are listed under SARA: 
+list accessed from https://laws.justice.gc.ca/eng/acts/s-15.3/page-10.html
+Below lists are all of the Canadian SARA spp, which are matched with the BC bird list
+```{r SARA spp}
+endangered <- c(
+"Northern Bobwhite",
+"Yellow-breasted Chat" ,#auricollis subspecies, Southern Mountain population and virens subspecies)
+"Whooping Crane",
+"Eskimo Curlew",
+"Acadian Flycatcher",
+"Horned Grebe", #(Magdalen Islands population)
+"Ivory Gull",
+"Red Knot",#subspecies (Southeastern U.S. / Gulf of Mexico / Caribbean wintering population and Tierra del Fuego and Patagonia wintering population)
+"Streaked Horned Lark",
+"Chestnut-collared Longspur",
+"American Barn Owl",# (Eastern population)",  --> this should be the same as Tyto furcata but check (western is threatened, just listed as barn owl for SARA)
+"Burrowing Owl",
+"Spotted Owl",# (caurina subspecies)",
+"Mountain Plover",
+"Piping Plover",#(circumcinctus subspecies) and melodus subspecies
+"King Rail",
+"Greater Sage-Grouse", #(urophasianus subspecies)
+"Williamson's Sapsucker",
+"Pink-footed Shearwater",
+"Eastern Loggerhead Shrike", # subspecies
+"Coastal Vesper Sparrow",
+"Henslow's Sparrow",
+"Black Swift",
+"Roseate Tern",
+"Sage Thrasher",
+"Cerulean Warbler",
+"Kirtland's Warbler",
+"Prothonotary Warbler",
+"Red-headed Woodpecker",
+"White-headed Woodpecker")
+#these are for Canada-wide, which of these are not in the BC list of birds"
+missing_names <- endangered[!(endangered %in% traits$common_name)] #do all these names appear in the BC list?
+missing_names#these are the SARA spp not found in BC:
+
+threatened <- c("Short-tailed Albatross",
+"Least Bittern",
+"Bobolink",
+"Lark Bunting",
+"Red Crossbill",# percna subspecies",
+"American Goshawk",#laingi subspecies; SARA has "northern goshawk" listed but the spp name changed and I think this is the correct common name now
+"Ross's Gull",
+"Ferruginous Hawk",
+"Red Knot",# roselaari subspecies",
+"McCown's Longspur",
+"Eastern Meadowlark",
+"Marbled Murrelet",
+"American Barn Owl",#(Western population) --> this should be the same as Tyto furcata
+"Northern Saw-whet Owl", #brooksi subspecies
+"Sprague's Pipit",
+"Western Screech-Owl",#kennicottii subspecies and macfarlanei subspecies
+"Loggerhead Shrike",#Prairie subspecies
+"Bank Swallow",
+"Barn Swallow",
+"Chimney Swift",
+"Bicknell's Thrush",
+"Wood Thrush",
+"Canada Warbler",
+"Golden-winged Warbler",
+"Louisiana Waterthrush",
+"Eastern Whip-poor-will",
+"Lewis's Woodpecker")
+#these are for Canada-wide, which of these are not in the BC list of birds"
+missing_names <- threatened[!(threatened %in% traits$common_name)] #do all these names appear in the BC list?
+missing_names#these are the SARA spp not found in BC:
+
+special.concern <- c("Black-footed Albatross",
+"Cassin's Auklet",
+"Rusty Blackbird",
+"Long-billed Curlew",
+"Harlequin Duck",# (Eastern population)",
+"Peregrine Falcon", #pealei subspecies",
+"Olive-sided Flycatcher",
+"Barrow's Goldeneye",# (Eastern population)",
+"Horned Grebe",# (Western population)",
+"Western Grebe",
+"Evening Grosbeak",
+"Great Blue Heron",
+"Red Knot",# rufa subspecies (Northeastern South America wintering population)",
+"Ancient Murrelet",
+"Common Nighthawk",
+"Flammulated Owl",
+"Short-eared Owl",
+"Red-necked Phalarope",
+"Band-tailed Pigeon",
+"Yellow Rail",
+"Buff-breasted Sandpiper",
+"Baird's Sparrow",
+"Harris's Sparrow",
+"Grasshopper Sparrow",# pratensis subspecies",
+"Savannah Sparrow", # princeps subspecies",
+"Eastern Wood-pewee"
+)
+#these are for Canada-wide, which of these are not in the BC list of birds"
+missing_names <- special.concern[!(special.concern %in% traits$common_name)] #do all these names appear in the BC list?
+missing_names#these are the SARA spp not found in BC:
+
+#Adding the species that match the BC list as a column in the above df
+traits$SARA.endangered <- ifelse(traits$common_name %in% endangered, 1, NA)
+traits$SARA.threatened <- ifelse(traits$common_name %in% threatened, 1, NA)
+traits$SARA.special.concern <- ifelse(traits$common_name %in% special.concern, 1, NA)
+```
+# Now forming the other groups of interest:
+### What do the numbers for migration mean?
+Migration == 1] <- "sedentary"
+Migration == 2] <- "partial"
+$Migration == 3] <- "migratory"
+```{r}
+#goal here is to make groups for grouping the distributions
+#groups should be: species at risk, land birds, forest birds, insectivores (aerial insectivores?), grassland species, grassland specialists, long distance migrants, semi migratory birds
+
+groups <- traits %>% 
+  mutate(long.distance.migrants = ifelse(migration == 3, 1, 0),
+         short.distance.migrants = ifelse(migration == 2, 1, 0),
+         residents = ifelse(migration == 1, 1, 0),
+         aerial.insectivores = ifelse(family == "Hirundinidae"|family == "Apodidae"|family == "Caprimulgidae"|family == "Tyrannidae", 1, 0), #swallows, swifts, nightjars, and flycatcher families, informed by the State of Canada's Birds report
+         invertivores = ifelse(trophic_niche == "Invertivore", 1, 0),
+         grassland.species = ifelse(primary_habitat == "Grassland", 1, 0),
+         forest.species = ifelse(primary_habitat == "Forest", 1, 0),
+         SARA = ifelse(traits$SARA.endangered == 1 |traits$SARA.threatened == 1 |traits$SARA.special.concern == 1, 1,0)) %>% 
+  select(order, family, sci_name, common_name, long.distance.migrants, short.distance.migrants, residents,aerial.insectivores, invertivores, grassland.species, forest.species, SARA, SARA.endangered, SARA.threatened, SARA.special.concern) #only keep these columns
+
+```
+
+# Get lists of each group here:
+```{r}
+long.distance.migrants <- groups %>% 
+  filter(long.distance.migrants == 1) %>% 
+  select(order, family, sci_name, common_name)
+long.distance.migrants %>%
+  select(2:4) %>%
+  print()
+
+short.distance.migrants <- groups %>% 
+  filter(short.distance.migrants == 1) %>% 
+  select(order, family, sci_name, common_name)
+short.distance.migrants %>%
+  select(2:4) %>%
+  print()
+
+residents <- groups %>% 
+  filter(residents == 1) %>% 
+  select(order, family, sci_name, common_name)
+residents %>%
+  select(2:4) %>%
+  print()
+
+residents <- groups %>% 
+  filter(residents == 1) %>% 
+  select(order, family, sci_name, common_name)
+residents %>%
+  select(2:4) %>%
+  print()
+
+aerial.insectivores <- groups %>% 
+  filter(aerial.insectivores == 1) %>% 
+  select(order, family, sci_name, common_name)
+aerial.insectivores %>%
+  select(2:4) %>%
+  print()
+
+invertivores <- groups %>% 
+  filter(invertivores == 1) %>% 
+  select(order, family, sci_name, common_name)
+invertivores %>%
+  select(2:4) %>%
+  print()
+
+grassland.species <- groups %>% 
+  filter(grassland.species == 1) %>% 
+  select(order, family, sci_name, common_name)
+grassland.species %>%
+  select(2:4) %>%
+  print()
+
+forest.species <- groups %>% 
+  filter(forest.species == 1) %>% 
+  select(order, family, sci_name, common_name)
+forest.species %>%
+  select(2:4) %>%
+  print()
+
+#This is for any spp listed under SARA
+SARA <- groups %>% 
+  filter(SARA == 1) %>% 
+  select(order, family, sci_name, common_name)
+SARA %>%
+  select(2:4) %>%
+  print()
+
+#just endangered:
+SARA.endangered <- groups %>% 
+  filter(SARA.endangered == 1) %>% 
+  select(order, family, sci_name, common_name)
+SARA.endangered %>%
+  select(2:4) %>%
+  print()
+
+#just threatened:
+SARA.threatened <- groups %>% 
+  filter(SARA.threatened == 1) %>% 
+  select(order, family, sci_name, common_name)
+SARA.threatened %>%
+  select(2:4) %>%
+  print()
+
+#just special concern
+SARA.special.concern <- groups %>% 
+  filter(SARA.special.concern == 1) %>% 
+  select(order, family, sci_name, common_name)
+SARA.special.concern %>%
+  select(2:4) %>%
+  print()
+
+```
+
+
+
+
+
