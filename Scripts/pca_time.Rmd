@@ -16,6 +16,7 @@ traits$habitat_density[traits$habitat_density == "dense"] <- 1
 traits$habitat_density[traits$habitat_density == "semiopen"] <- 2
 traits$habitat_density[traits$habitat_density == "open"] <- 3
 traits <- traits %>% 
+    select(-any_tree_nest, -live_tree_nest) %>% 
     mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
    #        ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
    #        shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0)) %>%

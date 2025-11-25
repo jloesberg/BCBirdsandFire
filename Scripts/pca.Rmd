@@ -19,6 +19,7 @@ traits$habitat_density[traits$habitat_density == "dense"] <- 1
 traits$habitat_density[traits$habitat_density == "semiopen"] <- 2
 traits$habitat_density[traits$habitat_density == "open"] <- 3
 traits <- traits %>% 
+  select(-any_tree_nest, -live_tree_nest) %>% 
     mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
    #        ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
    #        shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0)) %>%
@@ -95,17 +96,21 @@ trait.pca <- traits %>%
 #   )
 # )
 
-png(here("Figures", "PCA", "correlation analysis", "scatterplot_output.png"), width = 3000, height = 3000, res = 150)
+#uncehck here - jjust takes while to run
 
-ggpairs(
-  trait.pca[,-1],
-  upper = list(continuous = "cor"),  # correlation matrix
-  lower = list(continuous = "points"),
-  diag  = list(continuous = "densityDiag")
-)
+# png(here("Figures", "PCA", "correlation analysis", "scatterplot_output.png"), width = 3000, height = 3000, res = 150)
+# 
+# ggpairs(
+#   trait.pca[,-1],
+#   upper = list(continuous = "cor"),  # correlation matrix
+#   lower = list(continuous = "points"),
+#   diag  = list(continuous = "densityDiag")
+# )
 
 ```
-
+***	p < 0.001
+**	p < 0.01
+*	p < 0.05
 
 ```{r}
 trait.pca <- traits %>% 
@@ -256,11 +261,11 @@ ggsave(here("Figures", "PCA", "pca loadings.png"), plot = f2, width = 10, height
 
 # Filter top 5 loadings for PC1 and PC2, excluding 'any_tree_nest'
 top_PC1 <- loadings %>%
-  filter(trait != "any_tree_nest") %>%
+  #filter(trait != "any_tree_nest") %>%
   slice_max(abs(PC1_arrow), n = 4)
 
 top_PC2 <- loadings %>%
-  filter(trait != "any_tree_nest") %>%
+  #filter(trait != "any_tree_nest") %>%
   slice_max(abs(PC2_arrow), n = 4)
 
 # Combine top loadings
@@ -525,6 +530,12 @@ summary(anova_pc2)
 # Post-hoc (Tukey) test for pairwise comparisons
 TukeyHSD(anova_pc2)
 
+anova_pc3 <- aov(PC3~ fire_response, data = pca_scores)
+summary(anova_pc3)
+
+# Post-hoc (Tukey) test for pairwise comparisons
+TukeyHSD(anova_pc3)
+
 ##
 arrow_multiplier <- 3
 loadings <- loadings %>%
@@ -634,4 +645,150 @@ positive-neutral   0.3976099 -0.6010267  1.39624654 0.7299017
 ggsave(here("Figures", "PCA", "PCA_final.png"), plot = end, width = 18, height =8, dpi = 300)
 
 ```
+"Wildfire-positive species are characterized by higher use of snags and coniferous trees.
+Species dependent on deciduous foliage and shrub cover decline.
+Life-history pace does not appear to influence wildfire response."
 
+
+🔥 STEP 1 — Identify the dominant loadings
+PC1: Forest structure + mobility axis
+
+Highest magnitude loadings (|0.25–0.36|):
+
+habitat_density (–0.36)
+
+ground_nest (–0.29)
+
+mass_g (–0.28)
+
+range_size (–0.21)
+
+hand_wing_index (–0.22)
+
+for_strat_canopy (+0.35)
+
+diet_inv (+0.24)
+
+bark gleaning (+0.26)
+
+Interpretation
+
+PC1 contrasts:
+
+Negative side (low PC1 score)
+
+large-bodied
+
+ground-nesting
+
+dense forest dependence
+
+small ranges
+
+low wing index (poor dispersers)
+
+→ These are forest interior, low-mobility species.
+
+Positive side (high PC1 score)
+
+canopy foragers
+
+bark gleaners
+
+high insectivory
+
+higher mobility (wing index up a bit)
+
+lower habitat density use
+
+→ These are mobile, canopy-using species.
+
+PC1 = Forest interior/ground nesters ↔ Mobile canopy insectivores
+
+PC2: Nest substrate axis (snag vs. shrub)
+
+Strong loadings:
+
+snag_nest (–0.45)
+
+cavity_nester (–0.45)
+
+bark_gleaning (–0.31)
+
+ground_nest (+0.14)
+
+shrub_nest (+0.29)
+
+migration (+0.27)
+
+Interpretation
+Negative PC2 (low scores)
+
+cavity nesters
+
+snag nesters
+
+bark gleaners
+
+→ These are snag-dependent, cavity-nesting species.
+
+Positive PC2 (high scores)
+
+shrub nesters
+
+migratory species
+
+ground nesters
+
+→ These are shrub-using, migratory species.
+
+PC2 = Cavity/snag specialists ↔ Shrub/ground/migratory species
+
+PC3: Foraging & diet strategy axis
+
+Strong loadings:
+
+diet_inv (+0.37)
+
+for_hawking (+0.31)
+
+understory foraging (+0.26)
+
+foliage gleaning (–0.31)
+
+seed diet (–0.36)
+
+diet breadth (–0.36)
+
+Interpretation
+Positive PC3
+
+high insectivory
+
+hawking
+
+understory foraging
+
+Negative PC3
+
+higher seed use
+
+foliage gleaners
+
+broader diet
+
+PC3 = Insectivore hawking specialists ↔ Seed/foliage generalists
+
+```{r}
+glm_positive <- glm(positive ~ PC1 + PC2, 
+                    data = pca_scores, family = binomial)
+glm_positive1 <- glm(positive ~ PC1, 
+                    data = pca_scores, family = binomial)
+glm_positive2 <- glm(positive ~ PC2, 
+                    data = pca_scores, family = binomial)
+
+
+summary(glm_positive2)
+```
+
+"We used PCA to reduce multicollinearity among traits and obtain independent ecological axes. We then modeled wildfire response (positive/negative/null) as a function of PCA scores. PCA axes significantly associated with wildfire response were interpreted based on trait loadings. For example, PC4 (high ground foraging, low canopy dependence) predicted positive wildfire response, indicating that species associated with open or shrubby habitats increased after fire, while forest-dependent species (low PC4) showed declines."
