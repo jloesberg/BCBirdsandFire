@@ -3,22 +3,21 @@ title: "species_groups"
 author: "Jenna Loesberg"
 date: "`r Sys.Date()`"
 output:
-  word_document: default
   html_document: default
+  word_document: default
 ---
 ```{r, include=FALSE}
 library(here)
 library(tidyverse)
 ```
 
-
+can be viewed at: https://htmlpreview.github.io/?https://github.com/jloesberg/BCBirdsandFire/blob/main/Scripts/species.groups.html
 ```{r, echo = FALSE}
 traits <- read.csv(here("Data", "cleaned", "BC_bird_traits.csv"))
 ```
 
-Figure out which BC species are listed under SARA: 
-list accessed from https://laws.justice.gc.ca/eng/acts/s-15.3/page-10.html
-Below lists are all of the Canadian SARA spp, which are matched with the BC bird list
+Step 1. Figure out which BC species are listed under SARA (accessed from https://laws.justice.gc.ca/eng/acts/s-15.3/page-10.html)
+- The code below lists all Canadian SARA spp, which I then match to the BC bird list
 ```{r SARA spp}
 endangered <- c(
 "Northern Bobwhite",
@@ -51,9 +50,9 @@ endangered <- c(
 "Prothonotary Warbler",
 "Red-headed Woodpecker",
 "White-headed Woodpecker")
-#these are for Canada-wide, which of these are not in the BC list of birds"
-missing_names <- endangered[!(endangered %in% traits$common_name)] #do all these names appear in the BC list?
-missing_names#these are the SARA spp not found in BC:
+#Which of these Canada-wide SARA birds are not in the BC list of birds"
+missing_names <- endangered[!(endangered %in% traits$common_name)]
+missing_names #these are the SARA spp not found in BC:
 
 threatened <- c("Short-tailed Albatross",
 "Least Bittern",
@@ -82,8 +81,8 @@ threatened <- c("Short-tailed Albatross",
 "Louisiana Waterthrush",
 "Eastern Whip-poor-will",
 "Lewis's Woodpecker")
-#these are for Canada-wide, which of these are not in the BC list of birds"
-missing_names <- threatened[!(threatened %in% traits$common_name)] #do all these names appear in the BC list?
+#Which of these Canada-wide SARA birds are not in the BC list of birds"
+missing_names <- threatened[!(threatened %in% traits$common_name)]
 missing_names#these are the SARA spp not found in BC:
 
 special.concern <- c("Black-footed Albatross",
@@ -113,8 +112,8 @@ special.concern <- c("Black-footed Albatross",
 "Savannah Sparrow", # princeps subspecies",
 "Eastern Wood-pewee"
 )
-#these are for Canada-wide, which of these are not in the BC list of birds"
-missing_names <- special.concern[!(special.concern %in% traits$common_name)] #do all these names appear in the BC list?
+#Which of these Canada-wide SARA birds are not in the BC list of birds"
+missing_names <- special.concern[!(special.concern %in% traits$common_name)]
 missing_names#these are the SARA spp not found in BC:
 
 #Adding the species that match the BC list as a column in the above df
@@ -122,11 +121,161 @@ traits$SARA.endangered <- ifelse(traits$common_name %in% endangered, 1, NA)
 traits$SARA.threatened <- ifelse(traits$common_name %in% threatened, 1, NA)
 traits$SARA.special.concern <- ifelse(traits$common_name %in% special.concern, 1, NA)
 ```
+Step 2. Get BC listed species, accessed from https://a100.gov.bc.ca/pub/eswp/search.do with a search for all bird species in BC listed with a red or blue status
+```{r BC listed spp}
+blue <- c("Smith's Longspur",
+"Rough-legged Hawk",
+"American Golden-Plover",
+"Gyrfalcon",
+"Eared Grebe",
+"Horned Lark",
+"Black Swift",
+"White-throated Swift",
+"Baltimore Oriole",
+"Winter Wren",
+"Common Nighthawk",
+"Black Tern",
+"Killdeer",
+"Rusty Blackbird",
+"American Avocet",
+"American Bittern",
+"Lark Sparrow",
+"Short-eared Owl",
+"Surf Scoter",
+"Red-necked Phalarope",
+"American Barn Owl",
+"Caspian Tern",
+"Green Heron",
+"Lewis's Woodpecker",
+"Williamson's Sapsucker",
+"Great Blue Heron",#, herodias subspecies",
+"Canyon Wren",
+"Western Screech-Owl",#, macfarlanei subspecies",
+"Gray Flycatcher",
+"Flammulated Owl",
+"Brewer's Sparrow",#, breweri subspecies",
+"Sharp-tailed Grouse",#, columbianus subspecies",
+"Canada Warbler",
+"Black-throated Green Warbler",
+"Purple Martin",
+"Double-crested Cormorant",
+"Brant",
+"Wandering Tattler",
+"Connecticut Warbler",
+"American Goshawk",#, atricapillus subspecies",
+"Cape May Warbler",
+"Black Scoter",
+#"Great Blue Heron",#, fannini subspecies",
+"Red Knot",
+"Peregrine Falcon",#, pealei subspecies",
+"Tufted Puffin",
+"Ancient Murrelet",
+"Band-tailed Pigeon",
+"Marbled Murrelet",
+"Northern Pygmy-Owl",#, swarthi subspecies",
+"Western Screech-Owl",#, kennicottii subspecies",
+"Northern Saw-whet Owl",#, brooksi subspecies",
+"Steller's Jay",#, carlottae subspecies",
+"Pine Grosbeak",#, carlottae subspecies",
+"White-tailed Ptarmigan",#, saxatilis subspecies",
+"Long-tailed Duck",
+"Buller's Shearwater",
+"Flesh-footed Shearwater",
+"Pink-footed Shearwater",
+"White-rumped Sandpiper",
+"Stilt Sandpiper",
+"Rock Sandpiper",
+"Tundra Swan",
+"Yellow-billed Loon",
+"Western Gull",
+"Marbled Godwit",
+"Laysan Albatross",
+"Black-footed Albatross",
+"South Polar Skua",
+"Common Tern",
+"Lesser Yellowlegs")
+#Which of these BC listed birds are not in our BC list of birds"
+missing_names <- blue[!(blue %in% traits$common_name)]
+missing_names #these are the SARA spp not found in BC:
+
+red <- c(
+"Greater Sage-Grouse",
+"Prairie Falcon",
+"Western Grebe",
+"American White Pelican",
+"California Gull",
+"Forster's Tern",
+"Bobolink",
+"Short-billed Dowitcher",
+"Upland Sandpiper",
+"Peregrine Falcon",#,, anatum subspecies",
+"Swainson's Hawk",
+"Black-crowned Night-Heron",
+"Sage Thrasher",
+"Yellow-breasted Chat",
+"Yellow-billed Cuckoo",
+"Grasshopper Sparrow",
+"Burrowing Owl",
+"White-headed Woodpecker",
+"Horned Lark",#, merrilli subspecies",
+"Parasitic Jaeger",
+"Hudsonian Godwit",
+"Nelson's Sparrow",
+"Bay-breasted Warbler",
+"Yellow Rail",
+"Vesper Sparrow",#, affinis subspecies",
+"Brandt's Cormorant",
+"American Goshawk",#, laingi subspecies",
+"Horned Lark",#, strigata subspecies",
+"Horned Puffin",
+"Northern Fulmar",
+"Cassin's Auklet",
+"Common Murre",
+"Thick-billed Murre",
+"Spotted Owl",
+"Clark's Grebe",
+"Ruby-throated Hummingbird",
+"Canada Goose",#, occidentalis subspecies",
+"Baird's Sandpiper",
+"Black-necked Stilt",
+"Whimbrel",
+"Short-tailed Albatross",
+"Black-legged Kittiwake"
+)
+#Which of these BC listed birds are not in our BC list of birds"
+missing_names <- red[!(red %in% traits$common_name)]
+missing_names #these are the SARA spp not found in BC:
+
+#Adding the species that match the BC list as a column in the above df
+traits$blue.listed <- ifelse(traits$common_name %in% blue, 1, NA)
+traits$red.listed <- ifelse(traits$common_name %in% red, 1, NA)
+```
+
+
+
 # Now forming the other groups of interest:
-### What do the numbers for migration mean?
-Migration == 1] <- "sedentary"
-Migration == 2] <- "partial"
-$Migration == 3] <- "migratory"
+#### What do the numbers for migration mean?
+Accessed from Avonet trait database
+
+- Migration == 1] <- sedentary or residents
+- Migration == 2] <- Partially migratory, i.e. minority of population migrates long distances, or most of population undergoes - short-distance migration, nomadic movements, distinct altitudinal migration, etc.
+- Migration == 3] <- migratory, i.e. majority of population undertakes long-distance migration"
+
+#### How were aerial insectivores grouped?
+Informed by the State of Canada's Birds report, which assigns the swallow, swift, nightjar, and flycatcher families as aerial insectivores (accessed from https://naturecounts.ca/nc/socb-epoc/methods.jsp) 
+
+#### Invertivores
+Accessed from Avonet trait database
+
+Invertivores are species obtaining at least 60% of food resources from invertebrates in terrestrial systems, including insects, worms, arachnids, etc.
+
+#### Grassland and Forest species
+Accessed from Birdbase trait database
+
+Defined as main habitat type utilized by a species
+    - Forest, secondary forest, swamp forest, tree-fall gaps, taiga, igapo, varzea
+    -Grasslands, high altitude flats, puna, altiplano, tundra, tussock, pastures, steppe, paramo, moorland, plateaus, open vegetation
+
 ```{r}
 #goal here is to make groups for grouping the distributions
 #groups should be: species at risk, land birds, forest birds, insectivores (aerial insectivores?), grassland species, grassland specialists, long distance migrants, semi migratory birds
@@ -135,12 +284,12 @@ groups <- traits %>%
   mutate(long.distance.migrants = ifelse(migration == 3, 1, 0),
          short.distance.migrants = ifelse(migration == 2, 1, 0),
          residents = ifelse(migration == 1, 1, 0),
-         aerial.insectivores = ifelse(family == "Hirundinidae"|family == "Apodidae"|family == "Caprimulgidae"|family == "Tyrannidae", 1, 0), #swallows, swifts, nightjars, and flycatcher families, informed by the State of Canada's Birds report
+         aerial.insectivores = ifelse(family == "Hirundinidae"|family == "Apodidae"|family == "Caprimulgidae"|family == "Tyrannidae", 1, 0), 
          invertivores = ifelse(trophic_niche == "Invertivore", 1, 0),
          grassland.species = ifelse(primary_habitat == "Grassland", 1, 0),
          forest.species = ifelse(primary_habitat == "Forest", 1, 0),
          SARA = ifelse(traits$SARA.endangered == 1 |traits$SARA.threatened == 1 |traits$SARA.special.concern == 1, 1,0)) %>% 
-  select(order, family, sci_name, common_name, long.distance.migrants, short.distance.migrants, residents,aerial.insectivores, invertivores, grassland.species, forest.species, SARA, SARA.endangered, SARA.threatened, SARA.special.concern) #only keep these columns
+  select(order, family, sci_name, common_name, long.distance.migrants, short.distance.migrants, residents,aerial.insectivores, invertivores, grassland.species, forest.species, SARA, SARA.endangered, SARA.threatened, SARA.special.concern, blue.listed, red.listed) #only keep these columns
 
 ```
 
@@ -231,6 +380,22 @@ SARA.special.concern <- groups %>%
   filter(SARA.special.concern == 1) %>% 
   select(order, family, sci_name, common_name)
 SARA.special.concern %>%
+  select(2:4) %>%
+  print()
+
+#BC blue listed
+blue.listed <- groups %>% 
+  filter(blue.listed == 1) %>% 
+  select(order, family, sci_name, common_name)
+blue.listed %>%
+  select(2:4) %>%
+  print()
+
+#red listed
+red.listed <- groups %>% 
+  filter(red.listed == 1) %>% 
+  select(order, family, sci_name, common_name)
+red.listed %>%
   select(2:4) %>%
   print()
 

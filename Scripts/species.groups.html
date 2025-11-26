@@ -357,9 +357,10 @@ display: none;
 </div>
 
 
-<p>Figure out which BC species are listed under SARA: list accessed from
-<a href="https://laws.justice.gc.ca/eng/acts/s-15.3/page-10.html" class="uri">https://laws.justice.gc.ca/eng/acts/s-15.3/page-10.html</a>
-Below lists are all of the Canadian SARA spp, which are matched with the
+<p>can be viewed at: <a href="https://htmlpreview.github.io/?https://github.com/jloesberg/BCBirdsandFire/blob/main/Scripts/species.groups.html" class="uri">https://htmlpreview.github.io/?https://github.com/jloesberg/BCBirdsandFire/blob/main/Scripts/species.groups.html</a></p>
+<p>Step 1. Figure out which BC species are listed under SARA (accessed
+from <a href="https://laws.justice.gc.ca/eng/acts/s-15.3/page-10.html" class="uri">https://laws.justice.gc.ca/eng/acts/s-15.3/page-10.html</a>)
+- The code below lists all Canadian SARA spp, which I then match to the
 BC bird list</p>
 <pre class="r"><code>endangered &lt;- c(
 &quot;Northern Bobwhite&quot;,
@@ -392,9 +393,9 @@ BC bird list</p>
 &quot;Prothonotary Warbler&quot;,
 &quot;Red-headed Woodpecker&quot;,
 &quot;White-headed Woodpecker&quot;)
-#these are for Canada-wide, which of these are not in the BC list of birds&quot;
-missing_names &lt;- endangered[!(endangered %in% traits$common_name)] #do all these names appear in the BC list?
-missing_names#these are the SARA spp not found in BC:</code></pre>
+#Which of these Canada-wide SARA birds are not in the BC list of birds&quot;
+missing_names &lt;- endangered[!(endangered %in% traits$common_name)]
+missing_names #these are the SARA spp not found in BC:</code></pre>
 <pre><code>##  [1] &quot;Northern Bobwhite&quot;          &quot;Whooping Crane&quot;            
 ##  [3] &quot;Eskimo Curlew&quot;              &quot;Acadian Flycatcher&quot;        
 ##  [5] &quot;Horned Grebe&quot;               &quot;Ivory Gull&quot;                
@@ -435,8 +436,8 @@ missing_names#these are the SARA spp not found in BC:</code></pre>
 &quot;Louisiana Waterthrush&quot;,
 &quot;Eastern Whip-poor-will&quot;,
 &quot;Lewis&#39;s Woodpecker&quot;)
-#these are for Canada-wide, which of these are not in the BC list of birds&quot;
-missing_names &lt;- threatened[!(threatened %in% traits$common_name)] #do all these names appear in the BC list?
+#Which of these Canada-wide SARA birds are not in the BC list of birds&quot;
+missing_names &lt;- threatened[!(threatened %in% traits$common_name)]
 missing_names#these are the SARA spp not found in BC:</code></pre>
 <pre><code>##  [1] &quot;Short-tailed Albatross&quot; &quot;Least Bittern&quot;          &quot;Lark Bunting&quot;          
 ##  [4] &quot;Ross&#39;s Gull&quot;            &quot;Ferruginous Hawk&quot;       &quot;Red Knot&quot;              
@@ -471,8 +472,8 @@ missing_names#these are the SARA spp not found in BC:</code></pre>
 &quot;Savannah Sparrow&quot;, # princeps subspecies&quot;,
 &quot;Eastern Wood-pewee&quot;
 )
-#these are for Canada-wide, which of these are not in the BC list of birds&quot;
-missing_names &lt;- special.concern[!(special.concern %in% traits$common_name)] #do all these names appear in the BC list?
+#Which of these Canada-wide SARA birds are not in the BC list of birds&quot;
+missing_names &lt;- special.concern[!(special.concern %in% traits$common_name)]
 missing_names#these are the SARA spp not found in BC:</code></pre>
 <pre><code>##  [1] &quot;Black-footed Albatross&quot;  &quot;Cassin&#39;s Auklet&quot;        
 ##  [3] &quot;Long-billed Curlew&quot;      &quot;Horned Grebe&quot;           
@@ -484,12 +485,197 @@ missing_names#these are the SARA spp not found in BC:</code></pre>
 traits$SARA.endangered &lt;- ifelse(traits$common_name %in% endangered, 1, NA)
 traits$SARA.threatened &lt;- ifelse(traits$common_name %in% threatened, 1, NA)
 traits$SARA.special.concern &lt;- ifelse(traits$common_name %in% special.concern, 1, NA)</code></pre>
+<p>Step 2. Get BC listed species, accessed from <a href="https://a100.gov.bc.ca/pub/eswp/search.do" class="uri">https://a100.gov.bc.ca/pub/eswp/search.do</a> with a search
+for all bird species in BC listed with a red or blue status</p>
+<pre class="r"><code>blue &lt;- c(&quot;Smith&#39;s Longspur&quot;,
+&quot;Rough-legged Hawk&quot;,
+&quot;American Golden-Plover&quot;,
+&quot;Gyrfalcon&quot;,
+&quot;Eared Grebe&quot;,
+&quot;Horned Lark&quot;,
+&quot;Black Swift&quot;,
+&quot;White-throated Swift&quot;,
+&quot;Baltimore Oriole&quot;,
+&quot;Winter Wren&quot;,
+&quot;Common Nighthawk&quot;,
+&quot;Black Tern&quot;,
+&quot;Killdeer&quot;,
+&quot;Rusty Blackbird&quot;,
+&quot;American Avocet&quot;,
+&quot;American Bittern&quot;,
+&quot;Lark Sparrow&quot;,
+&quot;Short-eared Owl&quot;,
+&quot;Surf Scoter&quot;,
+&quot;Red-necked Phalarope&quot;,
+&quot;American Barn Owl&quot;,
+&quot;Caspian Tern&quot;,
+&quot;Green Heron&quot;,
+&quot;Lewis&#39;s Woodpecker&quot;,
+&quot;Williamson&#39;s Sapsucker&quot;,
+&quot;Great Blue Heron&quot;,#, herodias subspecies&quot;,
+&quot;Canyon Wren&quot;,
+&quot;Western Screech-Owl&quot;,#, macfarlanei subspecies&quot;,
+&quot;Gray Flycatcher&quot;,
+&quot;Flammulated Owl&quot;,
+&quot;Brewer&#39;s Sparrow&quot;,#, breweri subspecies&quot;,
+&quot;Sharp-tailed Grouse&quot;,#, columbianus subspecies&quot;,
+&quot;Canada Warbler&quot;,
+&quot;Black-throated Green Warbler&quot;,
+&quot;Purple Martin&quot;,
+&quot;Double-crested Cormorant&quot;,
+&quot;Brant&quot;,
+&quot;Wandering Tattler&quot;,
+&quot;Connecticut Warbler&quot;,
+&quot;American Goshawk&quot;,#, atricapillus subspecies&quot;,
+&quot;Cape May Warbler&quot;,
+&quot;Black Scoter&quot;,
+#&quot;Great Blue Heron&quot;,#, fannini subspecies&quot;,
+&quot;Red Knot&quot;,
+&quot;Peregrine Falcon&quot;,#, pealei subspecies&quot;,
+&quot;Tufted Puffin&quot;,
+&quot;Ancient Murrelet&quot;,
+&quot;Band-tailed Pigeon&quot;,
+&quot;Marbled Murrelet&quot;,
+&quot;Northern Pygmy-Owl&quot;,#, swarthi subspecies&quot;,
+&quot;Western Screech-Owl&quot;,#, kennicottii subspecies&quot;,
+&quot;Northern Saw-whet Owl&quot;,#, brooksi subspecies&quot;,
+&quot;Steller&#39;s Jay&quot;,#, carlottae subspecies&quot;,
+&quot;Pine Grosbeak&quot;,#, carlottae subspecies&quot;,
+&quot;White-tailed Ptarmigan&quot;,#, saxatilis subspecies&quot;,
+&quot;Long-tailed Duck&quot;,
+&quot;Buller&#39;s Shearwater&quot;,
+&quot;Flesh-footed Shearwater&quot;,
+&quot;Pink-footed Shearwater&quot;,
+&quot;White-rumped Sandpiper&quot;,
+&quot;Stilt Sandpiper&quot;,
+&quot;Rock Sandpiper&quot;,
+&quot;Tundra Swan&quot;,
+&quot;Yellow-billed Loon&quot;,
+&quot;Western Gull&quot;,
+&quot;Marbled Godwit&quot;,
+&quot;Laysan Albatross&quot;,
+&quot;Black-footed Albatross&quot;,
+&quot;South Polar Skua&quot;,
+&quot;Common Tern&quot;,
+&quot;Lesser Yellowlegs&quot;)
+#Which of these BC listed birds are not in our BC list of birds&quot;
+missing_names &lt;- blue[!(blue %in% traits$common_name)]
+missing_names #these are the SARA spp not found in BC:</code></pre>
+<pre><code>##  [1] &quot;American Golden-Plover&quot;   &quot;Eared Grebe&quot;             
+##  [3] &quot;Black Tern&quot;               &quot;Killdeer&quot;                
+##  [5] &quot;American Avocet&quot;          &quot;American Bittern&quot;        
+##  [7] &quot;Red-necked Phalarope&quot;     &quot;Caspian Tern&quot;            
+##  [9] &quot;Green Heron&quot;              &quot;Great Blue Heron&quot;        
+## [11] &quot;Gray Flycatcher&quot;          &quot;Double-crested Cormorant&quot;
+## [13] &quot;Wandering Tattler&quot;        &quot;Red Knot&quot;                
+## [15] &quot;Tufted Puffin&quot;            &quot;Ancient Murrelet&quot;        
+## [17] &quot;Marbled Murrelet&quot;         &quot;Buller&#39;s Shearwater&quot;     
+## [19] &quot;Flesh-footed Shearwater&quot;  &quot;Pink-footed Shearwater&quot;  
+## [21] &quot;White-rumped Sandpiper&quot;   &quot;Stilt Sandpiper&quot;         
+## [23] &quot;Rock Sandpiper&quot;           &quot;Yellow-billed Loon&quot;      
+## [25] &quot;Western Gull&quot;             &quot;Marbled Godwit&quot;          
+## [27] &quot;Laysan Albatross&quot;         &quot;Black-footed Albatross&quot;  
+## [29] &quot;South Polar Skua&quot;         &quot;Common Tern&quot;             
+## [31] &quot;Lesser Yellowlegs&quot;</code></pre>
+<pre class="r"><code>red &lt;- c(
+&quot;Greater Sage-Grouse&quot;,
+&quot;Prairie Falcon&quot;,
+&quot;Western Grebe&quot;,
+&quot;American White Pelican&quot;,
+&quot;California Gull&quot;,
+&quot;Forster&#39;s Tern&quot;,
+&quot;Bobolink&quot;,
+&quot;Short-billed Dowitcher&quot;,
+&quot;Upland Sandpiper&quot;,
+&quot;Peregrine Falcon&quot;,#,, anatum subspecies&quot;,
+&quot;Swainson&#39;s Hawk&quot;,
+&quot;Black-crowned Night-Heron&quot;,
+&quot;Sage Thrasher&quot;,
+&quot;Yellow-breasted Chat&quot;,
+&quot;Yellow-billed Cuckoo&quot;,
+&quot;Grasshopper Sparrow&quot;,
+&quot;Burrowing Owl&quot;,
+&quot;White-headed Woodpecker&quot;,
+&quot;Horned Lark&quot;,#, merrilli subspecies&quot;,
+&quot;Parasitic Jaeger&quot;,
+&quot;Hudsonian Godwit&quot;,
+&quot;Nelson&#39;s Sparrow&quot;,
+&quot;Bay-breasted Warbler&quot;,
+&quot;Yellow Rail&quot;,
+&quot;Vesper Sparrow&quot;,#, affinis subspecies&quot;,
+&quot;Brandt&#39;s Cormorant&quot;,
+&quot;American Goshawk&quot;,#, laingi subspecies&quot;,
+&quot;Horned Lark&quot;,#, strigata subspecies&quot;,
+&quot;Horned Puffin&quot;,
+&quot;Northern Fulmar&quot;,
+&quot;Cassin&#39;s Auklet&quot;,
+&quot;Common Murre&quot;,
+&quot;Thick-billed Murre&quot;,
+&quot;Spotted Owl&quot;,
+&quot;Clark&#39;s Grebe&quot;,
+&quot;Ruby-throated Hummingbird&quot;,
+&quot;Canada Goose&quot;,#, occidentalis subspecies&quot;,
+&quot;Baird&#39;s Sandpiper&quot;,
+&quot;Black-necked Stilt&quot;,
+&quot;Whimbrel&quot;,
+&quot;Short-tailed Albatross&quot;,
+&quot;Black-legged Kittiwake&quot;
+)
+#Which of these BC listed birds are not in our BC list of birds&quot;
+missing_names &lt;- red[!(red %in% traits$common_name)]
+missing_names #these are the SARA spp not found in BC:</code></pre>
+<pre><code>##  [1] &quot;Greater Sage-Grouse&quot;       &quot;Western Grebe&quot;            
+##  [3] &quot;American White Pelican&quot;    &quot;California Gull&quot;          
+##  [5] &quot;Forster&#39;s Tern&quot;            &quot;Short-billed Dowitcher&quot;   
+##  [7] &quot;Upland Sandpiper&quot;          &quot;Black-crowned Night-Heron&quot;
+##  [9] &quot;Yellow-billed Cuckoo&quot;      &quot;Burrowing Owl&quot;            
+## [11] &quot;White-headed Woodpecker&quot;   &quot;Parasitic Jaeger&quot;         
+## [13] &quot;Hudsonian Godwit&quot;          &quot;Brandt&#39;s Cormorant&quot;       
+## [15] &quot;Horned Puffin&quot;             &quot;Northern Fulmar&quot;          
+## [17] &quot;Cassin&#39;s Auklet&quot;           &quot;Common Murre&quot;             
+## [19] &quot;Thick-billed Murre&quot;        &quot;Spotted Owl&quot;              
+## [21] &quot;Clark&#39;s Grebe&quot;             &quot;Ruby-throated Hummingbird&quot;
+## [23] &quot;Baird&#39;s Sandpiper&quot;         &quot;Black-necked Stilt&quot;       
+## [25] &quot;Whimbrel&quot;                  &quot;Short-tailed Albatross&quot;   
+## [27] &quot;Black-legged Kittiwake&quot;</code></pre>
+<pre class="r"><code>#Adding the species that match the BC list as a column in the above df
+traits$blue.listed &lt;- ifelse(traits$common_name %in% blue, 1, NA)
+traits$red.listed &lt;- ifelse(traits$common_name %in% red, 1, NA)</code></pre>
 <div id="now-forming-the-other-groups-of-interest" class="section level1">
 <h1>Now forming the other groups of interest:</h1>
-<div id="what-do-the-numbers-for-migration-mean" class="section level3">
-<h3>What do the numbers for migration mean?</h3>
-<p>Migration == 1] &lt;- “sedentary” Migration == 2] &lt;- “partial”
-$Migration == 3] &lt;- “migratory”</p>
+<div id="what-do-the-numbers-for-migration-mean" class="section level4">
+<h4>What do the numbers for migration mean?</h4>
+<p>Accessed from Avonet trait database</p>
+<ul>
+<li>Migration == 1] &lt;- sedentary or residents</li>
+<li>Migration == 2] &lt;- Partially migratory, i.e. minority of
+population migrates long distances, or most of population undergoes -
+short-distance migration, nomadic movements, distinct altitudinal
+migration, etc.</li>
+<li>Migration == 3] &lt;- migratory, i.e. majority of population
+undertakes long-distance migration”</li>
+</ul>
+</div>
+<div id="how-were-aerial-insectivores-grouped" class="section level4">
+<h4>How were aerial insectivores grouped?</h4>
+<p>Informed by the State of Canada’s Birds report, which assigns the
+swallow, swift, nightjar, and flycatcher families as aerial insectivores
+(accessed from <a href="https://naturecounts.ca/nc/socb-epoc/methods.jsp" class="uri">https://naturecounts.ca/nc/socb-epoc/methods.jsp</a>)</p>
+</div>
+<div id="invertivores" class="section level4">
+<h4>Invertivores</h4>
+<p>Accessed from Avonet trait database</p>
+<p>Invertivores are species obtaining at least 60% of food resources
+from invertebrates in terrestrial systems, including insects, worms,
+arachnids, etc.</p>
+</div>
+<div id="grassland-and-forest-species" class="section level4">
+<h4>Grassland and Forest species</h4>
+<p>Accessed from Birdbase trait database</p>
+<p>Defined as main habitat type utilized by a species - Forest,
+secondary forest, swamp forest, tree-fall gaps, taiga, igapo, varzea
+-Grasslands, high altitude flats, puna, altiplano, tundra, tussock,
+pastures, steppe, paramo, moorland, plateaus, open vegetation</p>
 <pre class="r"><code>#goal here is to make groups for grouping the distributions
 #groups should be: species at risk, land birds, forest birds, insectivores (aerial insectivores?), grassland species, grassland specialists, long distance migrants, semi migratory birds
 
@@ -497,12 +683,12 @@ groups &lt;- traits %&gt;%
   mutate(long.distance.migrants = ifelse(migration == 3, 1, 0),
          short.distance.migrants = ifelse(migration == 2, 1, 0),
          residents = ifelse(migration == 1, 1, 0),
-         aerial.insectivores = ifelse(family == &quot;Hirundinidae&quot;|family == &quot;Apodidae&quot;|family == &quot;Caprimulgidae&quot;|family == &quot;Tyrannidae&quot;, 1, 0), #swallows, swifts, nightjars, and flycatcher families, informed by the State of Canada&#39;s Birds report
+         aerial.insectivores = ifelse(family == &quot;Hirundinidae&quot;|family == &quot;Apodidae&quot;|family == &quot;Caprimulgidae&quot;|family == &quot;Tyrannidae&quot;, 1, 0), 
          invertivores = ifelse(trophic_niche == &quot;Invertivore&quot;, 1, 0),
          grassland.species = ifelse(primary_habitat == &quot;Grassland&quot;, 1, 0),
          forest.species = ifelse(primary_habitat == &quot;Forest&quot;, 1, 0),
          SARA = ifelse(traits$SARA.endangered == 1 |traits$SARA.threatened == 1 |traits$SARA.special.concern == 1, 1,0)) %&gt;% 
-  select(order, family, sci_name, common_name, long.distance.migrants, short.distance.migrants, residents,aerial.insectivores, invertivores, grassland.species, forest.species, SARA, SARA.endangered, SARA.threatened, SARA.special.concern) #only keep these columns</code></pre>
+  select(order, family, sci_name, common_name, long.distance.migrants, short.distance.migrants, residents,aerial.insectivores, invertivores, grassland.species, forest.species, SARA, SARA.endangered, SARA.threatened, SARA.special.concern, blue.listed, red.listed) #only keep these columns</code></pre>
 </div>
 </div>
 <div id="get-lists-of-each-group-here" class="section level1">
@@ -1178,6 +1364,74 @@ SARA.special.concern %&gt;%
 ## 12 Passerellidae  Passerculus sandwichensis       Savannah Sparrow
 ## 13     Icteridae         Euphagus carolinus        Rusty Blackbird
 ## 14  Fringillidae Coccothraustes vespertinus       Evening Grosbeak</code></pre>
+<pre class="r"><code>#BC blue listed
+blue.listed &lt;- groups %&gt;% 
+  filter(blue.listed == 1) %&gt;% 
+  select(order, family, sci_name, common_name)
+blue.listed %&gt;%
+  select(2:4) %&gt;%
+  print()</code></pre>
+<pre><code>##           family                 sci_name                  common_name
+## 1       Anatidae          Branta bernicla                        Brant
+## 2       Anatidae       Cygnus columbianus                  Tundra Swan
+## 3       Anatidae  Melanitta perspicillata                  Surf Scoter
+## 4       Anatidae      Melanitta americana                 Black Scoter
+## 5       Anatidae        Clangula hyemalis             Long-tailed Duck
+## 6    Phasianidae Tympanuchus phasianellus          Sharp-tailed Grouse
+## 7    Phasianidae          Lagopus leucura       White-tailed Ptarmigan
+## 8     Columbidae     Patagioenas fasciata           Band-tailed Pigeon
+## 9  Caprimulgidae         Chordeiles minor             Common Nighthawk
+## 10      Apodidae        Cypseloides niger                  Black Swift
+## 11      Apodidae     Aeronautes saxatalis         White-throated Swift
+## 12  Accipitridae       Astur atricapillus             American Goshawk
+## 13  Accipitridae            Buteo lagopus            Rough-legged Hawk
+## 14     Tytonidae             Tyto furcata            American Barn Owl
+## 15     Strigidae    Psiloscops flammeolus              Flammulated Owl
+## 16     Strigidae    Megascops kennicottii          Western Screech-Owl
+## 17     Strigidae         Glaucidium gnoma           Northern Pygmy-Owl
+## 18     Strigidae            Asio flammeus              Short-eared Owl
+## 19     Strigidae        Aegolius acadicus        Northern Saw-whet Owl
+## 20       Picidae   Sphyrapicus thyroideus       Williamson&#39;s Sapsucker
+## 21       Picidae         Melanerpes lewis           Lewis&#39;s Woodpecker
+## 22    Falconidae         Falco rusticolus                    Gyrfalcon
+## 23    Falconidae         Falco peregrinus             Peregrine Falcon
+## 24      Corvidae      Cyanocitta stelleri                Steller&#39;s Jay
+## 25     Alaudidae     Eremophila alpestris                  Horned Lark
+## 26  Hirundinidae             Progne subis                Purple Martin
+## 27 Troglodytidae      Catherpes mexicanus                  Canyon Wren
+## 28 Troglodytidae     Troglodytes hiemalis                  Winter Wren
+## 29  Fringillidae      Pinicola enucleator                Pine Grosbeak
+## 30   Calcariidae         Calcarius pictus             Smith&#39;s Longspur
+## 31 Passerellidae         Spizella breweri             Brewer&#39;s Sparrow
+## 32 Passerellidae     Chondestes grammacus                 Lark Sparrow
+## 33     Icteridae       Euphagus carolinus              Rusty Blackbird
+## 34     Parulidae         Oporornis agilis          Connecticut Warbler
+## 35     Parulidae        Setophaga tigrina             Cape May Warbler
+## 36     Parulidae         Setophaga virens Black-throated Green Warbler
+## 37     Parulidae    Cardellina canadensis               Canada Warbler
+## 38     Icteridae          Icterus galbula             Baltimore Oriole</code></pre>
+<pre class="r"><code>#red listed
+red.listed &lt;- groups %&gt;% 
+  filter(red.listed == 1) %&gt;% 
+  select(order, family, sci_name, common_name)
+red.listed %&gt;%
+  select(2:4) %&gt;%
+  print()</code></pre>
+<pre><code>##           family                   sci_name          common_name
+## 1       Anatidae          Branta canadensis         Canada Goose
+## 2       Rallidae Coturnicops noveboracensis          Yellow Rail
+## 3   Accipitridae         Astur atricapillus     American Goshawk
+## 4   Accipitridae            Buteo swainsoni      Swainson&#39;s Hawk
+## 5     Falconidae           Falco peregrinus     Peregrine Falcon
+## 6     Falconidae            Falco mexicanus       Prairie Falcon
+## 7      Alaudidae       Eremophila alpestris          Horned Lark
+## 8        Mimidae       Oreoscoptes montanus        Sage Thrasher
+## 9  Passerellidae      Ammodramus savannarum  Grasshopper Sparrow
+## 10 Passerellidae        Pooecetes gramineus       Vesper Sparrow
+## 11 Passerellidae          Ammospiza nelsoni     Nelson&#39;s Sparrow
+## 12    Icteriidae             Icteria virens Yellow-breasted Chat
+## 13     Icteridae      Dolichonyx oryzivorus             Bobolink
+## 14     Parulidae         Setophaga castanea Bay-breasted Warbler</code></pre>
 </div>
 
 
