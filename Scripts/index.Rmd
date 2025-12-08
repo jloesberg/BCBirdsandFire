@@ -13,12 +13,10 @@ library(ggrepel)
 
 ```{r}
 bctraits.all <- read.csv(here("Data", "cleaned", "BC_bird_traits.csv"))
-
 ```
 
 
 ```{r Fire Index}
-
 index <- bctraits.all %>% 
   mutate(index_primary_lifestyle = ifelse(primary_lifestyle=="Insessorial"|for_hawking>51, 1, 0),
          index_primary_habitat = ifelse(primary_habitat == "Forest"|primary_habitat == "Woodland", -1, ifelse(primary_habitat == "Shrub"|primary_habitat == "Grassland"|primary_habitat == "Plains", 1, 0)),
@@ -28,67 +26,19 @@ index <- bctraits.all %>%
          index_foraging_location = ifelse(most_common_foraging_location=="canopy", -1, ifelse(most_common_foraging_location=="ground"|most_common_foraging_location == "understory", 1, 0)),
          index_trophic_niche = ifelse(trophic_niche == "Invertivore"|trophic_niche == "Nectarivore"|trophic_niche == "Granivore"|trophic_niche=="Frugivore", 1, 0),
          # #20th percentile for range size will be considered "small"
-         # index_range_size = ifelse(range_size<(quantile(range_size, probs = 0.20, na.rm =T)), -1, 0),
          index_migration = ifelse(migration == "sedentary", -1, 0),
-         #index_kipps = ifelse(kipps_distance<(quantile(kipps_distance, probs = 0.20, na.rm =T)), -1, 0),
          index_snag_use = ifelse(snag_nest>51, 1, 0),
          index_oldgrowth = ifelse(old_growth == 1, -1, 0),
          index_nesting_location = ifelse(most_common_nesting_location =="ground"| most_common_nesting_location=="grass"| most_common_nesting_location == "shrub", 1, ifelse(live_tree_nest >51, -1, 0)),
          index_nest_type = ifelse(nest_category=="cavity", 1, 0),
          index_handwing = ifelse(hand_wing_index > mean(hand_wing_index, na.rm = TRUE), 1, 0),
-         #index_groundforaging = ifelse(for_strat_ground>51, 1, 0),
-        # index_canopyforaging = ifelse(for_strat_canopy>51, -1, 0),
          index_foliageglean = ifelse(for_foliage_gleaning>51, -1, 0),
          index_sum = rowSums(across(starts_with("index")), na.rm = TRUE))
-
-#index$index_nesting_location[index$most_common_nesting_location == "tree" & index$nest_category == "cavity"] <- 1 #tree nesting is only positive if its cavity nesting
-  
 ```
 
 
-```{r index try 2}
-index <- bctraits.all %>% 
-  mutate(index_diet = ifelse(trophic_niche == "Invertivore"|trophic_niche == "Nectarivore"|trophic_niche == "Granivore"|trophic_niche=="Frugivore", 1, 
-                           #  ifelse(primary_lifestyle == "Insessorial" & primary_diet == "Invertebrate", 1, #arboreal spp that eat on insects positively impacted
-                                    ifelse(primary_lifestyle == "Insessorial" & trophic_niche == "Omnivore", 1, 0)),# omnivore arboreal spp  positively impacted
-         #note the differences between primary_diet from the Nature data paper and trophic niche from avonet...
-         index_nesting = ifelse(nest_type == "cavity"| most_common_nesting_location == "snag", 1, 
-                                if_else(most_common_nesting_location == "tree", -1, #negaitvely impacted if they nest in live trees
-                                        ifelse(most_common_nesting_location=="grass"|most_common_nesting_location == "shrub"|most_common_nesting_location == "ground", 1, 0))), # including ground as a postive
-         index_migration = ifelse(migration == 3, -1, 0),
-         index_habitat_density = ifelse(habitat_density == 1, 1, 0),
-         index_sum = rowSums(across(starts_with("index")), na.rm = TRUE))
-         
-         # index_primary_habitat = ifelse(primary_habitat == "Forest"|primary_habitat == "Woodland", -1, ifelse(primary_habitat == "Shrub"|primary_habitat == "Grassland"|primary_habitat == "Plains", 1, 0)),
-         # index_habitat_density = ifelse(habitat_density == "dense", -1, ifelse(is.na(habitat_density), 0, 1)),
-         # index_forest_use = ifelse(forest_use == 1, -1, 0),
-         # index_eco_spec_index = ifelse(eco_spec_index >1, -1,0),
-         # index_foraging_location = ifelse(most_common_foraging_location=="canopy"|most_common_foraging_location == "midhigh", -1, ifelse(most_common_foraging_location=="ground"|most_common_foraging_location == "understory", 1, 0)),
-         # index_trophic_niche = ifelse(trophic_niche == "Invertivore"|trophic_niche == "Nectarivore"|trophic_niche == "Granivore"|trophic_niche=="Frugivore", 1, ifelse(trophic_niche == "Herbivore terrestrial", -1, 0)),
-         # #20th percentile for range size will be considered "small"
-         # index_range_size = ifelse(range_size<(quantile(range_size, probs = 0.20, na.rm =T)), -1, 0),
-         # index_migration = ifelse(migration == "sedentary", -1, 0),
-         # #hwi maybe not the best...would mean that vultures are least dispersing??
-         # index_kipps = ifelse(kipps_distance<(quantile(kipps_distance, probs = 0.20, na.rm =T)), -1, 0),
-         # index_live_tree = ifelse(live_tree_nesting_use >.90, -1, 0),
-         # #only one spp does snags>90
-         # index_snag_use = ifelse(snag_nesting_use>.60, 1, 0),
-         # index_nesting_location = ifelse(most_common_nesting_location == "tree", -1, ifelse(most_common_nesting_location == "snag"|most_common_nesting_location == "ground"|most_common_nesting_location=="grass"|most_common_nesting_location == "shrub", 1, 0)),
-         # index_nest_type = ifelse(nest_category=="cavity", 1, 0),
+```{r Figures}
 
-
-#index$index_nesting_location[index$most_common_nesting_location == "tree" & index$nest_category == "cavity"] <- 1 #tree nesting is only positive if its cavity nesting
-  
-```
-
-
-
-```{r}
-
-
-# Create the figure: Lollipop Chart
-# NOTE: Replace 'species' with the actual species column name if it is different
-# We reorder the species (Y-axis) based on the index_sum (X-axis) for better visualization
 (index1 <- ggplot(index, aes(x = index_sum, 
                   y = reorder(common_name, index_sum), 
                   color = index_sum)) +
@@ -103,8 +53,8 @@ index <- bctraits.all %>%
    facet_wrap(~family, scales = "free_y")+
   theme(plot.title = element_text(face = "bold", hjust = 0.5),
     plot.subtitle = element_text(hjust = 0.5),
-    axis.text.y = element_text(size = 8), # Smaller font for potentially many species
-    panel.grid.major.y = element_blank(), # Remove horizontal lines for clean look
+    axis.text.y = element_text(size = 8), 
+    panel.grid.major.y = element_blank(),
     legend.position = "bottom"
   ))
 #Picidae
@@ -122,8 +72,8 @@ index <- bctraits.all %>%
   theme_classic(base_size = 12) +
   theme(plot.title = element_text(face = "bold", hjust = 0.5),
     plot.subtitle = element_text(hjust = 0.5),
-    axis.text.y = element_text(size = 8), # Smaller font for potentially many species
-    panel.grid.major.y = element_blank(), # Remove horizontal lines for clean look
+    axis.text.y = element_text(size = 8), 
+    panel.grid.major.y = element_blank(), 
     legend.position = "bottom"
   ))
 
@@ -142,8 +92,8 @@ index <- bctraits.all %>%
   theme_classic(base_size = 12) +
   theme(plot.title = element_text(face = "bold", hjust = 0.5),
     plot.subtitle = element_text(hjust = 0.5),
-    axis.text.y = element_text(size = 8), # Smaller font for potentially many species
-    panel.grid.major.y = element_blank(), # Remove horizontal lines for clean look
+    axis.text.y = element_text(size = 8),
+    panel.grid.major.y = element_blank(),
     legend.position = "bottom"
   ))
 

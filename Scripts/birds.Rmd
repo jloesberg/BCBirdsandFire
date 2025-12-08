@@ -4,33 +4,20 @@ author: "JL"
 date: "`r Sys.Date()`"
 output: html_document
 ---
-_to do:_
-
-
-
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
 library(here) 
 library(tidyverse)
 library(janitor)
 ```
 
-_Traits we discussed:_
-nest type (ground, open-cup, cavity), nest location (ground, mid-canopy, canopy), foraging height (ground, mid-canopy, canopy), horizontal foraging strategy (ground, edge, core), diet (herbivore, invertivore, omnivore), morphological attributes (body mass, wing length, bill size), and migratory behaviour (resident/short-distance migrants, long-distance migrants)
-Plus: Range size, population estimate, nest type, specialization to habitat, migration
-
 ```{r read in bc bird list}
 birdlist <- read.csv(here("Data", "BirdLists", "bc_birds_checklist.csv"), na.strings = c("", "NA"))
 birdlist <- birdlist[rowSums(is.na(birdlist)) != ncol(birdlist), ]
 
-#test <- read.csv(here("Data", "BirdLists", "bc_birds_avibase_clements_2025.csv"))
 birdlist <- birdlist%>%
   filter(if_any(everything(), ~ . != "" & !is.na(.))) 
 birdlist$Family <- sub("^\\s+", "", birdlist$Family)
-#duplicated(birdlist$common_name)#no duplicated, 567 birds
 
-#setdiff(birdlist$sci_name, test$sci_name)
 remove_species <- c(
   "American Black Duck",
   "Acorn Woodpecker",
@@ -55,7 +42,7 @@ birdlist <- birdlist_filtered
 remove(birdlist_filtered)
 ```
 
-```{r read in trait data base available databases}
+```{r read in available databases}
 dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk", "Dubovyk_trait_database.csv")) #> nest <- dtrait %>% select(name, eng_name, nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nsdeci, nsconi, nssnag, nsfloat, nscact, nstang, ntree, nesting.location)
 dtrait2 <- dtrait %>% 
   select(name, eng_name, 39:96, -fcfish, -fpdiur, -fpnoct, -klepto)
@@ -143,11 +130,8 @@ eco_t <- eco_t %>%
     sorted_indices = list(order(row_values, decreasing = TRUE)),
     most.common.foraging.location = cols_to_check[sorted_indices[1]],
     second.foraging.location = ifelse(
-      # Condition: Is the second highest value equal to 0?
       row_values[sorted_indices[2]] == 0,
-      # If TRUE: Assign NA (must be type character to match column names)
       NA_character_, 
-      # If FALSE: Assign the column name
       cols_to_check[sorted_indices[2]])) %>% 
     ungroup() %>%
   select(-c(row_values, sorted_indices, ForStrat.aerial, ForStrat.water))
@@ -159,7 +143,6 @@ de.trait <- full_join(eco_t, dtrait, by = c("Elton_ID", "eng_name")) %>%
    mutate(
     Scientific = coalesce(Scientific, name)  # use 'name' only if Scientific is NA
   )
-
   
 #get bc birds
 bctrait <- left_join(birdlist ,de.trait, by = c("sci_name" = "Scientific"))
@@ -204,17 +187,9 @@ avtrait$Habitat.Density[avtrait$Habitat.Density == 1] <- "dense"
 avtrait$Habitat.Density[avtrait$Habitat.Density == 2] <- "semiopen"
 avtrait$Habitat.Density[avtrait$Habitat.Density == 3] <- "open"
 
-# avtrait$Migration[avtrait$Migration == 1] <- "sedentary"
-# avtrait$Migration[avtrait$Migration == 2] <- "partial"
-# avtrait$Migration[avtrait$Migration == 3] <- "migratory"
-
 avtrait3$Habitat.Density[avtrait3$Habitat.Density == 1] <- "dense"
 avtrait3$Habitat.Density[avtrait3$Habitat.Density == 2] <- "semiopen"
 avtrait3$Habitat.Density[avtrait3$Habitat.Density == 3] <- "open"
-
-# avtrait3$Migration[avtrait3$Migration == 1] <- "sedentary"
-# avtrait3$Migration[avtrait3$Migration == 2] <- "partial"
-# avtrait3$Migration[avtrait3$Migration == 3] <- "migratory"
 
 #fixing taxonomy - there arent many, so doing it by hand (and there are no common names to help out)
 avtrait$sci_name[avtrait$sci_name=="Falcipennis canadensis"] <- "Canachites canadensis"
@@ -223,9 +198,7 @@ avtrait$sci_name[avtrait$sci_name=="Bubulcus ibis"] <- "Ardea ibis"
 avtrait$sci_name[avtrait$sci_name=="Accipiter cooperii"] <- "Astur cooperii"
 avtrait$sci_name[avtrait$sci_name=="Hylatomus pileatus"] <- "Dryocopus pileatus"
 avtrait$sci_name[avtrait$sci_name=="Anas penelope"] <- "Mareca penelope"
-#avtrait$sci_name[avtrait$sci_name=="Melanitta fusca"] <- "Melanitta deglandi"
-#avtrait$sci_name[avtrait$sci_name=="Dendragapus canadensis"] <- "Canachites canadensis"
-#avtrait$sci_name[avtrait$sci_name=="Larus argentatus"] <- "Larus smithsonianus"
+
 avtrait$sci_name[avtrait$sci_name=="Nannopterum auritus"] <- "Nannopterum auritum"
 avtrait$sci_name[avtrait$sci_name=="Tyto alba"] <- "Tyto furcata"
 avtrait$sci_name[avtrait$sci_name=="Accipiter gentilis"] <- "Astur atricapillus"
@@ -241,8 +214,6 @@ avtrait$sci_name[avtrait$sci_name=="Ixobrychus exilis"] <- "Botaurus exilis"
 avtrait$sci_name[avtrait$sci_name=="Butorides striatus"] <- "Butorides virescens"
 avtrait$sci_name[avtrait$sci_name=="Picoides tridactylus"] <- "Picoides dorsalis"
 avtrait$sci_name[avtrait$sci_name=="Leuconotopicus villosus"] <- "Dryobates villosus" #some taxonomic disagreement it seems, sticking to this one
-#avtrait$sci_name[avtrait$sci_name=="Charadrius mexicanus"] <- "Himantopus mexicanus" #this one not in avonet1
-#avtrait$sci_name[avtrait$sci_name=="Butorides striatus"] <- "Butorides virescens" #this one not in avonet1
 avtrait$sci_name[avtrait$sci_name=="Leuconotopicus albolarvatus"] <- "Dryobates albolarvatus"
 avtrait$sci_name[avtrait$sci_name=="Regulus calendula"] <- "Corthylio calendula"
 avtrait$sci_name[avtrait$sci_name=="Icterus galbula"] <- "Icterus bullockii"
@@ -250,11 +221,8 @@ avtrait$sci_name[avtrait$sci_name=="Anthus rubescens"] <- "Anthus japonicus"
 avtrait$sci_name[avtrait$sci_name=="Charadrius alexandrinus"] <- "Anarhynchus nivosus"
 avtrait$sci_name[avtrait$sci_name=="Charadrius montanus"] <- "Anarhynchus montanus"
 avtrait$sci_name[avtrait$sci_name=="Charadrius mongolus"] <- "Anarhynchus mongolus"
-
-
 avtrait3$sci_name[avtrait3$sci_name=="Spizella arborea"] <- "Spizelloides arborea"
 avtrait3$sci_name[avtrait3$sci_name=="Ammodramus bairdii"] <- "Centronyx bairdii"
-#avtrait3$sci_name[avtrait3$sci_name=="Larus argentatus"] <- "Larus smithsonianus"
 
 #mew gulls were made into 2 species
 new_row <- avtrait[avtrait$sci_name == "Larus canus", ]
@@ -273,43 +241,7 @@ bctraits3 <- bctraits3 %>%
   filter(!is.na(AV_ID)) %>%  # keep the matched ones
   bind_rows(matched_by_)
 
-#duplicated(bctraits3$sci_name)#no duplicated, 567 birds
-#dupes <- bctraits3[duplicated(bctraits3$sci_name) | duplicated(bctraits3$sci_name, fromLast = TRUE), ]
-
 bctraits.all <- left_join(bctraits3, bctrait)
-
-# ################################################################################
-# #IUCN
-# redlist <- read.csv(here("Data", "TraitDatabases", "IUCN", "assessments.csv"))
-# redlist <- redlist %>% 
-#   select(scientificName, redlistCategory, populationTrend)
-# #cleaning up some taxonomy so they match:
-# redlist$scientificName[redlist$scientificName=="Passerella arborea"] <- "Spizelloides arborea"
-# redlist$scientificName[redlist$scientificName=="Haematopus ater"] <- "Haematopus bachmani"
-# redlist$scientificName[redlist$scientificName=="Catharacta maccormicki"] <- "Stercorarius maccormicki"
-# redlist$scientificName[redlist$scientificName=="Picoides tridactylus"] <- "Picoides dorsalis"
-# redlist$scientificName[redlist$scientificName=="Hylatomus pileatus"] <- "Dryocopus pileatus"
-# redlist$scientificName[redlist$scientificName=="Icterus bullockiorum"] <- "Icterus bullockii"
-# redlist$scientificName[redlist$scientificName=="Butorides striatus"] <- "Butorides virescens" #this
-# redlist$scientificName[redlist$scientificName=="Leuconotopicus villosus"] <- "Dryobates villosus" #some taxonomic disagreement it seems, sticking to this one
-# 
-# 
-# 
-# bctraits.i <- bctraits.all %>% 
-#   select(name, names(birdlist)) %>% 
-#             left_join(redlist, by = c("sci_name" = "scientificName"))
-# unmatched.i <- bctraits.i %>%
-#   filter(is.na(redlistCategory)) %>%   # replace with a col you expect after join
-#   select(name, names(birdlist))
-# matched_by_i<- unmatched.i %>%
-#   left_join(redlist, by = c("name" = "scientificName"))
-# 
-# bctraits.i<- bctraits.i %>%
-#   filter(!is.na(redlistCategory)) %>%  # keep the matched ones
-#   bind_rows(matched_by_i)
-# 
-# bctraits.all <- left_join(bctraits.all, bctraits.i)
-
 ###############################################################################
 #cleanign it up a bit
 bctraits.all <- bctraits.all %>% 
@@ -335,9 +267,7 @@ bctraits.all$nest.category[bctraits.all$common_name=="South Polar Skua"] <- "ope
 bctraits.all$lifespan[bctraits.all$common_name=="Short-tailed Shearwater"] <- 30 
 bctraits.all$ReproAge[bctraits.all$common_name=="Short-tailed Shearwater"] <- 6 
 bctraits.all$clutches.per.year[bctraits.all$common_name=="Short-tailed Shearwater"] <- 1 
-#bctraits.all$nest.type[bctraits.all$common_name=="Short-tailed Shearwater"] <- "scrape"
-#bctraits.all$nesting.location[bctraits.all$common_name=="Short-tailed Shearwater"] <- "ground"
-#bctraits.all$nest.category[bctraits.all$common_name=="Short-tailed Shearwater"] <- "open"
+
 
 
 #lots of missing data for Pacific Wren - associated with old growth forests AND was recently seperated from winter wren. So where there isnt data for pacific, use data from winter
@@ -374,7 +304,7 @@ bctraits.all$shrub_nest[bctraits.all$common_name=="Pacific Wren"] <- 0
 ```
 
 ```{r}
-#hot off the press BIRDBASE (published sept 20 2025)
+#BIRDBASE
 birdbase <- read.csv(here("Data", "TraitDatabases", "Birdbase", "BIRDBASE.database.csv"), skip = 1)
 
 birdbase <- birdbase %>% 
@@ -386,7 +316,7 @@ birdbase$forest.use[is.na(birdbase$forest.use)] <- 0
 
 ##ESI: Ecological Specialization Index: log10 (100/[dietary breadth x habitat breadth]), with a maximum of 2 for the most specialized species that only feed on one major food group and live in one major type of habitat (e.g., forest frugivore; Sekercioglu, 2011)
 #just get BC birds
-birdbase.bc <- left_join(birdlist, birdbase, by = c("sci_name" = "latin"))
+birdbase.bc <- left_join(birdlst, birdbase, by = c("sci_name" = "latin"))
 
 
 unmatched.i <- birdbase.bc %>%
@@ -414,8 +344,6 @@ birdbase.bc<- birdbase.bc %>%
 bctraits.all <- left_join(bctraits.all, birdbase.bc)
 
 bctraits.all <- bctraits.all %>% 
- # rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific ) %>% 
-  #select(AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name) #uncheck this to include these other names/database IDs
   select(Order, Family, sci_name, common_name, iucn.2024, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category, any_tree_nest, ground_nest, shrub_nest, snag_nest, live_tree_nest, conifer_nest, deciduous_nest, majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name,  for_hawking, for_foliage_gleaning, for_bark_gleaning, fstimb, Diet.Inv, Diet.Nect, Diet.Seed, ForStrat.ground, ForStrat.understory, ForStrat.canopy, elevational_range, forest.use, primary_habitat, habitat.breadth, primary_diet,diet.breadth, Eco.Spec.Index)
 
 old_growth <-  c("American Three-toed Woodpecker", "Bay-breasted Warbler", "Black-capped Chickadee", "Boreal Chickadee", "Boreal Owl", "Brown Creeper", "Canada Warbler", "Chestnut-backed Chickadee", "Dusky Grouse", "Golden-crowned Kinglet", "Great Horned Owl", "Hairy Woodpecker", "Hammond's Flycatcher", "Hermit Thrush", "Lewis's Woodpecker", "American Goshawk", "Northern Waterthrush", "Western Flycatcher", "Pileated Woodpecker", "Red-breasted Nuthatch", "Red-breasted Sapsucker", "Ruby-crowned Kinglet", "Spruce Grouse", "Swainson's Thrush", "Townsend's Warbler", "Varied Thrush", "Vaux's Swift", "White-breasted Nuthatch")
@@ -428,9 +356,7 @@ bctraits.all <- bctraits.all %>%
   janitor::clean_names()
 
 write.csv(bctraits.all, here("Data", "cleaned", "BC_bird_traits.csv"), row.names = FALSE)
-
 ```
-
 Read me:
 
 "order" - [BC bird list]
@@ -597,43 +523,3 @@ snag_nesting_use - % of nesting preference for snags out of 100% [dubovyk]
 "ForStrat-canopy": Prevalence of: Foraging in or just above (from) tree canopy. estimated % use (categories sum to 100% total) [eltontraits]
 
 "old_growth": are they associated with old growth? list from Peter Arcese
-
-
-
-
-
-
-```{r}
-#update spp names
-# https://ecoinfor.shinyapps.io/UTaxonstandOnline/
-
-# data(spExample)
-# data(databaseExample)
-# 
-# library(openxlsx)
-# dat1 <- read.xlsx("Birds_ITIS_database.xlsx")
-# 
-# res <- nameMatch(spList=birdlist, spSource=databaseExample, author = TRUE, max.distance= 1)
-# head(res)
-```
-
-
-simplifying categories:
-- nest types: simplify to broader categories (for fire: cup, scape, cavity, [bank/crevice] 
-  change outside structres ie. gourd, sphere, pendant, saucer, chamber, oven, cup --> MAKE ALL THE SAME... will be similarly affected to cups. VS TREE CAVITY; rockCREVICE/crack; burrow (+/-?) ; open[no, scrape--> combined these into one category] platform[negatively affected]  (tree; burrows; crevice[look at definition]) VS exposed )
-- take out lat/long
-- keep Kipp distance and hand wing distance [some direction]
-
-foraging strategy from elton tratis: assign the majoity % for each (>50%)
-
-from Du..: see if there are any extra records for hand wing index
-
-add in number of clutched (but not age of maturity etc)
-
-TODO:
-- make table of tratis and directions in google drive (similar to the FIRE paper)
-
-ex. wood duck:
-https://www.audubon.org/field-guide/bird/wood-duck (fire would remove forest, causing negative impact on birds)
-
-

@@ -11,13 +11,11 @@ library(tiff)
 library(terra)
 library(here)
 library(bcmaps)
-# install.packages("terra")
 library(tidyterra)
-
 ```
 
 ```{r FWI}
-t.26 <- rast(here("Data","ClimateDataCanada","May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050_.nc")) # for terra package
+t.26 <- rast(here("Data","ClimateDataCanada","May_to_September_95th_percentile_of_FWI_RCP8.5_2021-2050_.nc")) # for terra package
 print(t.26)
 #plot(t.26)
 #add bc boundary
@@ -26,7 +24,7 @@ bc <- bcmaps::bc_bound() %>%
 bc_proj <- project(bc, t.26)
 t.26bc <- mask(crop(t.26, bc_proj), bc_proj)
 t.26bc <- project(t.26bc, crs(bc)) #turns it back to the BC specific projection
-plot(t.26bc, main = "BC May_to_September_95th_percentile_of_FWI_RCP2.6_2021-2050")
+plot(t.26bc, main = "BC May_to_September_95th_percentile_of_FWI_RCP8.5_2021-2050")
 lines(bc, col = "black", lwd = 2)
 
 climate_layer <- t.26bc[[1]] 
@@ -55,12 +53,12 @@ climate_aligned <- resample(climate_layer, osf_final, method = "near")
 risk_map <- osf_final * climate_aligned
 ##
 
-png(here("Maps", "nov.presentation", "osf.panel.png"), width = 3000, height = 1000, pointsize = 24)
+png(here("Maps", "osf.panel.png"), width = 3000, height = 1000, pointsize = 24)
 par(mfrow = c(1, 3)) 
 # Plot Map 2: Climate Data
 
 plot(climate_aligned, 
-     main = "FWI RCP2.6 2021-2050",
+     main = "FWI RCP8.5 2021-2050",
      col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
 )
 lines(bc, col = "black", lwd = 1.5)
@@ -81,7 +79,7 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #individual maps
-png(here("Maps", "nov.presentation", "osf.risk.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "osf.risk.png"), width = 1000, height = 1000, pointsize = 24)
 #risk
 plot(risk_map, 
      main = "Olive-sided Flycatcher Risk",
@@ -90,15 +88,15 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #fwi
-png(here("Maps", "nov.presentation", "fwi.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "fwi.png"), width = 1000, height = 1000, pointsize = 24)
 plot(climate_aligned, 
-     main = "FWI RCP2.6 2021-2050",
+     main = "FWI RCP8.5 2021-2050",
      col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
 )
 lines(bc, col = "black", lwd = 1.5)
 
 #osf
-png(here("Maps", "nov.presentation", "osf.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "osf.png"), width = 1000, height = 1000, pointsize = 24)
 plot(osf_final, 
      main = "Olive-sided Flycatcher ",
      col = rev(hcl.colors(100, "Blues")) 
@@ -128,12 +126,12 @@ climate_aligned <- resample(climate_layer, bbw_final, method = "near")
 risk_map <- bbw_final * climate_aligned
 ##
 
-png(here("Maps", "nov.presentation", "bbw.panel.png"), width = 3000, height = 1000, pointsize = 24)
+png(here("Maps", "bbw.panel.png"), width = 3000, height = 1000, pointsize = 24)
 par(mfrow = c(1, 3)) 
 # Plot Map 2: Climate Data
 
 plot(climate_aligned, 
-     main = "FWI RCP2.6 2021-2050",
+     main = "FWI RCP8.5 2021-2050",
      col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
 )
 lines(bc, col = "black", lwd = 1.5)
@@ -154,7 +152,7 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #individual maps
-png(here("Maps", "nov.presentation", "bbw.risk.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "bbw.risk.png"), width = 1000, height = 1000, pointsize = 24)
 #risk
 plot(risk_map, 
      main = "Black-backed Woodpecker Risk",
@@ -163,7 +161,7 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #abundance
-png(here("Maps", "nov.presentation", "bbw.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "bbw.png"), width = 1000, height = 1000, pointsize = 24)
 plot(bbw_final, 
      main = "Black-backed Woodpecker",
      col = rev(hcl.colors(100, "Blues")) 
@@ -193,12 +191,12 @@ climate_aligned <- resample(climate_layer, lw_final, method = "near")
 risk_map <- lw_final * climate_aligned
 ##
 
-png(here("Maps", "nov.presentation", "lw.panel.png"), width = 3000, height = 1000, pointsize = 24)
+png(here("Maps", "lw.panel.png"), width = 3000, height = 1000, pointsize = 24)
 par(mfrow = c(1, 3)) 
 # Plot Map 2: Climate Data
 
 plot(climate_aligned, 
-     main = "FWI RCP2.6 2021-2050",
+     main = "FWI RCP8.5 2021-2050",
      col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
 )
 lines(bc, col = "black", lwd = 1.5)
@@ -219,7 +217,7 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #individual maps
-png(here("Maps", "nov.presentation", "lw.risk.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "lw.risk.png"), width = 1000, height = 1000, pointsize = 24)
 #risk
 plot(risk_map, 
      main = "Lewis's Woodpecker Risk",
@@ -228,7 +226,7 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #abundance
-png(here("Maps", "nov.presentation", "lw.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "lw.png"), width = 1000, height = 1000, pointsize = 24)
 plot(lw_final, 
      main = "Lewis's Woodpecker",
      col = rev(hcl.colors(100, "Blues")) 
@@ -258,12 +256,12 @@ climate_aligned <- resample(climate_layer, rck_final, method = "near")
 risk_map <- rck_final * climate_aligned
 ##
 
-png(here("Maps", "nov.presentation", "rck.panel.png"), width = 3000, height = 1000, pointsize = 24)
+png(here("Maps", "rck.panel.png"), width = 3000, height = 1000, pointsize = 24)
 par(mfrow = c(1, 3)) 
 # Plot Map 2: Climate Data
 
 plot(climate_aligned, 
-     main = "FWI RCP2.6 2021-2050",
+     main = "FWI RCP8.5 2021-2050",
      col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
 )
 lines(bc, col = "black", lwd = 1.5)
@@ -284,7 +282,7 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #individual maps
-png(here("Maps", "nov.presentation", "rck.risk.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "rck.risk.png"), width = 1000, height = 1000, pointsize = 24)
 #risk
 plot(risk_map, 
      main = "Ruby-crowned Kinglet Risk",
@@ -293,7 +291,7 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #abundance
-png(here("Maps", "nov.presentation", "rck.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "rck.png"), width = 1000, height = 1000, pointsize = 24)
 plot(rck_final, 
      main = "Ruby-crowned Kinglet",
      col = rev(hcl.colors(100, "Blues")) 
@@ -322,12 +320,12 @@ climate_aligned <- resample(climate_layer, wwp_final, method = "near")
 risk_map <- wwp_final * climate_aligned
 ##
 
-png(here("Maps", "nov.presentation", "wwp.panel.png"), width = 3000, height = 1000, pointsize = 24)
+png(here("Maps", "wwp.panel.png"), width = 3000, height = 1000, pointsize = 24)
 par(mfrow = c(1, 3)) 
 # Plot Map 2: Climate Data
 
 plot(climate_aligned, 
-     main = "FWI RCP2.6 2021-2050",
+     main = "FWI RCP8.5 2021-2050",
      col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
 )
 lines(bc, col = "black", lwd = 1.5)
@@ -348,7 +346,7 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #individual maps
-png(here("Maps", "nov.presentation", "wwp.risk.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "wwp.risk.png"), width = 1000, height = 1000, pointsize = 24)
 #risk
 plot(risk_map, 
      main = "Western Wood-Pewee Risk",
@@ -357,64 +355,12 @@ plot(risk_map,
 lines(bc, col = "black", lwd = 1.5)
 
 #abundance
-png(here("Maps", "nov.presentation", "wwp.png"), width = 1000, height = 1000, pointsize = 24)
+png(here("Maps", "wwp.png"), width = 1000, height = 1000, pointsize = 24)
 plot(wwp_final, 
      main = "Western Wood-Pewee",
      col = rev(hcl.colors(100, "Blues")) 
 )
 lines(bc, col = "black", lwd = 1.5)
-```
-
-```{r}
-climate_layer <- t.26bc[[1]] 
-
-# 2. Rename the layers to be clear in the facet titles/legends
-names(osf_final) <- "Abundance"
-names(climate_layer) <- "FWI_2050" 
-
-# 3. Combine the two aligned rasters into a single SpatRaster stack
-climate_aligned <- resample(climate_layer, osf_final, method = "near") 
-
-combined_raster_stack <- c(osf_final, climate_aligned)
-ggplot() +
-  geom_spatraster(data = climate_aligned) +  # use aligned raster
-  scale_fill_viridis_c(
-    na.value = "transparent",
-    option = "A",   # Magma/Heat color scheme
-    name = "FWI Value",
-    guide = guide_colorbar(direction = "horizontal", title.position = "top")
-  ) +
-  geom_sf(data = bc, 
-          fill = NA, 
-          color = "black",
-          linewidth = 0.75) +
-  coord_sf(expand = FALSE) +
-  theme_bw() +
-  theme(legend.position = "bottom",
-        legend.box = "horizontal")
-
-# Combine
-combined_stack <- c(osf_final, climate_aligned)
-
-# Convert to data frame for ggplot
-combined_df <- as.data.frame(combined_stack, xy = TRUE, na.rm = TRUE)
-
-# Pivot longer for faceting
-library(tidyr)
-combined_long <- combined_df %>%
-  pivot_longer(cols = c("Abundance", "FWI_2050"), 
-               names_to = "Layer", values_to = "Value")
-
-# Plot with facets
-ggplot(combined_long, aes(x = x, y = y, fill = Value)) +
-  geom_raster() +
-  geom_sf(data = bc, fill = NA, color = "black", linewidth = 0.75) +
-  scale_fill_viridis_c(option = "A", na.value = "transparent") +
-  facet_wrap(~Layer) +
-  coord_sf(expand = FALSE) +
-  theme_bw() +
-  theme(legend.position = "bottom",
-        legend.box = "horizontal")
 ```
 
 
@@ -445,7 +391,7 @@ lines(bc,
 par(mfrow = c(1, 3)) 
 # Plot Map 2: Climate Data
 plot(climate_aligned, 
-     main = "FWI RCP2.6 2021-2050",
+     main = "FWI RCP8.5 2021-2050",
      col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
 )
 lines(bc, col = "black", lwd = 1.5)

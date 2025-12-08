@@ -19,8 +19,6 @@ traits$habitat_density[traits$habitat_density == "open"] <- 3
 traits <- traits %>% 
       select(-any_tree_nest, -live_tree_nest) %>% 
   mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
-   #        ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
-   #        shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0)) %>%
     habitat_density = as.numeric(habitat_density))
 traits2 <- traits
 
@@ -83,11 +81,6 @@ traits <- traits %>%
 ```{r}
 trait.pca <- traits %>% 
   select(common_name, where(is.numeric), -elevational_range,-positive_medium, -negative_medium, -null_medium,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb)
-
-# trait_list <- trait.pca 
-# trait_list <- trait_list[1, ]
-# write.csv(trait_list, here("Data", "cleaned", "traits.for.pca.csv"), row.names = FALSE)
-
 
 pca_result <- prcomp(trait.pca[,-1], scale = T) #scale the variables!
 ##
@@ -189,14 +182,6 @@ loadings <- loadings %>%
     "Positive & Neutral" = "#005AB5",
     "Negative & Neutral" = "#DC3220"
   )))
-
-# ggplot(pca_df, aes(x = PC1, y = PC2, group = common_name)) +
-#       geom_point() + # Add points for individual data points
-#       stat_ellipse(level = 0.95, type = "t") + # Add 95% confidence ellipses based on a t-distribution
-#       labs(title = "PCA Plot with Confidence Ellipses",
-#            x = "Principal Component 1",
-#            y = "Principal Component 2") +
-#       theme_minimal()
 ```
 
 ```{r}
@@ -406,19 +391,6 @@ ggsave(here("Figures", "PCA", "PCA_all response patchwork.medium.png"), plot = p
        title = ""))
 ggsave(here("Figures", "PCA", "PCA_centers.medium.png"), plot = with.mix, width = 8, height =8, dpi = 300)
 
-
-# t.test(
-#   pca_scores$PC1[pca_scores$positive == 1&pca_scores$negative != 1],
-#   pca_scores$PC1[pca_scores$negative == 1&pca_scores$positive != 1]
-# )
-# 
-# # PC2
-# t.test(
-#   pca_scores$PC2[pca_scores$positive == 1&pca_scores$negative != 1],
-#   pca_scores$PC2[pca_scores$negative == 1&pca_scores$positive != 1]
-# )
-#p < 0.05 → The positive and negative 1’s occupy significantly different mean positions along that PC.
-#p ≥ 0.05 → No significant difference.
 pca_scores <- pca_scores %>%
   mutate(fire_response = case_when(
     positive == 1 & negative == 1 ~ "mixed",
@@ -472,52 +444,3 @@ loadings <- loadings %>%
 ggsave(here("Figures", "PCA", "PCA_end fig medium.png"), plot = medium, width = 18, height =8, dpi = 300)
 
 ```
-
-anova_pc1 <- aov(PC1 ~ fire_response, data = pca_scores)
-> summary(anova_pc1)
-               Df Sum Sq Mean Sq F value   Pr(>F)    
-fire_response   3   95.2   31.75   6.353 0.000488 ***
-Residuals     122  609.7    5.00                     
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-> 
-> # Post-hoc (Tukey) test for pairwise comparisons
-> TukeyHSD(anova_pc1)
-  Tukey multiple comparisons of means
-    95% family-wise confidence level
-
-Fit: aov(formula = PC1 ~ fire_response, data = pca_scores)
-
-$fire_response
-                        diff        lwr        upr     p adj
-negative-mixed     0.1054934 -1.8952531  2.1062399 0.9990705
-neutral-mixed     -2.2028776 -3.9193403 -0.4864150 0.0059884
-positive-mixed    -1.2816869 -2.9502444  0.3868705 0.1933438
-neutral-negative  -2.3083710 -3.9548139 -0.6619281 0.0021519
-positive-negative -1.3871803 -2.9836183  0.2092577 0.1124493
-positive-neutral   0.9211907 -0.3002313  2.1426127 0.2071948
-
-> 
-> anova_pc2 <- aov(PC2~ fire_response, data = pca_scores)
-> summary(anova_pc2)
-               Df Sum Sq Mean Sq F value  Pr(>F)   
-fire_response   3   49.6  16.543   5.653 0.00116 **
-Residuals     122  357.0   2.926                   
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-> 
-> # Post-hoc (Tukey) test for pairwise comparisons
-> TukeyHSD(anova_pc2)
-  Tukey multiple comparisons of means
-    95% family-wise confidence level
-
-Fit: aov(formula = PC2 ~ fire_response, data = pca_scores)
-
-$fire_response
-                         diff        lwr        upr     p adj
-negative-mixed    -1.39758801 -2.9285988  0.1334228 0.0868184
-neutral-mixed     -1.93872412 -3.2521953 -0.6252529 0.0010959
-positive-mixed    -1.85339025 -3.1302035 -0.5765770 0.0013738
-neutral-negative  -0.54113612 -1.8010268  0.7187546 0.6786873
-positive-negative -0.45580224 -1.6774282  0.7658237 0.7656799
-positive-neutral   0.08533388 -0.8493224  1.0199902 0.9952436

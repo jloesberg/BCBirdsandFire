@@ -21,26 +21,20 @@ traits$habitat_density[traits$habitat_density == "open"] <- 3
 traits <- traits %>% 
   select(-any_tree_nest, -live_tree_nest) %>% 
     mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
-   #        ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
-   #        shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0)) %>%
     habitat_density = as.numeric(habitat_density)) 
-# old_growth <-  c("American Three-toed Woodpecker", "Bay-breasted Warbler", "Black-capped Chickadee", "Boreal Chickadee", "Boreal Owl", "Brown Creeper", "Canada Warbler", "Chestnut-backed Chickadee", "Dusky Grouse", "Golden-crowned Kinglet", "Great Horned Owl", "Hairy Woodpecker", "Hammond's Flycatcher", "Hermit Thrush", "Lewis's Woodpecker", "American Goshawk", "Northern Waterthrush", "Western Flycatcher", "Pileated Woodpecker", "Red-breasted Nuthatch", "Red-breasted Sapsucker", "Ruby-crowned Kinglet", "Spruce Grouse", "Swainson's Thrush", "Townsend's Warbler", "Varied Thrush", "Vaux's Swift", "White-breasted Nuthatch")
-# missing_names <- old_growth[!(old_growth %in% traits$common_name)] #do all these names appear in the BC list?
+
 traits2 <- traits
 
 ##
 positive <- c("American Crow", "American Goldfinch", "American Kestrel", "American Robin", "American Three-toed Woodpecker", "Baltimore Oriole", "Black-backed Woodpecker", "Black-billed Magpie", "Black-capped Chickadee", "Black-headed Grosbeak", "Black-throated Gray Warbler", "Brewer's Blackbird", "Brewer's Sparrow", "Brown Creeper", "Brown-headed Cowbird", "Canada Goose", "Canada Jay", "Cassin's Finch", "Cedar Waxwing", "Chestnut-backed Chickadee", "Chipping Sparrow", "Clay-colored Sparrow", "Common Yellowthroat", "Connecticut Warbler", "Dark-eyed Junco", "Downy Woodpecker", "Dusky Flycatcher", "Eastern Kingbird", "Evening Grosbeak", "Fox Sparrow", "Golden-crowned Kinglet", "Great Horned Owl", "Hairy Woodpecker", "Hammond's Flycatcher", "Hermit Thrush", "Lazuli Bunting", "Least Flycatcher", "Lewis's Woodpecker", "Lincoln's Sparrow", "MacGillivray's Warbler", "Mountain Bluebird", "Mountain Chickadee", "Nashville Warbler", "Northern Flicker", "Northern Hawk Owl", "Northern House Wren", "Northern Pygmy-Owl", "Olive-sided Flycatcher", "Pacific Wren", "Palm Warbler", "Pine Siskin", "Red-breasted Nuthatch", "Red-winged Blackbird", "Rock Wren", "Rufous Hummingbird", "Savannah Sparrow", "Say's Phoebe", "Song Sparrow", "Spotted Towhee", "Steller's Jay", "Swamp Sparrow", "Tennessee Warbler", "Townsend's Solitaire", "Tree Swallow", "Turkey Vulture", "Veery", "Warbling Vireo", "Western Bluebird", "Western Screech-Owl", "Western Tanager", "Western Wood-Pewee", "White-breasted Nuthatch", "White-crowned Sparrow", "White-throated Sparrow", "Winter Wren", "Yellow-bellied Sapsucker", "Yellow-rumped Warbler")
-# "Broad-tailed Hummingbird","Eastern Bluebird", "Field Sparrow", "Prairie Warbler",  "White-headed Woodpecker","Red-headed Woodpecker",
 missing_names <- positive[!(positive %in% traits$common_name)] #do all these names appear in the BC list?
 
 
 negative <- c("Alder Flycatcher", "Barred Owl", "Bay-breasted Warbler", "Black-and-white Warbler", "Black-headed Grosbeak", "Black-throated Gray Warbler", "Boreal Chickadee", "Brown Creeper", "Canada Jay", "Cape May Warbler", "Cassin's Vireo", "Chestnut-backed Chickadee", "Common Goldeneye", "Common Raven", "Common Yellowthroat", "Dark-eyed Junco", "Dusky Flycatcher", "Golden-crowned Kinglet","Great Horned Owl",  "Hermit Thrush",  "Hutton's Vireo", "MacGillivray's Warbler", "Mountain Chickadee", "Nashville Warbler",  "Northern Saw-whet Owl", "Northern Waterthrush", "Orange-crowned Warbler", "Ovenbird", "Pacific Wren", "Pileated Woodpecker", "Pine Grosbeak", "Pine Siskin",  "Philadelphia Vireo", "Purple Finch", "Pygmy Nuthatch", "Red Crossbill", "Red-breasted Nuthatch", "Red-breasted Sapsucker", "Red-eyed Vireo", "Red-naped Sapsucker", "Ruffed Grouse", "Ruby-crowned Kinglet", "Sooty Grouse", "Steller's Jay", "Swainson's Thrush", "Swamp Sparrow", "Townsend's Warbler", "Vaux's Swift", "Warbling Vireo", "Western Tanager", "Western Wood-Pewee", "White-winged Crossbill", "Williamson's Sapsucker", "Wilson's Warbler", "Winter Wren",  "Yellow Warbler", "Yellow-rumped Warbler"
 )
-#"Broad-tailed Hummingbird", "Eastern Bluebird", "Field Sparrow","Prairie Warbler","Red-headed Woodpecker","White-headed Woodpecker",  "Blue-gray Gnatcatcher", "Great Crested Flycatcher", "Greater Sage-Grouse","Hooded Warbler","Northern Cardinal","Pinyon Jay","Wood Thrush",
 missing_names <- negative[!(negative %in% traits$common_name)] #do all these names appear in the BC list?
 
 null <- c("American Goldfinch", "American Kestrel", "American Robin", "American Wigeon", "Barrow's Goldeneye", "Black-capped Chickadee", "Black-headed Grosbeak", "Brewer's Blackbird", "Brown Creeper", "Brown-headed Cowbird", "Bufflehead", "Calliope Hummingbird", "Canvasback", "Cassin's Finch", "Cassin's Vireo", "Cedar Waxwing", "Chipping Sparrow", "Clark's Nutcracker", "Common Goldeneye", "Common Loon", "Common Merganser", "Common Nighthawk", "Common Raven", "Common Yellowthroat", "Dark-eyed Junco", "Downy Woodpecker", "Dusky Flycatcher", "Eastern Phoebe", "Evening Grosbeak", "Fox Sparrow",  "Green-winged Teal", "Hairy Woodpecker", "Hammond's Flycatcher", "Hermit Thrush", "House Finch", "Lesser Scaup", "Lincoln's Sparrow", "MacGillivray's Warbler", "Mallard", "Marsh Wren", "Mountain Chickadee", "Mourning Dove", "Nashville Warbler", "Northern Pintail", "Northern Shoveler", "Northern Waterthrush", "Olive-sided Flycatcher", "Orange-crowned Warbler", "Pacific Wren", "Pileated Woodpecker", "Pine Grosbeak", "Pine Siskin", "Pygmy Nuthatch", "Red Crossbill", "Red-breasted Merganser", "Red-breasted Nuthatch", "Red-breasted Sapsucker", "Red-naped Sapsucker", "Red-tailed Hawk", "Ring-necked Duck", "Rock Wren", "Ruby-crowned Kinglet", "Ruffed Grouse", "Rufous Hummingbird", "Song Sparrow",  "Steller's Jay", "Surf Scoter", "Swainson's Thrush", "Townsend's Solitaire", "Townsend's Warbler", "Varied Thrush", "Violet-green Swallow", "Warbling Vireo", "Western Tanager", "White-breasted Nuthatch", "White-crowned Sparrow", "White-winged Scoter", "Williamson's Sapsucker", "Willow Flycatcher", "Wilson's Warbler", "Winter Wren", "Yellow Warbler", "Yellow-bellied Flycatcher", "Yellow-rumped Warbler")
- #"Greater Scaup","Spotted Sandpiper",
 missing_names <- null[!(null %in% traits$common_name)] #do all these names appear in the BC list?
 
 traits$positive <- ifelse(traits$common_name %in% positive, 1, NA)
@@ -51,9 +45,6 @@ traits$null <- ifelse(traits$common_name %in% null, 1, NA)
 traits <- traits %>%
     filter(!if_all(c(positive, negative, null), is.na)) %>% 
     mutate(across(c(positive, negative, null), ~replace_na(.x, 0)))
-
-
-
 ```
 
 ```{r CORRELATION TEST}
@@ -116,17 +107,9 @@ trait.pca <- traits %>%
 trait.pca <- traits %>% 
   select(common_name, where(is.numeric), -elevational_range,-positive, -negative, -null,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb)
 
-# trait_list <- trait.pca 
-# trait_list <- trait_list[1, ]
-# write.csv(trait_list, here("Data", "cleaned", "traits.for.pca.csv"), row.names = FALSE)
-
-
 pca_result <- prcomp(trait.pca[,-1], scale = T) #scale the variables!
-##
 pca_result$rotation
 pca_result$x
-
-#autoplot(pca_result, data = climate, loadings=T,loadings.label=T, label = T)
 biplot(pca_result)
 
 pca_loadings <- as.data.frame(pca_result$rotation) %>% select(1:10)
@@ -169,7 +152,6 @@ pca_df <- pca_df %>%
 loadings <- as.data.frame(pca_result$rotation)  # columns = PCs, rows = traits
 loadings$trait <- rownames(loadings)
 
-# Optional: scale arrows for visualization
 arrow_multiplier <- 5  # adjust to make arrows visible
 loadings <- loadings %>%
   mutate(PC1_arrow = PC1 * arrow_multiplier,
@@ -223,17 +205,6 @@ loadings <- loadings %>%
     "Negative & Neutral" = "#DC3220"
   )))
 ggsave(here("Figures", "PCA", "all responses.png"), plot = f1, width = 10, height =8)
-
-#If the colors are scattered randomly:
-##Positive/negative response is not strongly associated with the traits included in the PCA.
-
-# ggplot(pca_df, aes(x = PC1, y = PC2, color = Species, group = Species)) +
-#       geom_point() + # Add points for individual data points
-#       stat_ellipse(level = 0.95, type = "t") + # Add 95% confidence ellipses based on a t-distribution
-#       labs(title = "PCA Plot with Confidence Ellipses",
-#            x = "Principal Component 1",
-#            y = "Principal Component 2") +
-#       theme_minimal()
 ```
 
 ```{r}
@@ -305,7 +276,7 @@ pca_scores$positive <- traits$positive
 pca_scores$negative <- traits$negative
 pca_scores$null <- traits$null
 
-# 3️⃣ ggplot biplot colored by positive
+# ggplot biplot colored by positive
 (f3 <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = factor(positive))) +
   geom_point(size = 3, alpha = 0.8) +
   scale_color_manual(values = c("0" = "grey", "1" = "#005AB5")) +
@@ -375,19 +346,8 @@ ggsave(here("Figures", "PCA", "loadings bar plot.png"), plot = loadings.bar, wid
 ```
 
 ```{r}
-# traits <- read.csv(here("Data", "cleaned", "BC_bird_traits.csv"))
-# traits$habitat_density[traits$habitat_density == "dense"] <- 1
-# traits$habitat_density[traits$habitat_density == "semiopen"] <- 2
-# traits$habitat_density[traits$habitat_density == "open"] <- 3
-# traits <- traits %>% 
-#    mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
-#           ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
-#           shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0))
 bc <- traits2 %>%  
   select(common_name, where(is.numeric), -elevational_range,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb) %>% 
-  # mutate(null = NA,
-  #        positive = NA,
-  #        negative = NA) %>% 
   drop_na()  
 #plotting all spp on this pca:
 bc_scaled <- scale(bc[,-1],
@@ -543,52 +503,8 @@ loadings <- loadings %>%
          PC2_arrow = PC2 * arrow_multiplier)
 
 ```
-> summary(anova_pc1)
-               Df Sum Sq Mean Sq F value   Pr(>F)    
-fire_response   3  191.6   63.86   15.17 9.96e-09 ***
-Residuals     159  669.5    4.21                     
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-> # Post-hoc (Tukey) test for pairwise comparisons
-> TukeyHSD(anova_pc1)
-  Tukey multiple comparisons of means
-    95% family-wise confidence level
-
-Fit: aov(formula = PC1 ~ fire_response, data = pca_scores)
-
-$fire_response
-                        diff        lwr        upr     p adj
-negative-mixed    -0.3038765 -1.6120795  1.0043265 0.9309546
-neutral-mixed     -3.1731860 -4.5979908 -1.7483812 0.0000002
-positive-mixed    -1.4907550 -2.7133738 -0.2681362 0.0099228
-neutral-negative  -2.8693095 -4.1495019 -1.5891170 0.0000002
-positive-negative -1.1868785 -2.2374120 -0.1363450 0.0199196
-positive-neutral   1.6824309  0.4898312  2.8750307 0.0019091
-
-> summary(anova_pc2)
-               Df Sum Sq Mean Sq F value Pr(>F)  
-fire_response   3   25.5   8.499   2.879 0.0378 *
-Residuals     159  469.4   2.952                 
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-> # Post-hoc (Tukey) test for pairwise comparisons
-> TukeyHSD(anova_pc2)
-  Tukey multiple comparisons of means
-    95% family-wise confidence level
-
-Fit: aov(formula = PC2 ~ fire_response, data = pca_scores)
-
-$fire_response
-                        diff        lwr         upr     p adj
-negative-mixed    -0.4811402 -1.5765785  0.61429805 0.6651232
-neutral-mixed     -1.2498137 -2.4428898 -0.05673767 0.0361447
-positive-mixed    -0.8522038 -1.8759771  0.17156957 0.1386786
-neutral-negative  -0.7686735 -1.8406568  0.30330978 0.2487872
-positive-negative -0.3710636 -1.2507394  0.50861227 0.6929792
-positive-neutral   0.3976099 -0.6010267  1.39624654 0.7299017
 
 ```{r}
-
 (with.mix <- ggplot() +
    geom_point(data = new_df, aes(PC1, PC2),
              shape = 1, color = "grey", alpha = 0.85, size = 2) +
@@ -643,152 +559,4 @@ positive-neutral   0.3976099 -0.6010267  1.39624654 0.7299017
   plot_layout(guides = "collect") +
   plot_annotation(theme = theme(legend.position = "bottom"), tag_levels = "A"))
 ggsave(here("Figures", "PCA", "PCA_final.png"), plot = end, width = 18, height =8, dpi = 300)
-
 ```
-"Wildfire-positive species are characterized by higher use of snags and coniferous trees.
-Species dependent on deciduous foliage and shrub cover decline.
-Life-history pace does not appear to influence wildfire response."
-
-
-🔥 STEP 1 — Identify the dominant loadings
-PC1: Forest structure + mobility axis
-
-Highest magnitude loadings (|0.25–0.36|):
-
-habitat_density (–0.36)
-
-ground_nest (–0.29)
-
-mass_g (–0.28)
-
-range_size (–0.21)
-
-hand_wing_index (–0.22)
-
-for_strat_canopy (+0.35)
-
-diet_inv (+0.24)
-
-bark gleaning (+0.26)
-
-Interpretation
-
-PC1 contrasts:
-
-Negative side (low PC1 score)
-
-large-bodied
-
-ground-nesting
-
-dense forest dependence
-
-small ranges
-
-low wing index (poor dispersers)
-
-→ These are forest interior, low-mobility species.
-
-Positive side (high PC1 score)
-
-canopy foragers
-
-bark gleaners
-
-high insectivory
-
-higher mobility (wing index up a bit)
-
-lower habitat density use
-
-→ These are mobile, canopy-using species.
-
-PC1 = Forest interior/ground nesters ↔ Mobile canopy insectivores
-
-PC2: Nest substrate axis (snag vs. shrub)
-
-Strong loadings:
-
-snag_nest (–0.45)
-
-cavity_nester (–0.45)
-
-bark_gleaning (–0.31)
-
-ground_nest (+0.14)
-
-shrub_nest (+0.29)
-
-migration (+0.27)
-
-Interpretation
-Negative PC2 (low scores)
-
-cavity nesters
-
-snag nesters
-
-bark gleaners
-
-→ These are snag-dependent, cavity-nesting species.
-
-Positive PC2 (high scores)
-
-shrub nesters
-
-migratory species
-
-ground nesters
-
-→ These are shrub-using, migratory species.
-
-PC2 = Cavity/snag specialists ↔ Shrub/ground/migratory species
-
-PC3: Foraging & diet strategy axis
-
-Strong loadings:
-
-diet_inv (+0.37)
-
-for_hawking (+0.31)
-
-understory foraging (+0.26)
-
-foliage gleaning (–0.31)
-
-seed diet (–0.36)
-
-diet breadth (–0.36)
-
-Interpretation
-Positive PC3
-
-high insectivory
-
-hawking
-
-understory foraging
-
-Negative PC3
-
-higher seed use
-
-foliage gleaners
-
-broader diet
-
-PC3 = Insectivore hawking specialists ↔ Seed/foliage generalists
-
-```{r}
-glm_positive <- glm(positive ~ PC1 + PC2, 
-                    data = pca_scores, family = binomial)
-glm_positive1 <- glm(positive ~ PC1, 
-                    data = pca_scores, family = binomial)
-glm_positive2 <- glm(positive ~ PC2, 
-                    data = pca_scores, family = binomial)
-
-
-summary(glm_positive2)
-```
-
-"We used PCA to reduce multicollinearity among traits and obtain independent ecological axes. We then modeled wildfire response (positive/negative/null) as a function of PCA scores. PCA axes significantly associated with wildfire response were interpreted based on trait loadings. For example, PC4 (high ground foraging, low canopy dependence) predicted positive wildfire response, indicating that species associated with open or shrubby habitats increased after fire, while forest-dependent species (low PC4) showed declines."
