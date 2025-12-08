@@ -1,0 +1,17 @@
+Descriptions of scripts in this repository:
+
+birds.rmd: cleaning of BC birds list, and compiling trait databases
+
+climate.rmd: script to download and make maps from the FWI from climate data Canada
+
+distributions.rmd: script to overlap some bird distributions and FWI indexes
+
+index.rmd: script that builds the index and produces figures
+
+pca.rmd: script for the overall PCA analysis (all species)
+
+pca_moderate_time.rmd: script for the PCA analysis for moderate term (5-10 year) responses to fire
+
+pca_immediate_time.rmd: script for the PCA analysis for immediate term (0-5 year) responses to fire
+
+species.groups.rmd: script that collects different species groups (aerial insectivores, etc)
