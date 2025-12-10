@@ -47,62 +47,6 @@ traits <- traits %>%
     mutate(across(c(positive, negative, null), ~replace_na(.x, 0)))
 ```
 
-```{r CORRELATION TEST}
-trait.pca <- traits %>% 
-  select(common_name, where(is.numeric), -elevational_range,-positive, -negative, -null,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb)
-###################################################################################
-#MAKE CORRELATION MATRIX
-# M<-cor(trait.pca[,-1])
-# res1 <- cor.mtest(trait.pca[,-1], conf.level = 0.95)
-# ord <- corrMatOrder(M, order = "AOE")
-# 
-# png(here("Figures", "PCA","correlation analysis", "corrplot_output.png"), width = 2000, height = 2000, res = 150)
-# corrplot(M, p.mat = res1$p, method="circle",type="upper",insig = "p-value", sig.level=-1)
-# #so yes, some are correlated! onwards
-# 
-# png(here("Figures", "PCA", "correlation analysis", "scatterplot_output.png"), width = 3000, height = 3000, res = 150)
-# par(oma = c(8, 8, 8, 8),      # huge outer margins for labels
-#     mar = c(4, 4, 2, 2),
-#     cex.labels = 2,           # bigger variable names
-#     cex.axis = 1.2,
-#     cex = 1.2)
-# 
-# pairs(trait.pca[,-1],
-#       upper.panel = NULL,
-#       pch = 20,
-#       cex = 1.2)
-# 
-# 
-# 
-# ggpairs(
-#   trait.pca[,-1],
-#   upper = list(
-#     continuous = wrap("cor", size = 4)   # top triangle = correlation coefficients
-#   ),
-#   lower = list(
-#     continuous = wrap("points", alpha = 0.5, size = 1)   # bottom = scatterplots
-#   ),
-#   diag = list(
-#     continuous = wrap("densityDiag")     # diagonal = density plots
-#   )
-# )
-
-#uncehck here - jjust takes while to run
-
-# png(here("Figures", "PCA", "correlation analysis", "scatterplot_output.png"), width = 3000, height = 3000, res = 150)
-# 
-# ggpairs(
-#   trait.pca[,-1],
-#   upper = list(continuous = "cor"),  # correlation matrix
-#   lower = list(continuous = "points"),
-#   diag  = list(continuous = "densityDiag")
-# )
-
-```
-***	p < 0.001
-**	p < 0.01
-*	p < 0.05
-
 ```{r}
 trait.pca <- traits %>% 
   select(common_name, where(is.numeric), -elevational_range,-positive, -negative, -null,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb)
@@ -132,7 +76,7 @@ pve_df <- data.frame(
   ylim(0, 1) +
     theme_bw()+
   scale_x_continuous(breaks = 1:length(PVE)))
-ggsave(here("Figures", "PCA", "scree plot.png"), plot = scree, width = 8, height =8)
+ggsave(here("Figures", "PCA", "scree plot_all.png"), plot = scree, width = 8, height =8)
 
 
 ##
@@ -156,55 +100,6 @@ arrow_multiplier <- 5  # adjust to make arrows visible
 loadings <- loadings %>%
   mutate(PC1_arrow = PC1 * arrow_multiplier,
          PC2_arrow = PC2 * arrow_multiplier)
-
-
-(f1 <- ggplot(pca_df, aes(PC1, PC2, color = fire_response)) +
-  geom_point(size = 2, alpha = 0.9) +
-  theme_classic() +
-  labs(
-    title = "PCA of Bird Traits Colored by Fire Response",
-    x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
-    y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")
-  ) +
-   geom_segment(data = loadings,
-               aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
-               arrow = arrow(length = unit(0.3, "cm")),
-               color = "black") +
-  geom_text(data = loadings,
-            aes(x = PC1_arrow * 1.1, y = PC2_arrow * 1.1, label = trait),
-            color = "black", size = 3, hjust = 0.5, vjust = 0.5) +
-  scale_color_manual(values = c(
-    "Positive" = "#005AB5",
-    "Negative" = "#DC3220",
-    "Neutral" = "grey",
-    "Positive & Negative" = "#44AA99",
-    "Positive & Neutral" = "#66a61e",
-    "Negative & Neutral" = "#e6ab02"
-  )))
-(f1.1 <- ggplot(pca_df, aes(PC1, PC2, color = fire_response)) +
-  geom_point(size = 2, alpha = 0.9) +
-  theme_classic() +
-  labs(
-    title = "PCA of Bird Traits Colored by Fire Response",
-    x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
-    y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")
-  ) +
-   geom_segment(data = loadings,
-               aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
-               arrow = arrow(length = unit(0.3, "cm")),
-               color = "black") +
-  geom_text(data = loadings,
-            aes(x = PC1_arrow * 1.1, y = PC2_arrow * 1.1, label = trait),
-            color = "black", size = 3, hjust = 0.5, vjust = 0.5) +
-  scale_color_manual(values = c(
-    "Positive" = "#005AB5",
-    "Negative" = "#DC3220",
-    "Neutral" = "grey",
-    "Positive & Negative" = "#44AA99",
-    "Positive & Neutral" = "#005AB5",
-    "Negative & Neutral" = "#DC3220"
-  )))
-ggsave(here("Figures", "PCA", "all responses.png"), plot = f1, width = 10, height =8)
 ```
 
 ```{r}
@@ -212,61 +107,6 @@ arrow_multiplier <- 3
 loadings <- loadings %>%
   mutate(PC1_arrow = PC1 * arrow_multiplier,
          PC2_arrow = PC2 * arrow_multiplier)
-
-loadings.example <- loadings %>% 
-  filter()
-
-# Plot
-(f2 <- ggplot() +
-  geom_segment(data = loadings,
-               aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
-               arrow = arrow(length = unit(0.3, "cm")),
-               color = "black") +
-  geom_text(data = loadings,
-            aes(x = PC1_arrow * 1.1, y = PC2_arrow * 1.1, label = trait),
-            color = "black", size = 3) +
-  theme_bw() +
-  labs(x = "PC1", y = "PC2"))
-ggsave(here("Figures", "PCA", "pca loadings.png"), plot = f2, width = 10, height =8)
-
-
-# Filter top 5 loadings for PC1 and PC2, excluding 'any_tree_nest'
-top_PC1 <- loadings %>%
-  #filter(trait != "any_tree_nest") %>%
-  slice_max(abs(PC1_arrow), n = 4)
-
-top_PC2 <- loadings %>%
-  #filter(trait != "any_tree_nest") %>%
-  slice_max(abs(PC2_arrow), n = 4)
-
-# Combine top loadings
-top_loadings <- bind_rows(top_PC1, top_PC2) %>%
-  distinct()  # remove duplicates if a trait is top in both PCs
-
-# Plot
-(fex <- ggplot() +
-  geom_segment(data = top_loadings,
-               aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
-               arrow = arrow(length = unit(0.3, "cm")),
-               color = "black") +
-  geom_text_repel(data = top_loadings,
-                  aes(x = PC1_arrow, y = PC2_arrow, label = trait),
-                  color = "black",
-                  size = 4,
-                  segment.color = "grey50",    # line from label to point
-                  segment.size = 0.5,
-                  segment.alpha = 0.8,
-                  nudge_x = 0,                 # optional small nudge
-                  nudge_y = 0,
-                  box.padding = 0.5,
-                  point.padding = 0.5,
-                  max.overlaps = 20) +
-  theme_bw() +
-  labs(x = "PC1", y = "PC2"))
-ggsave(here("Figures", "PCA", "pca EXAMPLE.png"), plot = fex, width = 6, height =6)
-
-
-
 ```
 
 ```{r}
@@ -275,45 +115,6 @@ pca_scores$common_name <- traits$common_name
 pca_scores$positive <- traits$positive
 pca_scores$negative <- traits$negative
 pca_scores$null <- traits$null
-
-# ggplot biplot colored by positive
-(f3 <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = factor(positive))) +
-  geom_point(size = 3, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey", "1" = "#005AB5")) +
-  theme_bw() +
-  labs(color = "Positive Response", x = "PC1", y = "PC2",
-       title = "PCA of Bird Traits Colored by Positive Fire Response"))
-(f4 <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = factor(negative))) +
-  geom_point(size = 3, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey", "1" = "#DC3220")) +
-  theme_bw() +
-  labs(color = "Negative Response", x = "PC1", y = "PC2",
-       title = "PCA of Bird Traits Colored by Negative Fire Response"))
-
-(pos.neg <- f3/f4)
-ggsave(here("Figures", "PCA", "pca by response.png"), plot = pos.neg, width = 8, height =10)
-
-
-##
-(f5 <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = factor(positive))) +
-  geom_point(size = 3, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey", "1" = "#005AB5")) +
-  theme_bw() +
-  geom_text(aes(label = common_name), size = 3) +
-  labs(color = "Positive Response", x = "PC1", y = "PC2",
-       title = "PCA of Bird Traits Colored by Positive Fire Response"))
-(f6 <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = factor(negative))) +
-  geom_point(size = 3, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey", "1" = "#DC3220")) +
-    geom_text(aes(label = common_name), size = 3) +
-  theme_bw() +
-  labs(color = "Negative Response", x = "PC1", y = "PC2",
-       title = "PCA of Bird Traits Colored by Negative Fire Response"))
-
-
-(pos.neg.spp.names <- f5/f6)
-ggsave(here("Figures", "PCA", "pca by response spp names.png"), plot = pos.neg.spp.names, width = 20, height =20, dpi = 300)
-
 ```
 
 
@@ -340,8 +141,9 @@ loadings_long <- loadings %>%
   scale_fill_manual(values = c("#a1d99b", "#688c64")) +  # set all bars to green
   facet_wrap(~PC)+
     theme(legend.position = "none"))
+ loadings %>%  arrange(desc(abs(PC1)))
 
-ggsave(here("Figures", "PCA", "loadings bar plot.png"), plot = loadings.bar, width = 6, height =5, dpi = 300)
+ggsave(here("Figures", "PCA", "loadings bar plot_all.png"), plot = loadings.bar, width = 6, height =5, dpi = 300)
 
 ```
 
@@ -383,14 +185,6 @@ centers <- data.frame(
   )
 )
 
-# Basic PCA scatterplot
-(all <- ggplot(bc_scores, aes(x = PC1, y = PC2)) +  # V1 and V2 are PC1 and PC2
-  geom_point(size = 3, alpha = 0.7) +
-  labs(x = "PC1", y = "PC2", title = "All BC Birds Plotted on PCA Axes") +
-  theme_bw())
-ggsave(here("Figures", "PCA", "all spp.png"), plot = all, width = 6, height =6, dpi = 300)
-
-
 # Original PCA points
 orig_df <- pca_scores
 orig_df$type <- "PCA"
@@ -402,81 +196,6 @@ new_df$common_name <- bc$common_name[complete.cases(bc)]
 
 # Combine
 plot_df <- left_join(new_df,orig_df)
-
-# Overlay plot
-(p1 <- ggplot(orig_df, aes(x = PC1, y = PC2)) +
-    geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
-  geom_point(aes(color = factor(positive)), size = 2.5, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey50", "1" = "#005AB5")) +
-  theme_bw() +
-  labs(x = "PC1", y = "PC2", color = "Positive Response", shape = "Point Type"))
-
-(n1 <- ggplot(orig_df, aes(x = PC1, y = PC2)) +
-    geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
-  geom_point(aes(color = factor(negative)), size = 2.5, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey50", "1" = "#D55E00")) +
-  theme_bw() +
-  labs(x = "PC1", y = "PC2", color = "Negative Response", shape = "Point Type"))
-
-orig_df <- orig_df %>% 
-  mutate(
-    mixed = rowSums(data.frame(positive, negative), na.rm = TRUE),
-    mixed = ifelse(mixed == 2|mixed == 3, 1, 0))
-
-(m1 <- ggplot(orig_df, aes(x = PC1, y = PC2)) +
-    geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
-  geom_point(aes(color = factor(mixed)), size = 2.5, alpha = 0.8) +
-  scale_color_manual(values = c("0" = "grey50", "1" = "darkmagenta")) +
-  theme_bw() +
-  labs(x = "PC1", y = "PC2", color = "Mixed Response", shape = "Point Type"))
-
-(pcas <- p1/n1/m1 + plot_annotation(tag_levels = 'A')
-)
-ggsave(here("Figures", "PCA", "PCA_all response patchwork.png"), plot = pcas, width = 8, height =12, dpi = 300)
-
-
-(with.mix <- ggplot(pca_scores) +
-  geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
-  geom_point(aes(PC1, PC2), color = "grey80") +
-  geom_point(data = subset(pca_scores, positive == 1),
-             aes(PC1, PC2), color = "#0072B2", size = 3, alpha = 0.8) +
-  geom_point(data = subset(pca_scores, negative == 1),
-             aes(PC1, PC2), color = "#D55E00", size = 3, alpha = 0.8) +
-  geom_point(data = subset(pca_scores, negative == 1& positive == 1),
-             aes(PC1, PC2), color = "darkmagenta", size = 3, alpha = 0.8)+
-  geom_point(data = centers, aes(PC1, PC2), size = 5, color = "white", shape = 16) +
-  geom_point(data = centers, aes(PC1, PC2, color = group), size = 7, shape = 8) +
-  scale_color_manual(values = c("darkmagenta", "#D55E00","grey80","#0072B2")) +
-  theme_bw() +
-  theme(legend.position="bottom")+
-  labs(color = "Fire Response",
-       title = ""))
-ggsave(here("Figures", "PCA", "PCA_centers.png"), plot = with.mix, width = 8, height =8, dpi = 300)
-
-(wo.mix <- ggplot(pca_scores) +
-  geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 2)+
-  geom_point(aes(PC1, PC2), color = "grey80") +
-  geom_point(data = subset(pca_scores, positive == 1),
-             aes(PC1, PC2), color = "#0072B2", size = 3, alpha = 0.8) +
-  geom_point(data = subset(pca_scores, negative == 1),
-             aes(PC1, PC2), color = "#D55E00", size = 3, alpha = 0.8) +
-  geom_point(data = centers, aes(PC1, PC2), size = 5, color = "white", shape = 16) +
-  geom_point(data = centers, aes(PC1, PC2, color = group), size = 5, shape = 8) +
-  scale_color_manual(values = c("darkmagenta", "#D55E00","grey80","#0072B2")) +
-  theme_bw() +
-  labs(color = "Response type",
-       title = "Locations of positive vs negative responses in PCA space"))
-
-t.test(
-  pca_scores$PC1[pca_scores$positive == 1&pca_scores$negative != 1],
-  pca_scores$PC1[pca_scores$negative == 1&pca_scores$positive != 1]
-)
-
-# PC2
-t.test(
-  pca_scores$PC2[pca_scores$positive == 1&pca_scores$negative != 1],
-  pca_scores$PC2[pca_scores$negative == 1&pca_scores$positive != 1]
-)
 
 anova_pc1 <- aov(PC1 ~ fire_response, data = pca_scores)
 summary(anova_pc1)
@@ -495,24 +214,17 @@ summary(anova_pc3)
 
 # Post-hoc (Tukey) test for pairwise comparisons
 TukeyHSD(anova_pc3)
-
-##
-arrow_multiplier <- 3
-loadings <- loadings %>%
-  mutate(PC1_arrow = PC1 * arrow_multiplier,
-         PC2_arrow = PC2 * arrow_multiplier)
-
 ```
 
 ```{r}
 (with.mix <- ggplot() +
    geom_point(data = new_df, aes(PC1, PC2),
-             shape = 1, color = "grey", alpha = 0.85, size = 2) +
+             shape = 1, color = "grey", alpha = 0.85, size = 3) +
   geom_point(data = pca_scores,
              aes(PC1, PC2, color = fire_response),
-             size = 3, alpha = 0.8) +
+             size = 4, alpha = 0.8) +
   geom_point(data = centers, aes(PC1, PC2, color = group),
-             size = 7, shape = 8) +
+             size = 13, shape = 8) +
  
   scale_color_manual(
     values = c(
@@ -527,10 +239,13 @@ loadings <- loadings %>%
                                   ceiling(max(pca_scores$PC1)), 
                                   by = 2))+
   theme(legend.position = "bottom") +
-  labs(color = "Fire Response",
+  labs(color = "All Species Fire Response",
        title = "",x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
     y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")))
-
+arrow_multiplier <- 5  # adjust to make arrows visible
+loadings <- loadings %>%
+  mutate(PC1_arrow = PC1 * arrow_multiplier,
+         PC2_arrow = PC2 * arrow_multiplier)
 (f2 <- ggplot() +
   geom_segment(data = loadings,
                aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
@@ -539,7 +254,7 @@ loadings <- loadings %>%
   geom_text_repel(data = loadings,
                   aes(x = PC1_arrow, y = PC2_arrow, label = trait),
                   color = "black",
-                  size = 4,
+                  size = 4.5,
                   segment.color = "grey50",    # line from label to point
                   segment.size = 0.5,
                   segment.alpha = 0.8,
@@ -547,16 +262,24 @@ loadings <- loadings %>%
                   nudge_y = 0,
                   box.padding = 0.5,
                   point.padding = 0.5,
-                  max.overlaps = 20) +
-  geom_point(data = centers, aes(PC1, PC2, color = group), size = 6, shape = 8) +
+                  max.overlaps = 22) +
+  geom_point(data = centers, aes(PC1, PC2, color = group), size = 10, shape = 8) +
   theme_bw() +
     theme(legend.position = "none")+
   scale_color_manual(values = c("darkmagenta", "#D55E00","grey50","#0072B2")) +
   labs(x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
     y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")))
 
-(end <- with.mix+f2+  
+(end <- with.mix/f2+  
   plot_layout(guides = "collect") +
-  plot_annotation(theme = theme(legend.position = "bottom"), tag_levels = "A"))
-ggsave(here("Figures", "PCA", "PCA_final.png"), plot = end, width = 18, height =8, dpi = 300)
+  plot_annotation(theme = theme(legend.position = "bottom"), tag_levels = "A")&
+  theme(
+    text        = element_text(size = 20),
+    axis.text   = element_text(size = 18),
+    axis.title  = element_text(size = 20),
+    strip.text  = element_text(size = 20),
+    legend.text = element_text(size = 16),
+    legend.title= element_text(size = 18))
+)
+ggsave(here("Figures", "PCA", "PCA_final_all.png"), plot = end, width = 10, height =13, dpi = 1000)
 ```
