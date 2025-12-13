@@ -1,0 +1,243 @@
+"family","common_name","index_primary_lifestyle","index_primary_habitat","index_habitat_density","index_forest_use","index_foraging_location","index_trophic_niche","index_migration","index_snag_use","index_oldgrowth","index_nesting_location","index_nest_type","index_handwing","index_foliageglean","index_sum"
+"Anatidae","Snow Goose",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Anatidae","Ross's Goose",0,0,0,0,1,0,0,0,0,0,0,1,0,2
+"Anatidae","Greater White-fronted Goose",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Anatidae","Brant",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Anatidae","Canada Goose",0,0,0,0,1,0,0,0,0,0,0,1,0,2
+"Anatidae","Trumpeter Swan",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Tundra Swan",0,0,0,0,1,0,0,0,0,0,0,1,0,2
+"Anatidae","Wood Duck",0,0,0,0,0,0,0,0,0,0,1,1,0,2
+"Anatidae","Blue-winged Teal",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Cinnamon Teal",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Northern Shoveler",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Gadwall",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Eurasian Wigeon",0,0,0,0,1,0,0,0,0,0,0,1,0,2
+"Anatidae","American Wigeon",0,0,0,0,1,0,0,0,0,0,0,1,0,2
+"Anatidae","Mallard",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Northern Pintail",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Green-winged Teal",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Canvasback",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Redhead",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Ring-necked Duck",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Lesser Scaup",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Harlequin Duck",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Surf Scoter",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","White-winged Scoter",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Black Scoter",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Long-tailed Duck",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Bufflehead",0,0,0,0,0,0,0,0,0,-1,1,1,0,1
+"Anatidae","Common Goldeneye",0,0,0,0,0,0,0,0,0,0,1,1,0,2
+"Anatidae","Barrow's Goldeneye",0,0,0,0,0,0,0,0,0,0,1,1,0,2
+"Anatidae","Hooded Merganser",0,0,0,0,0,0,0,1,0,0,1,1,0,3
+"Anatidae","Common Merganser",0,0,0,0,0,0,0,0,0,0,1,1,0,2
+"Anatidae","Red-breasted Merganser",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Anatidae","Ruddy Duck",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Phasianidae","Ruffed Grouse",0,1,-1,0,1,0,0,0,0,0,0,1,-1,1
+"Phasianidae","Dusky Grouse",0,-1,-1,-1,1,0,0,0,-1,0,0,1,0,-2
+"Phasianidae","Sooty Grouse",0,-1,0,-1,1,0,0,0,0,0,0,1,0,0
+"Phasianidae","Sharp-tailed Grouse",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Phasianidae","White-tailed Ptarmigan",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Phasianidae","Willow Ptarmigan",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Phasianidae","Rock Ptarmigan",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Phasianidae","Spruce Grouse",0,-1,-1,-1,1,0,0,0,-1,0,0,1,0,-2
+"Columbidae","Band-tailed Pigeon",0,-1,0,-1,1,1,0,0,0,-1,0,1,0,0
+"Columbidae","Mourning Dove",0,0,0,0,1,1,0,0,0,-1,0,1,0,2
+"Caprimulgidae","Common Nighthawk",0,1,0,0,0,1,0,0,0,0,0,1,0,3
+"Caprimulgidae","Common Poorwill",0,1,0,0,-1,1,0,0,0,0,0,1,0,2
+"Apodidae","Black Swift",0,0,-1,0,0,1,0,0,0,0,0,1,0,1
+"Apodidae","Vaux's Swift",0,-1,-1,-1,0,1,0,1,-1,0,0,1,0,-1
+"Apodidae","White-throated Swift",0,0,-1,0,0,1,0,0,0,0,0,1,0,1
+"Trochilidae","Black-chinned Hummingbird",0,-1,0,0,1,1,0,0,0,0,0,1,0,2
+"Trochilidae","Anna's Hummingbird",0,-1,0,0,-1,1,0,0,0,-1,0,1,0,-1
+"Trochilidae","Calliope Hummingbird",0,1,0,0,1,1,0,0,0,-1,0,1,0,3
+"Trochilidae","Rufous Hummingbird",0,-1,0,-1,1,1,0,0,0,0,0,1,0,1
+"Rallidae","Virginia Rail",0,0,-1,0,1,0,0,0,0,0,0,0,0,0
+"Rallidae","Sora",0,0,-1,0,1,0,0,0,0,0,0,0,0,0
+"Rallidae","American Coot",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Rallidae","Yellow Rail",0,0,0,0,1,0,0,0,0,0,0,0,0,1
+"Gruidae","Sandhill Crane",0,0,0,0,1,0,0,0,0,0,0,1,0,2
+"Gaviidae","Red-throated Loon",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Gaviidae","Pacific Loon",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Gaviidae","Common Loon",0,0,0,0,0,0,0,0,0,0,0,1,0,1
+"Cathartidae","Turkey Vulture",0,0,0,0,1,0,0,0,0,0,0,0,0,1
+"Pandionidae","Osprey",0,0,0,0,0,0,0,0,0,-1,0,1,0,0
+"Accipitridae","Golden Eagle",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Accipitridae","Sharp-shinned Hawk",0,-1,-1,-1,-1,0,0,0,0,-1,0,0,0,-5
+"Accipitridae","Cooper's Hawk",0,-1,0,-1,1,0,0,0,0,-1,0,0,0,-2
+"Accipitridae","American Goshawk",0,-1,-1,-1,1,0,0,0,-1,-1,0,1,0,-3
+"Accipitridae","Northern Harrier",0,0,0,0,1,0,0,0,0,0,0,1,0,2
+"Accipitridae","Bald Eagle",0,0,0,0,0,0,0,0,0,-1,0,1,0,0
+"Accipitridae","Swainson's Hawk",1,-1,0,0,-1,0,0,0,0,-1,0,1,0,-1
+"Accipitridae","Red-tailed Hawk",1,-1,0,0,-1,0,0,0,0,-1,0,1,0,-1
+"Accipitridae","Rough-legged Hawk",1,1,0,0,1,0,0,0,0,0,0,1,0,4
+"Tytonidae","American Barn Owl",1,1,0,0,1,0,0,0,0,0,1,1,0,5
+"Strigidae","Flammulated Owl",1,-1,-1,-1,1,1,0,0,0,-1,1,0,0,0
+"Strigidae","Western Screech-Owl",1,-1,0,0,1,1,0,0,0,0,1,0,0,3
+"Strigidae","Snowy Owl",1,1,0,0,1,0,0,0,0,0,0,1,0,4
+"Strigidae","Great Horned Owl",1,-1,0,0,1,0,0,0,-1,0,1,0,0,1
+"Strigidae","Northern Hawk Owl",1,1,0,0,1,0,0,0,0,0,0,1,0,4
+"Strigidae","Northern Pygmy-Owl",1,-1,0,-1,1,1,0,0,0,-1,1,0,0,1
+"Strigidae","Barred Owl",1,-1,0,-1,1,0,0,1,0,0,1,0,0,2
+"Strigidae","Great Gray Owl",1,-1,0,-1,1,0,0,0,0,-1,1,0,0,0
+"Strigidae","Long-eared Owl",0,1,0,0,1,0,0,0,0,-1,0,1,0,2
+"Strigidae","Short-eared Owl",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Strigidae","Boreal Owl",1,-1,-1,-1,1,0,0,0,-1,0,1,0,0,-1
+"Strigidae","Northern Saw-whet Owl",1,-1,0,0,1,0,0,0,0,0,1,0,0,2
+"Alcedinidae","Belted Kingfisher",1,0,0,0,0,0,0,0,0,0,0,0,0,1
+"Picidae","Williamson's Sapsucker",1,-1,-1,-1,-1,1,0,0,0,-1,1,0,0,-2
+"Picidae","Yellow-bellied Sapsucker",1,-1,-1,0,-1,0,0,0,0,-1,1,1,0,-1
+"Picidae","Red-naped Sapsucker",1,-1,0,0,-1,0,0,0,0,-1,1,0,0,-1
+"Picidae","Red-breasted Sapsucker",1,-1,0,0,-1,1,0,1,-1,0,1,0,0,1
+"Picidae","Lewis's Woodpecker",1,-1,0,0,1,1,0,0,-1,-1,1,0,0,1
+"Picidae","American Three-toed Woodpecker",1,-1,-1,-1,-1,1,0,0,-1,-1,1,0,0,-3
+"Picidae","Black-backed Woodpecker",1,-1,-1,-1,1,1,0,0,0,-1,1,0,0,0
+"Picidae","Downy Woodpecker",1,-1,0,-1,-1,1,0,0,0,-1,1,0,0,-1
+"Picidae","Hairy Woodpecker",1,-1,-1,-1,-1,1,0,1,-1,0,1,0,0,-1
+"Picidae","Pileated Woodpecker",1,-1,-1,-1,-1,1,0,0,-1,-1,1,0,0,-3
+"Picidae","Northern Flicker",0,-1,0,0,1,1,0,1,0,0,1,0,0,3
+"Falconidae","American Kestrel",1,-1,0,0,1,0,0,1,0,0,1,1,0,4
+"Falconidae","Merlin",0,-1,0,0,1,0,0,0,0,-1,0,1,0,0
+"Falconidae","Gyrfalcon",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Falconidae","Peregrine Falcon",0,1,0,0,-1,0,0,0,0,0,0,1,0,1
+"Falconidae","Prairie Falcon",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Tyrannidae","Olive-sided Flycatcher",1,-1,-1,-1,1,1,0,0,0,-1,0,1,0,0
+"Tyrannidae","Western Wood-Pewee",1,-1,-1,-1,1,1,0,0,0,-1,0,0,0,-1
+"Tyrannidae","Yellow-bellied Flycatcher",1,-1,-1,-1,1,1,0,0,0,0,0,0,0,0
+"Tyrannidae","Alder Flycatcher",1,1,-1,0,-1,1,0,0,0,0,0,0,0,1
+"Tyrannidae","Willow Flycatcher",1,1,0,0,1,1,0,0,0,0,0,0,0,4
+"Tyrannidae","Least Flycatcher",1,-1,-1,0,1,1,0,0,0,-1,0,0,0,0
+"Tyrannidae","Hammond's Flycatcher",1,-1,-1,-1,1,1,0,0,-1,-1,0,0,0,-2
+"Tyrannidae","Dusky Flycatcher",1,-1,0,-1,1,1,0,0,0,0,0,0,0,1
+"Tyrannidae","Eastern Phoebe",1,-1,0,0,1,1,0,0,0,0,0,0,0,2
+"Tyrannidae","Say's Phoebe",1,0,0,0,1,1,0,0,0,0,0,0,0,3
+"Tyrannidae","Tropical Kingbird",1,1,0,0,-1,1,0,0,0,0,0,0,0,2
+"Tyrannidae","Western Kingbird",1,1,0,0,-1,1,0,0,0,0,0,0,0,2
+"Tyrannidae","Eastern Kingbird",1,1,0,0,1,1,0,0,0,0,0,0,0,4
+"Vireonidae","Hutton's Vireo",1,-1,-1,0,-1,1,0,0,0,-1,0,0,-1,-3
+"Vireonidae","Cassin's Vireo",1,-1,0,-1,-1,1,0,0,0,-1,0,0,-1,-3
+"Vireonidae","Philadelphia Vireo",1,-1,-1,0,-1,1,0,0,0,-1,0,0,0,-2
+"Vireonidae","Warbling Vireo",1,-1,-1,-1,-1,1,0,0,0,-1,0,0,-1,-4
+"Vireonidae","Red-eyed Vireo",1,-1,-1,-1,-1,1,0,0,0,0,0,0,0,-2
+"Laniidae","Northern Shrike",1,-1,0,-1,1,0,0,0,0,-1,0,0,0,-1
+"Corvidae","Canada Jay",1,-1,-1,-1,1,0,0,0,0,-1,0,0,0,-2
+"Corvidae","Steller's Jay",1,-1,-1,-1,1,0,0,0,0,-1,0,0,0,-2
+"Corvidae","Blue Jay",0,-1,0,0,1,0,0,0,0,-1,0,0,0,-1
+"Corvidae","Black-billed Magpie",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Corvidae","Clark's Nutcracker",1,-1,-1,-1,1,0,0,0,0,-1,0,0,-1,-3
+"Corvidae","American Crow",0,0,0,0,1,0,0,0,0,-1,0,1,0,1
+"Corvidae","Common Raven",0,-1,0,-1,1,0,0,0,0,0,0,1,0,0
+"Paridae","Black-capped Chickadee",1,-1,-1,-1,-1,1,0,0,-1,0,1,0,-1,-3
+"Paridae","Mountain Chickadee",1,-1,-1,-1,-1,1,0,0,0,-1,1,0,-1,-3
+"Paridae","Chestnut-backed Chickadee",1,-1,-1,-1,-1,1,0,0,-1,0,1,0,-1,-3
+"Paridae","Boreal Chickadee",1,-1,-1,-1,-1,1,0,0,-1,-1,1,0,-1,-4
+"Alaudidae","Horned Lark",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Hirundinidae","Bank Swallow",0,0,0,0,-1,1,0,0,0,0,0,1,0,1
+"Hirundinidae","Tree Swallow",0,0,0,0,-1,1,0,1,0,0,1,1,0,3
+"Hirundinidae","Violet-green Swallow",0,-1,0,0,-1,1,0,0,0,0,1,1,0,1
+"Hirundinidae","Purple Martin",0,0,0,0,-1,1,0,0,0,0,1,1,0,2
+"Hirundinidae","Northern Rough-winged Swallow",0,1,0,0,1,1,0,0,0,0,0,1,0,4
+"Hirundinidae","Barn Swallow",0,1,0,0,-1,1,0,0,0,0,0,1,0,2
+"Hirundinidae","Cliff Swallow",0,0,0,0,0,1,0,0,0,0,0,1,0,2
+"Aegithalidae","Bushtit",1,-1,0,0,1,1,0,0,0,0,0,0,-1,1
+"Regulidae","Ruby-crowned Kinglet",1,-1,-1,-1,1,1,0,0,-1,-1,0,0,-1,-3
+"Regulidae","Golden-crowned Kinglet",1,-1,-1,-1,1,1,0,0,-1,-1,0,0,-1,-3
+"Sittidae","White-breasted Nuthatch",1,-1,-1,-1,-1,0,0,0,-1,-1,1,0,0,-4
+"Sittidae","Pygmy Nuthatch",1,-1,-1,-1,-1,1,0,0,0,-1,1,0,0,-2
+"Sittidae","Red-breasted Nuthatch",1,-1,-1,-1,-1,0,0,0,-1,-1,1,0,0,-4
+"Certhiidae","Brown Creeper",1,-1,-1,-1,-1,1,0,0,-1,0,0,0,0,-3
+"Troglodytidae","Rock Wren",0,0,0,0,1,1,0,0,0,0,0,0,0,2
+"Troglodytidae","Canyon Wren",1,0,0,0,1,1,0,0,0,0,0,0,0,3
+"Troglodytidae","Northern House Wren",1,-1,0,-1,1,1,0,0,0,0,1,0,0,2
+"Troglodytidae","Pacific Wren",1,-1,-1,-1,1,1,0,0,0,0,1,0,0,1
+"Troglodytidae","Winter Wren",1,-1,-1,-1,1,1,0,0,0,0,1,0,0,1
+"Troglodytidae","Marsh Wren",1,0,0,0,1,1,0,0,0,0,0,0,0,3
+"Troglodytidae","Bewick's Wren",0,1,0,0,1,1,0,0,0,0,1,0,0,4
+"Cinclidae","American Dipper",0,0,0,0,0,0,0,0,0,0,0,0,0,0
+"Mimidae","Gray Catbird",1,1,-1,0,1,1,0,0,0,0,0,0,0,3
+"Mimidae","Sage Thrasher",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Mimidae","Northern Mockingbird",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Turdidae","Western Bluebird",1,-1,0,0,1,0,0,0,0,0,1,1,0,3
+"Turdidae","Mountain Bluebird",1,1,0,0,1,1,0,0,0,-1,1,1,0,5
+"Turdidae","Townsend's Solitaire",1,-1,0,-1,-1,0,0,0,0,0,0,0,0,-2
+"Turdidae","Varied Thrush",0,-1,-1,-1,1,0,0,0,-1,-1,0,0,0,-4
+"Turdidae","Veery",0,-1,-1,-1,1,1,0,0,0,0,0,0,0,-1
+"Turdidae","Gray-cheeked Thrush",0,-1,0,-1,1,1,0,0,0,0,0,0,0,0
+"Turdidae","Swainson's Thrush",1,-1,-1,-1,1,1,0,0,-1,0,0,0,-1,-2
+"Turdidae","Hermit Thrush",0,-1,-1,-1,1,1,0,0,-1,0,0,0,0,-2
+"Turdidae","American Robin",0,-1,0,-1,1,1,0,0,0,-1,0,0,0,-1
+"Muscicapidae","Northern Wheatear",1,1,0,0,1,1,0,0,0,0,0,0,0,4
+"Bombycillidae","Bohemian Waxwing",1,-1,-1,-1,1,0,0,0,0,-1,0,1,-1,-2
+"Bombycillidae","Cedar Waxwing",1,-1,0,0,1,1,0,0,0,-1,0,1,-1,1
+"Motacillidae","Sprague's Pipit",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Fringillidae","Pine Grosbeak",1,-1,-1,-1,-1,0,0,0,0,-1,0,0,-1,-5
+"Fringillidae","Gray-crowned Rosy-Finch",0,1,0,0,1,0,0,0,0,0,0,1,0,3
+"Fringillidae","House Finch",1,1,0,0,1,1,0,0,0,0,0,0,0,4
+"Fringillidae","Purple Finch",1,-1,0,-1,1,0,0,0,0,-1,0,0,0,-1
+"Fringillidae","Cassin's Finch",1,-1,0,-1,1,1,0,0,0,-1,0,0,0,0
+"Fringillidae","Red Crossbill",1,-1,-1,-1,-1,1,0,0,0,-1,0,1,-1,-3
+"Fringillidae","White-winged Crossbill",1,-1,-1,-1,-1,0,0,0,0,-1,0,1,-1,-4
+"Fringillidae","Pine Siskin",1,-1,-1,-1,1,1,0,0,0,-1,0,1,-1,-1
+"Fringillidae","American Goldfinch",1,1,-1,0,1,1,0,0,0,0,0,0,-1,2
+"Calcariidae","Lapland Longspur",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Calcariidae","Smith's Longspur",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Calcariidae","Snow Bunting",0,0,0,0,1,1,0,0,0,0,0,1,0,3
+"Passerellidae","Grasshopper Sparrow",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Passerellidae","Chipping Sparrow",0,-1,0,0,1,0,0,0,0,0,0,0,0,0
+"Passerellidae","Clay-colored Sparrow",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Passerellidae","Brewer's Sparrow",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Passerellidae","Lark Sparrow",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Passerellidae","Fox Sparrow",0,1,-1,0,1,0,0,0,0,0,0,0,0,1
+"Passerellidae","Dark-eyed Junco",0,-1,0,0,1,1,0,0,0,0,1,0,0,2
+"Passerellidae","White-crowned Sparrow",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Passerellidae","Golden-crowned Sparrow",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Passerellidae","Harris's Sparrow",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Passerellidae","White-throated Sparrow",0,-1,0,0,1,0,0,0,0,0,0,0,0,0
+"Passerellidae","Vesper Sparrow",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Passerellidae","LeConte's Sparrow",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Passerellidae","Nelson's Sparrow",0,0,0,0,1,1,0,0,0,0,0,0,0,2
+"Passerellidae","Savannah Sparrow",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Passerellidae","Song Sparrow",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Passerellidae","Lincoln's Sparrow",0,0,0,0,1,0,0,0,0,0,0,0,0,1
+"Passerellidae","Swamp Sparrow",0,0,0,0,1,0,0,0,0,0,0,0,0,1
+"Passerellidae","Spotted Towhee",0,-1,0,-1,1,0,0,0,0,0,0,0,0,-1
+"Icteriidae","Yellow-breasted Chat",1,-1,0,0,1,1,0,0,0,0,0,0,-1,1
+"Icteridae","Yellow-headed Blackbird",0,0,0,0,1,1,0,0,0,0,0,0,0,2
+"Icteridae","Bobolink",0,1,-1,0,1,1,0,0,0,0,0,1,0,3
+"Icteridae","Western Meadowlark",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Icteridae","Bullock's Oriole",1,-1,-1,0,-1,1,0,0,0,-1,0,0,-1,-3
+"Icteridae","Red-winged Blackbird",0,0,0,0,1,1,0,0,0,0,0,0,0,2
+"Icteridae","Brown-headed Cowbird",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Icteridae","Rusty Blackbird",0,0,0,0,1,0,0,0,0,-1,0,0,0,0
+"Icteridae","Brewer's Blackbird",0,0,0,0,1,0,0,0,0,-1,0,0,0,0
+"Icteridae","Common Grackle",0,-1,0,0,1,0,0,0,0,-1,0,0,0,-1
+"Parulidae","Ovenbird",0,-1,-1,-1,1,1,0,0,0,0,0,0,0,-1
+"Parulidae","Northern Waterthrush",0,0,-1,0,1,1,0,0,-1,0,0,0,0,0
+"Parulidae","Black-and-white Warbler",1,-1,-1,0,-1,1,0,0,0,0,0,0,0,-1
+"Parulidae","Tennessee Warbler",1,-1,-1,-1,-1,1,0,0,0,0,0,0,-1,-3
+"Parulidae","Orange-crowned Warbler",1,1,-1,0,1,1,0,0,0,0,0,0,-1,2
+"Parulidae","Nashville Warbler",1,-1,-1,0,-1,1,0,0,0,0,0,0,-1,-2
+"Parulidae","Connecticut Warbler",0,-1,-1,-1,1,1,0,0,0,0,0,0,0,-1
+"Parulidae","MacGillivray's Warbler",0,-1,-1,-1,1,1,0,0,0,0,0,0,0,-1
+"Parulidae","Mourning Warbler",1,-1,-1,-1,1,1,0,0,0,0,0,0,-1,-1
+"Parulidae","Common Yellowthroat",1,0,-1,0,1,1,0,0,0,0,0,0,0,2
+"Parulidae","American Redstart",1,-1,-1,0,-1,1,0,0,0,-1,0,0,0,-2
+"Parulidae","Cape May Warbler",1,-1,-1,-1,-1,1,0,0,0,-1,0,0,-1,-4
+"Parulidae","Magnolia Warbler",1,-1,-1,-1,-1,1,0,0,0,-1,0,0,0,-3
+"Parulidae","Bay-breasted Warbler",1,-1,-1,-1,-1,1,0,0,-1,-1,0,0,0,-4
+"Parulidae","Yellow Warbler",1,0,-1,0,-1,1,0,0,0,0,0,0,-1,-1
+"Parulidae","Blackpoll Warbler",1,-1,-1,-1,-1,1,0,0,0,-1,0,0,-1,-4
+"Parulidae","Palm Warbler",1,1,-1,0,1,1,0,0,0,0,0,0,0,3
+"Parulidae","Yellow-rumped Warbler",1,-1,-1,-1,1,1,0,0,0,-1,0,0,-1,-2
+"Parulidae","Black-throated Gray Warbler",1,-1,-1,0,1,1,0,0,0,-1,0,0,-1,-1
+"Parulidae","Townsend's Warbler",1,-1,-1,-1,-1,1,0,0,-1,-1,0,0,-1,-5
+"Parulidae","Black-throated Green Warbler",1,-1,-1,-1,-1,1,0,0,0,-1,0,0,-1,-4
+"Parulidae","Canada Warbler",1,-1,-1,-1,1,1,0,0,-1,0,0,0,0,-1
+"Parulidae","Wilson's Warbler",1,-1,-1,0,-1,1,0,0,0,0,0,0,-1,-2
+"Cardinalidae","Western Tanager",1,-1,-1,0,-1,1,0,0,0,-1,0,0,-1,-3
+"Cardinalidae","Rose-breasted Grosbeak",1,-1,0,-1,-1,0,0,0,0,0,0,0,-1,-3
+"Cardinalidae","Black-headed Grosbeak",1,-1,0,-1,-1,1,0,0,0,-1,0,0,-1,-3
+"Cardinalidae","Lazuli Bunting",1,1,0,0,1,0,0,0,0,0,0,0,0,3
+"Motacillidae","American Pipit",0,1,0,0,1,1,0,0,0,0,0,0,0,3
+"Fringillidae","Evening Grosbeak",1,-1,-1,-1,1,0,0,0,0,-1,0,1,-1,-2
+"Passerellidae","American Tree Sparrow",0,1,0,0,1,0,0,0,0,0,0,0,0,2
+"Icteridae","Baltimore Oriole",1,-1,-1,-1,-1,1,0,0,0,-1,0,0,-1,-4

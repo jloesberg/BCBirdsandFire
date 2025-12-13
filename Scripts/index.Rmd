@@ -65,6 +65,7 @@ index <- bctraits.all %>%
                   color = index_sum)) +
   geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
                linewidth = 0.5, alpha = 0.7) +
+    scale_x_continuous(limits = c(-3, 4))+
   geom_point(size = 2.5) +
   scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
                         midpoint = 0, name = "Index Score") +
@@ -73,8 +74,8 @@ index <- bctraits.all %>%
   theme(plot.title = element_text(face = "bold", hjust = 0.5),
     plot.subtitle = element_text(hjust = 0.5),
     axis.text.y = element_text(size = 8), 
-    panel.grid.major.y = element_blank(), 
-    legend.position = "bottom"
+    panel.grid.major.y = element_blank(),
+    legend.position = "none"
   ))
 
 #Tyrannidae
@@ -86,6 +87,7 @@ index <- bctraits.all %>%
   geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
                linewidth = 0.5, alpha = 0.7) +
   geom_point(size = 2.5) +
+        scale_x_continuous(limits = c(-3, 4))+
   scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
                         midpoint = 0, name = "Index Score") +
   labs(title = "Tyrannidae", x = "Fire Vulnerability Index Score", y = "Species") +
@@ -94,7 +96,7 @@ index <- bctraits.all %>%
     plot.subtitle = element_text(hjust = 0.5),
     axis.text.y = element_text(size = 8),
     panel.grid.major.y = element_blank(),
-    legend.position = "bottom"
+    legend.position = "none"
   ))
 
 ##	Anatidae
@@ -117,9 +119,21 @@ index <- bctraits.all %>%
     legend.position = "bottom"
   ))
 
+(f1 <- woodpeckers/tyran  +
+  plot_layout(axis_titles = "collect") +
+  plot_annotation(theme = theme(legend.position = "right"), tag_levels = "A")&
+  theme(
+    text        = element_text(size = 20),
+    axis.text   = element_text(size = 20),
+    axis.title  = element_text(size = 20),
+    strip.text  = element_text(size = 20),
+    legend.text = element_text(size = 16),
+    legend.title= element_text(size = 18)))
+
 ggsave(here("Figures", "index.png"), plot = index1, width = 40, height =20)
 ggsave(here("Figures", "index.picidae.png"), plot = woodpeckers, width = 8, height =6)
 ggsave(here("Figures", "index.tyrannidae.png"), plot = tyran, width = 8, height =6)
+ggsave(here("Figures", "index.typi.png"), plot = f1, width = 8, height =8)
 
 
 ```
@@ -187,4 +201,26 @@ ggsave(here("Figures", "index.most10.png"), plot = most, width = 8, height =8)
 
 ```
 
+```{r}
+(spp <- index %>% 
+   filter(family == "Anatidae"|family == "Picidae"|family == "Tyrannidae"| family == "Turdidae"| family == "Parulidae") %>%
+  ggplot(aes(x = index_sum, 
+                  y = reorder(common_name, index_sum), 
+                  color = index_sum)) +
+  geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
+               linewidth = 0.5, alpha = 0.7) +
+  geom_point(size = 2.5) +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
+                        midpoint = 0, name = "Index Score") +
+  labs( x = "Fire Vulnerability Index Score", y = "Species") +
+  theme_bw(base_size = 12) +
+  facet_wrap(~family, scales = "free_y")+
+  theme(
+  axis.text.y = element_text(size = 9),
+  legend.position = c(0.9, 0.05),   # 
+  legend.justification = c("right", "bottom")
+  ))
+ggsave(here("Figures", "selectfamilies.png"), plot = spp, width = 10, height =8)
+
+```
 

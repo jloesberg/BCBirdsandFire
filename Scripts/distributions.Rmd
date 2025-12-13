@@ -33,7 +33,7 @@ climate_layer <- t.26bc[[1]]
 
 ```{r OSF}
 osf <- rast(here("Data", "ebird_distributions", "Olive-sided_Flycatcher_abundance_full-year_max_3km_BC.tif"))
-plot(osf, main = "Olive-sided Flycatcher Mean Seasonal Abundance")
+#plot(osf, main = "Olive-sided Flycatcher Mean Seasonal Abundance")
 
 
 # 
@@ -54,7 +54,7 @@ risk_map <- osf_final * climate_aligned
 ##
 
 png(here("Maps", "osf.panel.png"), width = 3000, height = 1000, pointsize = 24)
-par(mfrow = c(1, 3)) 
+par(mfrow = c(2, 2)) 
 # Plot Map 2: Climate Data
 
 plot(climate_aligned, 
@@ -125,20 +125,29 @@ lines(bc,
 climate_aligned <- resample(climate_layer, bbw_final, method = "near") 
 risk_map <- bbw_final * climate_aligned
 ##
+#save:
+png(here("Maps", "bbw.panel.png"),
+    width = 3000, height = 2000, pointsize = 60)
 
-png(here("Maps", "bbw.panel.png"), width = 3000, height = 1000, pointsize = 24)
-par(mfrow = c(1, 3)) 
+layout(
+  matrix(c(
+    1, 2,
+    3, 3
+  ), nrow = 2, byrow = TRUE),
+  heights = c(0.8, 1)   # top = 0.7 units, bottom = 1.3 units
+)
+
 # Plot Map 2: Climate Data
 
 plot(climate_aligned, 
-     main = "FWI RCP8.5 2021-2050",
+     main = "a) FWI RCP8.5 2021-2050",
      col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
 )
 lines(bc, col = "black", lwd = 1.5)
 
 # Plot Map 1: Bird Abundance
 plot(bbw_final, 
-     main = "Black-backed Woodpecker",
+     main = "b) Black-backed Woodpecker distribution",
      col = rev(hcl.colors(100, "Blues")) 
 )
 lines(bc, col = "black", lwd = 1.5)
@@ -146,11 +155,11 @@ lines(bc, col = "black", lwd = 1.5)
 # Plot the resulting composite map
 
 plot(risk_map, 
-     main = "FWI * Abundance",
+     main = "c) FWI * Abundance",
      col = rev(hcl.colors(100, "Reds"))
 )
 lines(bc, col = "black", lwd = 1.5)
-
+dev.off()
 #individual maps
 png(here("Maps", "bbw.risk.png"), width = 1000, height = 1000, pointsize = 24)
 #risk
