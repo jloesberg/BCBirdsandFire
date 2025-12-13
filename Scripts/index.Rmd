@@ -36,6 +36,14 @@ index <- bctraits.all %>%
          index_sum = rowSums(across(starts_with("index")), na.rm = TRUE))
 ```
 
+```{r}
+index.save <- index %>% 
+select(family, common_name, starts_with("index_"))
+
+write.csv(index.save, here("Data", "cleaned", "index_for_appendix.csv"), row.names = FALSE)
+
+```
+
 
 ```{r Figures}
 
