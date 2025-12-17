@@ -19,10 +19,8 @@ traits$habitat_density[traits$habitat_density == "open"] <- 3
 traits <- traits %>% 
     select(-any_tree_nest, -live_tree_nest) %>% 
     mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
-   #        ground_nester = ifelse(most_common_nesting_location == "ground", 1, 0),
-   #        shrub_nester = ifelse(most_common_nesting_location == "shrub", 1, 0)) %>%
     habitat_density = as.numeric(habitat_density))
-traits2 <- traits
+bc <- traits
 
 ##
 positive_immediate <- c("American Kestrel", "American Robin", "American Three-toed Woodpecker", "Black-backed Woodpecker", "Black-capped Chickadee", "Black-headed Grosbeak", "Black-throated Gray Warbler", "Brewer's Blackbird", "Brewer's Sparrow", "Brown Creeper", "Brown-headed Cowbird", "Canada Jay", "Cassin's Finch", "Cassin's Vireo", "Cedar Waxwing", "Chipping Sparrow", "Connecticut Warbler", "Dark-eyed Junco", "Downy Woodpecker", "Dusky Flycatcher","Fox Sparrow", "Hairy Woodpecker", "Hermit Thrush", "Northern House Wren", "Lazuli Bunting", "Least Flycatcher", "Lewis's Woodpecker", "Lincoln's Sparrow", "MacGillivray's Warbler", "Mountain Bluebird", "Mountain Chickadee", "Nashville Warbler", "Northern Flicker", "Northern Pygmy-Owl", "Olive-sided Flycatcher", "Pine Siskin", "Red-breasted Nuthatch", "Red-winged Blackbird", "Rock Wren", "Rufous Hummingbird", "Savannah Sparrow", "Say's Phoebe", "Song Sparrow", "Spotted Towhee", "Steller's Jay", "Tennessee Warbler", "Townsend's Solitaire", "Tree Swallow", "Turkey Vulture", "Veery", "Warbling Vireo", "Western Bluebird", "Western Screech-Owl", "Western Tanager", "Western Wood-Pewee", "White-breasted Nuthatch", "White-crowned Sparrow",  "White-throated Sparrow", "Winter Wren", "Yellow-bellied Sapsucker", "Yellow-rumped Warbler"
@@ -37,14 +35,11 @@ missing_names <- negative_immediate[!(negative_immediate %in% traits$common_name
 
 null_immediate <- c("American Goldfinch", "American Robin", "American Wigeon", "Black-capped Chickadee", "Black-headed Grosbeak", "Black-throated Gray Warbler", "Brown Creeper", "Brown-headed Cowbird", "Bufflehead", "Calliope Hummingbird", "Canvasback", "Cassin's Finch", "Cassin's Vireo", "Cedar Waxwing", "Chipping Sparrow", "Clark's Nutcracker", "Common Merganser", "Common Raven", "Common Yellowthroat", "Dark-eyed Junco", "Downy Woodpecker", "Dusky Flycatcher", "Eastern Phoebe", "Evening Grosbeak", "Fox Sparrow", "Golden-crowned Kinglet", "Green-winged Teal", "Hammond's Flycatcher", "Hermit Thrush", "House Finch", "Lesser Scaup", "Lincoln's Sparrow", "MacGillivray's Warbler", "Mallard", "Marsh Wren", "Mountain Chickadee", "Mourning Dove", "Nashville Warbler", "Northern Pintail", "Northern Shoveler", "Northern Waterthrush", "Olive-sided Flycatcher", "Orange-crowned Warbler", "Pacific Wren", "Pine Grosbeak", "Pine Siskin", "Pileated Woodpecker", "Purple Finch", "Red Crossbill", "Red-breasted Merganser", "Red-breasted Nuthatch", "Red-naped Sapsucker", "Red-tailed Hawk", "Ring-necked Duck", "Rock Wren", "Ruby-crowned Kinglet", "Ruffed Grouse", "Rufous Hummingbird", "Song Sparrow", "Spotted Towhee", "Steller's Jay", "Surf Scoter", "Swainson's Thrush", "Townsend's Warbler", "Varied Thrush", "Violet-green Swallow", "Warbling Vireo", "Western Tanager", "Western Wood-Pewee", "White-breasted Nuthatch", "White-crowned Sparrow", "White-winged Scoter", "Williamson's Sapsucker", "Willow Flycatcher", "Wilson's Warbler", "Winter Wren", "Yellow Warbler", "Yellow-bellied Flycatcher", "Yellow-rumped Warbler"
 )
-# "Greater Scaup","Spotted Sandpiper","Acorn Woodpecker","Mountain Quail","Hermit Warbler",
 missing_names <- null_immediate[!(null_immediate %in% traits$common_name)] #do all these names appear in the BC list?
 
 traits$positive_immediate <- ifelse(traits$common_name %in% positive_immediate, 1, NA)
 traits$negative_immediate <- ifelse(traits$common_name %in% negative_immediate, 1, NA)
 traits$null_immediate <- ifelse(traits$common_name %in% null_immediate, 1, NA)
-
-
 traits <- traits %>%
     filter(!if_all(c(positive_immediate, negative_immediate, null_immediate), is.na)) %>% 
     mutate(across(c(positive_immediate, negative_immediate, null_immediate), ~replace_na(.x, 0)))
@@ -55,10 +50,8 @@ trait.pca <- traits %>%
   select(common_name, where(is.numeric), -elevational_range,-positive_immediate, -negative_immediate, -null_immediate,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb)
 
 pca_result <- prcomp(trait.pca[,-1], scale = T) #scale the variables!
-##
 pca_result$rotation
 pca_result$x
-
 biplot(pca_result)
 
 pca_loadings <- as.data.frame(pca_result$rotation) %>% select(1:10)
@@ -70,8 +63,7 @@ PVE <- round(PVE, 2)
 
 pve_df <- data.frame(
   PC = 1:length(PVE),
-  PVE = PVE
-)
+  PVE = PVE)
 
 (scree <- ggplot(pve_df, aes(x = PC, y = PVE)) +
   geom_col() +
@@ -82,7 +74,6 @@ pve_df <- data.frame(
     theme_bw()+
   scale_x_continuous(breaks = 1:length(PVE)))
 ggsave(here("Figures", "PCA", "scree plot.immediate.png"), plot = scree, width = 8, height =8)
-
 
 ##
 pca_df <- as.data.frame(pca_result$x) %>%
@@ -101,7 +92,6 @@ pca_df <- pca_df %>%
 loadings <- as.data.frame(pca_result$rotation)  # columns = PCs, rows = traits
 loadings$trait <- rownames(loadings)
 
-# Optional: scale arrows for visualization
 arrow_multiplier <- 5  # adjust to make arrows visible
 loadings <- loadings %>%
   mutate(PC1_arrow = PC1 * arrow_multiplier,
@@ -115,12 +105,10 @@ pca_scores$null <- traits$null
 ```
 
 ```{r Extract loadings}
-
 loadings <- as.data.frame(pca_result$rotation)
 
 # Add trait names as a column
 loadings$trait <- rownames(loadings)
-
 loadings_long <- loadings %>%
   pivot_longer(cols = starts_with("PC"),
                names_to = "PC",
@@ -145,17 +133,12 @@ ggsave(here("Figures", "PCA", "loadings bar plot.immediate.png"), plot = loading
 
 
 ```{r}
-bc <- traits2 %>%  
+bc <- bc %>%  
   select(common_name, where(is.numeric), -elevational_range,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb) %>% 
   drop_na()  
-
 #plotting all spp on this pca:
-bc_scaled <- scale(bc[,-1],
-                    center = (pca_result$center),
-                    scale = (pca_result$scale))
-
+bc_scaled <- scale(bc[,-1], center = (pca_result$center), scale = (pca_result$scale))
 bc_scores <- as.data.frame(as.matrix(bc_scaled) %*% pca_result$rotation)
-
 ```
 
 ```{r}
@@ -178,14 +161,11 @@ centers <- data.frame(
     mean(pca_scores$PC2[pca_scores$positive == 1 & pca_scores$negative != 1], na.rm = TRUE),
     mean(pca_scores$PC2[pca_scores$positive == 1 & pca_scores$negative == 1], na.rm = TRUE),
     mean(pca_scores$PC2[pca_scores$negative == 1 & pca_scores$positive != 1], na.rm = TRUE),
-    mean(pca_scores$PC2[pca_scores$null == 1 & pca_scores$positive == 0 & pca_scores$negative == 0], na.rm = TRUE)
-  )
-)
+    mean(pca_scores$PC2[pca_scores$null == 1 & pca_scores$positive == 0 & pca_scores$negative == 0], na.rm = TRUE)))
 
 # Original PCA points
 orig_df <- pca_scores
 orig_df$type <- "PCA"
-
 
 # New projected points
 new_df <- bc_scores
@@ -204,11 +184,9 @@ summary(anova_pc2)
 
 # Post-hoc (Tukey) test for pairwise comparisons
 TukeyHSD(anova_pc2)
-
 ```
 
 ```{r final figure}
-
 (with.mix <- ggplot(pca_scores) +
   geom_point(data = new_df, aes( x = PC1, y = PC2), shape = 1, color = "grey", alpha = 0.85, size = 3)+
   geom_point(aes(PC1, PC2), color = "grey50", size =3) +
@@ -236,14 +214,13 @@ loadings <- loadings %>%
                aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
                arrow = arrow(length = unit(0.3, "cm")),
                color = "black") +
-  geom_text_repel(data = loadings,
-                  aes(x = PC1_arrow, y = PC2_arrow, label = trait),
+  geom_text_repel(data = loadings, aes(x = PC1_arrow, y = PC2_arrow, label = trait),
                   color = "black",
                   size = 4.5,
                   segment.color = "grey50",    # line from label to point
                   segment.size = 0.5,
                   segment.alpha = 0.8,
-                  nudge_x = 0,                 # optional small nudge
+                  nudge_x = 0, 
                   nudge_y = 0,
                   box.padding = 0.5,
                   point.padding = 0.5,
@@ -258,11 +235,10 @@ loadings <- loadings %>%
 (immediate <- with.mix/f2+  
   plot_layout(guides = "collect") +
   plot_annotation(theme = theme(legend.position = "bottom"), tag_levels = "A")&
-  theme(
-    text        = element_text(size = 20),
-    axis.text   = element_text(size = 18),
-    axis.title  = element_text(size = 20),
-    strip.text  = element_text(size = 20),
+  theme(text = element_text(size = 20),
+    axis.text = element_text(size = 18),
+    axis.title = element_text(size = 20),
+    strip.text = element_text(size = 20),
     legend.text = element_text(size = 16),
     legend.title= element_text(size = 18)))
 ggsave(here("Figures", "PCA", "PCA_end fig immediate.png"), plot = immediate,width = 10, height =13, dpi = 1000)

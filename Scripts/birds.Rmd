@@ -12,12 +12,10 @@ library(janitor)
 
 ```{r read in bc bird list}
 birdlist <- read.csv(here("Data", "BirdLists", "bc_birds_checklist.csv"), na.strings = c("", "NA"))
-birdlist <- birdlist[rowSums(is.na(birdlist)) != ncol(birdlist), ]
+birdlist <- birdlist[rowSums(is.na(birdlist)) != ncol(birdlist), ] #take out any blank rows
+birdlist$Family <- sub("^\\s+", "", birdlist$Family) #take out spaces in the family column
 
-birdlist <- birdlist%>%
-  filter(if_any(everything(), ~ . != "" & !is.na(.))) 
-birdlist$Family <- sub("^\\s+", "", birdlist$Family)
-
+#remove spp that dont really occur in BC
 remove_species <- c(
   "American Black Duck",
   "Acorn Woodpecker",
@@ -29,12 +27,14 @@ remove_species <- c(
   "Redpoll",
   "Mountain Quail"
 )
+#remove orders for which we dont expect fire responses
 remove_orders <- c("CHARADRIIFORMES", "PODICIPEDIFORMES", "PROCELLARIIFORMES", "SULIFORMES", "PELECANIFORMES")
 #filtering out the rare etc species
 birdlist_filtered <- birdlist %>% 
   filter(is.na(status) | status %in% c("Vulnerable", "Endangered", "Near-threatened")) %>% 
   filter(!common_name %in% remove_species)%>% 
   filter(!Order %in% remove_orders)
+#save this and the original before adding trait data
 write.csv(birdlist, here("Data", "cleaned", "BC_birdlist_avibase.csv"), row.names = FALSE)
 write.csv(birdlist_filtered, here("Data", "cleaned", "BC_birdlist_filtered.csv"), row.names = FALSE)
 
@@ -43,10 +43,11 @@ remove(birdlist_filtered)
 ```
 
 ```{r read in available databases}
-dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk", "Dubovyk_trait_database.csv")) #> nest <- dtrait %>% select(name, eng_name, nest, nsbank, nsgroun, nsgrass, nsclif, nsbuild, nsshru, nsdeci, nsconi, nssnag, nsfloat, nscact, nstang, ntree, nesting.location)
+dtrait <- read.csv(here("Data", "TraitDatabases", "Dubovyk", "Dubovyk_trait_database.csv")) 
 dtrait2 <- dtrait %>% 
   select(name, eng_name, 39:96, -fcfish, -fpdiur, -fpnoct, -klepto)
 
+#clean the database up
 dtrait <- dtrait %>% 
   mutate(nstree = nsdeci+nsconi,
          any_tree_nest = nstree+nssnag,  #to what scale do they use trees to nest? Essentially adding the % they use deciduous, coniferous, and snags
@@ -54,7 +55,6 @@ dtrait <- dtrait %>%
   select(name, synonyms, proj_id, et_id, synonyms, mlife, matage,nest, nsbank, nsgroun, nsclif, nsbuild, nsshru, nssnag, nscact, nstang, nsfloat, nstree, attem, eng_name,any_tree_nest, fmhawk, fmfogl, fmbagl, fstimb, nsdeci,nsconi) %>% 
   rename(Elton_ID = et_id,lifespan = mlife, ReproAge = matage,  nest.type = nest, clutches.per.year = attem,
          bank_nest = nsbank, ground_nest = nsgroun, cliff_nest = nsclif, human.structure_nest = nsbuild, shrub_nest = nsshru, snag_nest = nssnag, float_nest = nsfloat, cactus_nest = nscact, tangle_nest = nstang, live_tree_nest = nstree, conifer_nest = nsconi, deciduous_nest = nsdeci, for_hawking = fmhawk, for_foliage_gleaning =fmfogl, for_bark_gleaning = fmbagl) 
-#note - here grass nesting is included in ground nesting
 
 #correcting some taxonony
 dtrait$synonyms[dtrait$name=="Bubulcus ibis"] <- "Ardea ibis"
@@ -78,28 +78,19 @@ dtrait$name[dtrait$proj_id==3255] <- "Brotogeris versicolurus"
 dtrait <- dtrait %>% 
   mutate(nest.category = if_else(nest.type == "cup"|nest.type == "gourd"|nest.type == "sphere"|nest.type == "gourd"|nest.type == "saucer"|nest.type == "chamber"|nest.type == "oven"|nest.type == "pend", "built.structure", if_else(nest.type == "scrape"|nest.type == "no", "open", nest.type)))
 
-
 #get nesting substrates
 cols_to_check <- c("bank_nest", "ground_nest", 'cliff_nest', 'human.structure_nest', "shrub_nest", "float_nest", "snag_nest", 'cactus_nest', "tangle_nest", "live_tree_nest", "any_tree_nest")
 dtrait <- dtrait %>%
     mutate(majority.nesting.location = ifelse(ground_nest>51, "ground", if_else(shrub_nest>51, "shrub", if_else(live_tree_nest>51, "tree", if_else(snag_nest>51, "snag", if_else(bank_nest>51, "bank", if_else(cliff_nest>51, "cliff", if_else(human.structure_nest>51, "human.structure", if_else(tangle_nest>51, "tangle", if_else(float_nest>51, "float", if_else(any_tree_nest>51, "tree", NA))))))))))) %>%
   rowwise() %>%
-  mutate(
-    row_values = list(c_across(all_of(cols_to_check))),
-    sorted_indices = list(order(row_values, decreasing = TRUE)),
-    most.common.nesting.location = cols_to_check[sorted_indices[1]],
-    second.nesting.location = ifelse(
-      # Condition: Is the second highest value equal to 0?
+  mutate(row_values = list(c_across(all_of(cols_to_check))), sorted_indices = list(order(row_values, decreasing = TRUE)),
+    most.common.nesting.location = cols_to_check[sorted_indices[1]], second.nesting.location = ifelse(
       row_values[sorted_indices[2]] == 0,
-      # If TRUE: Assign NA (must be type character to match column names)
       NA_character_, 
-      # If FALSE: Assign the column name
       cols_to_check[sorted_indices[2]])) %>% 
     ungroup() %>%
- select(-c(row_values, sorted_indices)) %>%
-  ungroup()
+ select(-c(row_values, sorted_indices))
 ###########################################################################################
-
 #Ecology data paper - ELTON TRAITS
 eco_t <- read.delim(here("Data", "TraitDatabases","EltonTraits", "Ecology_BirdFuncDat.txt"), sep = "\t", header = T)
 eco_t <- eco_t %>% 
@@ -114,7 +105,6 @@ eco_t$Scientific[eco_t$Elton_ID=="9750"] <- "Troglodytes hiemalis"
 cols_to_check <- eco_t %>% 
   select(starts_with("ForStrat")) %>% # Select the columns
   names()   
-#cols_to_check <- c("ground", "understory", "midhigh", 'canopy', 'aerial', "water")
 
 eco_t <- eco_t %>%
   mutate(majority.foraging.location = case_when(
@@ -125,9 +115,7 @@ eco_t <- eco_t %>%
       ForStrat.water     > 51 ~ "water",
       TRUE ~ NA_character_)) %>%   
   rowwise() %>%
-  mutate(
-    row_values = list(c_across(all_of(cols_to_check))),
-    sorted_indices = list(order(row_values, decreasing = TRUE)),
+  mutate(row_values = list(c_across(all_of(cols_to_check))), sorted_indices = list(order(row_values, decreasing = TRUE)),
     most.common.foraging.location = cols_to_check[sorted_indices[1]],
     second.foraging.location = ifelse(
       row_values[sorted_indices[2]] == 0,
@@ -140,40 +128,37 @@ eco_t$second.foraging.location <- gsub("ForStrat.", "", eco_t$second.foraging.lo
 
 #connect these based on the elton traits et_id
 de.trait <- full_join(eco_t, dtrait, by = c("Elton_ID", "eng_name")) %>% 
-   mutate(
-    Scientific = coalesce(Scientific, name)  # use 'name' only if Scientific is NA
-  )
+   mutate(Scientific = coalesce(Scientific, name))
   
-#get bc birds
-bctrait <- left_join(birdlist ,de.trait, by = c("sci_name" = "Scientific"))
+#match to just bc birds
+bctrait <- left_join(birdlist, de.trait, by = c("sci_name" = "Scientific"))
 
+#did any of these not match?
 unmatched <- bctrait %>%
-  filter(is.na(Elton_ID)) %>%   # replace with a col you expect after join
+  filter(is.na(Elton_ID)) %>% 
   select(names(birdlist))
+#for those that didnt match, try common name instead of scientific
 matched_by_common <- unmatched %>%
   left_join(de.trait, by = c("common_name" = "eng_name"))
 
+#add those back in
 bctrait <- bctrait %>%
   filter(!is.na(Elton_ID)) %>%  # keep the matched ones
   bind_rows(matched_by_common)
-
 unmatched2 <- bctrait %>%
-  filter(is.na(Elton_ID)) %>%   # replace with a col you expect after join
+  filter(is.na(Elton_ID)) %>%
   select(names(birdlist))
 matched_by_syn <- unmatched2 %>%
   left_join(de.trait, by = c("sci_name" = "synonyms"))
-
 bctrait <- bctrait %>%
-  filter(!is.na(Elton_ID)) %>%  # keep the matched ones
+  filter(!is.na(Elton_ID)) %>%  
   bind_rows(matched_by_syn)
-
-
 
 ############################
 #Avonet database
 avtrait <- read.csv(here("Data", "TraitDatabases", "ELEData", "TraitData", "AVONET1_BirdLife.csv"))
 avtrait3 <- read.csv(here("Data", "TraitDatabases", "ELEData", "TraitData", "AVONET3_BirdTree.csv"))
-
+#for avonet, there are different spp in AVONET 1 and 3
 avtrait <- avtrait %>% 
   rename(sci_name = Species1,
          AV_ID = Sequence) %>% 
@@ -198,7 +183,6 @@ avtrait$sci_name[avtrait$sci_name=="Bubulcus ibis"] <- "Ardea ibis"
 avtrait$sci_name[avtrait$sci_name=="Accipiter cooperii"] <- "Astur cooperii"
 avtrait$sci_name[avtrait$sci_name=="Hylatomus pileatus"] <- "Dryocopus pileatus"
 avtrait$sci_name[avtrait$sci_name=="Anas penelope"] <- "Mareca penelope"
-
 avtrait$sci_name[avtrait$sci_name=="Nannopterum auritus"] <- "Nannopterum auritum"
 avtrait$sci_name[avtrait$sci_name=="Tyto alba"] <- "Tyto furcata"
 avtrait$sci_name[avtrait$sci_name=="Accipiter gentilis"] <- "Astur atricapillus"
@@ -224,26 +208,27 @@ avtrait$sci_name[avtrait$sci_name=="Charadrius mongolus"] <- "Anarhynchus mongol
 avtrait3$sci_name[avtrait3$sci_name=="Spizella arborea"] <- "Spizelloides arborea"
 avtrait3$sci_name[avtrait3$sci_name=="Ammodramus bairdii"] <- "Centronyx bairdii"
 
-#mew gulls were made into 2 species
+#mew gulls were made into 2 species, adding it here
 new_row <- avtrait[avtrait$sci_name == "Larus canus", ]
 new_row$sci_name <- "Larus brachyrhynchus"
 avtrait <- rbind(avtrait, new_row)
-	
+
+#add to BC birds list
 bctraits3 <- left_join(birdlist, avtrait, by = "sci_name")
 
+#for the ones that dont match, add in AVONET3
 unmatched_av <- bctraits3 %>%
-  filter(is.na(AV_ID)) %>%   # replace with a col you expect after join
+  filter(is.na(AV_ID)) %>%   
   select(names(birdlist))
-
 matched_by_ <- unmatched_av %>%
   left_join(avtrait3, by = "sci_name")
 bctraits3 <- bctraits3 %>%
-  filter(!is.na(AV_ID)) %>%  # keep the matched ones
+  filter(!is.na(AV_ID)) %>%  
   bind_rows(matched_by_)
-
+#add this into the original BC trait df
 bctraits.all <- left_join(bctraits3, bctrait)
 ###############################################################################
-#cleanign it up a bit
+#cleaning it up a bit
 bctraits.all <- bctraits.all %>% 
   rename(Elton_common_name = eng_name, Elton_sci_name = name, Elton_syn = synonyms, D_ID = proj_id, D_sci_name = Scientific, mass_g= Mass ) %>% 
   select(Order, Family, sci_name, common_name, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category, any_tree_nest, ground_nest, shrub_nest, snag_nest, live_tree_nest, conifer_nest, deciduous_nest, majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name,  for_hawking, for_foliage_gleaning, for_bark_gleaning, fstimb, Diet.Inv, Diet.Nect, Diet.Seed, ForStrat.ground, ForStrat.understory, ForStrat.canopy)
@@ -268,15 +253,11 @@ bctraits.all$lifespan[bctraits.all$common_name=="Short-tailed Shearwater"] <- 30
 bctraits.all$ReproAge[bctraits.all$common_name=="Short-tailed Shearwater"] <- 6 
 bctraits.all$clutches.per.year[bctraits.all$common_name=="Short-tailed Shearwater"] <- 1 
 
-
-
-#lots of missing data for Pacific Wren - associated with old growth forests AND was recently seperated from winter wren. So where there isnt data for pacific, use data from winter
-bctraits.all$lifespan[bctraits.all$common_name=="Pacific Wren"] <- 4 #making it the same as the winter wren, which it was recently split from
-bctraits.all$clutches.per.year[bctraits.all$common_name=="Pacific Wren"] <- 1 #can lay a replacement clutch if first is lost
-#bctraits.all$majority.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "?"
+#lots of missing data for Pacific Wren - associated with old growth forests AND was recently separated from winter wren. So where there isnt data for pacific, use data from winter wren
+bctraits.all$lifespan[bctraits.all$common_name=="Pacific Wren"] <- 4 
+bctraits.all$clutches.per.year[bctraits.all$common_name=="Pacific Wren"] <- 1
 bctraits.all$nest.type[bctraits.all$common_name=="Pacific Wren"] <- "cavity"
 bctraits.all$nest.category[bctraits.all$common_name=="Pacific Wren"] <- "cavity"
-#bctraits.all$Diet.5Cat[bctraits.all$common_name=="Pacific Wren"] <- "Invertebrate"
 bctraits.all$any_tree_nest[bctraits.all$common_name=="Pacific Wren"] <- 50
 bctraits.all$live_tree_nest[bctraits.all$common_name=="Pacific Wren"] <- 20
 bctraits.all$snag_nest[bctraits.all$common_name=="Pacific Wren"] <- 30
@@ -284,17 +265,14 @@ bctraits.all$most.common.nesting.location[bctraits.all$common_name=="Pacific Wre
 bctraits.all$second.nesting.location[bctraits.all$common_name=="Pacific Wren"] <- "ground"
 bctraits.all$most.common.foraging.location[bctraits.all$common_name=="Pacific Wren"] <- "ground"
 bctraits.all$second.foraging.location[bctraits.all$common_name=="Pacific Wren"] <- "understory"
-bctraits.all$ReproAge[bctraits.all$common_name=="Pacific Wren"] <- 1 #these are from winter wren
+bctraits.all$ReproAge[bctraits.all$common_name=="Pacific Wren"] <- 1
 bctraits.all$for_hawking[bctraits.all$common_name=="Pacific Wren"] <- 0
 bctraits.all$for_foliage_gleaning[bctraits.all$common_name=="Pacific Wren"] <- 40
 bctraits.all$for_bark_gleaning[bctraits.all$common_name=="Pacific Wren"] <- 0
-#bctraits.all$fstimb[bctraits.all$common_name=="Pacific Wren"] <- 10
-# bctraits.all$fcinvert[bctraits.all$common_name=="Pacific Wren"] <- 60
 bctraits.all$conifer_nest[bctraits.all$common_name=="Pacific Wren"] <- 10
 bctraits.all$deciduous_nest[bctraits.all$common_name=="Pacific Wren"] <- 10
 bctraits.all$ForStrat.ground[bctraits.all$common_name=="Pacific Wren"] <- 50
 bctraits.all$ForStrat.understory[bctraits.all$common_name=="Pacific Wren"] <- 50
-#bctraits.all$ForStrat.midhigh[bctraits.all$common_name=="Pacific Wren"] <- 0
 bctraits.all$ForStrat.canopy[bctraits.all$common_name=="Pacific Wren"] <- 0
 bctraits.all$Diet.Inv[bctraits.all$common_name=="Pacific Wren"] <- 60
 bctraits.all$Diet.Nect[bctraits.all$common_name=="Pacific Wren"] <- 0
@@ -304,35 +282,33 @@ bctraits.all$shrub_nest[bctraits.all$common_name=="Pacific Wren"] <- 0
 ```
 
 ```{r}
+#adding in data from birdbase
 #BIRDBASE
 birdbase <- read.csv(here("Data", "TraitDatabases", "Birdbase", "BIRDBASE.database.csv"), skip = 1)
-
+#get the traits were interested in:
 birdbase <- birdbase %>% 
   clean_names()
 birdbase <- birdbase %>% 
   rename(iucn.2024 = x2024_iucn_red_list_category, forest.use = 33, habitat.breadth = hb, diet.breadth =db, Eco.Spec.Index = esi, latin = 3, former.latin = 5, common.name = 2) %>% 
   select(1:7, iucn.2024, rr, average_mass, elevational_range, forest.use, primary_habitat, habitat.breadth, primary_diet,diet.breadth, Eco.Spec.Index) 
-birdbase$forest.use[is.na(birdbase$forest.use)] <- 0 
+birdbase$forest.use[is.na(birdbase$forest.use)] <- 0 #is NA for forest use, make it 0
 
-##ESI: Ecological Specialization Index: log10 (100/[dietary breadth x habitat breadth]), with a maximum of 2 for the most specialized species that only feed on one major food group and live in one major type of habitat (e.g., forest frugivore; Sekercioglu, 2011)
 #just get BC birds
-birdbase.bc <- left_join(birdlst, birdbase, by = c("sci_name" = "latin"))
-
-
+birdbase.bc <- left_join(birdlist, birdbase, by = c("sci_name" = "latin"))
+#if sci name didnt match, use common name:
 unmatched.i <- birdbase.bc %>%
-  filter(is.na(ioc_15_1)) %>%   # replace with a col you expect after join
+  filter(is.na(ioc_15_1)) %>% #this is a unique ID for birdbase, if its NA here, it didnt match with the BC list
   select(names(birdlist))
 matched_by_i<- unmatched.i %>%
   left_join(birdbase, by = c("common_name" = "common.name"))
-
+#if common name also didnt match, use the former scientific name:
 unmatched.2 <- matched_by_i %>%
-  filter(is.na(ioc_15_1)) %>%   # replace with a col you expect after join
+  filter(is.na(ioc_15_1)) %>% 
   select(names(birdlist))
 matched_by_2<- unmatched.2 %>%
   left_join(birdbase, by = c("sci_name" = "former.latin"))
-
 birdbase.bc<- birdbase.bc %>%
-  filter(!is.na(ioc_15_1)) %>%  # keep the matched ones
+  filter(!is.na(ioc_15_1)) %>%
   bind_rows(matched_by_i) %>% 
   filter(!is.na(ioc_15_1)) %>% 
   bind_rows(matched_by_2)
@@ -346,12 +322,14 @@ bctraits.all <- left_join(bctraits.all, birdbase.bc)
 bctraits.all <- bctraits.all %>% 
   select(Order, Family, sci_name, common_name, iucn.2024, status, mass_g, Habitat, Habitat.Density, Migration, Trophic.Level, Trophic.Niche, Primary.Lifestyle, Range.Size, lifespan, ReproAge, clutches.per.year, Kipps.Distance, Hand.Wing.Index, nest.type, majority.nesting.location, most.common.nesting.location, second.nesting.location, nest.category, any_tree_nest, ground_nest, shrub_nest, snag_nest, live_tree_nest, conifer_nest, deciduous_nest, majority.foraging.location, most.common.foraging.location, second.foraging.location, AV_ID, Elton_ID, D_ID, Elton_common_name, Elton_sci_name, Elton_syn, D_ID, D_sci_name,  for_hawking, for_foliage_gleaning, for_bark_gleaning, fstimb, Diet.Inv, Diet.Nect, Diet.Seed, ForStrat.ground, ForStrat.understory, ForStrat.canopy, elevational_range, forest.use, primary_habitat, habitat.breadth, primary_diet,diet.breadth, Eco.Spec.Index)
 
+#these are old growth associated spp
 old_growth <-  c("American Three-toed Woodpecker", "Bay-breasted Warbler", "Black-capped Chickadee", "Boreal Chickadee", "Boreal Owl", "Brown Creeper", "Canada Warbler", "Chestnut-backed Chickadee", "Dusky Grouse", "Golden-crowned Kinglet", "Great Horned Owl", "Hairy Woodpecker", "Hammond's Flycatcher", "Hermit Thrush", "Lewis's Woodpecker", "American Goshawk", "Northern Waterthrush", "Western Flycatcher", "Pileated Woodpecker", "Red-breasted Nuthatch", "Red-breasted Sapsucker", "Ruby-crowned Kinglet", "Spruce Grouse", "Swainson's Thrush", "Townsend's Warbler", "Varied Thrush", "Vaux's Swift", "White-breasted Nuthatch")
 missing_names <- old_growth[!(old_growth %in% bctraits.all$common_name)] #do all these names appear in the BC list?
 
 bctraits.all <- bctraits.all %>%
   mutate(old_growth = if_else(common_name %in% old_growth, 1, 0))
-  
+
+#now clean it and save it:
 bctraits.all <- bctraits.all %>% 
   janitor::clean_names()
 

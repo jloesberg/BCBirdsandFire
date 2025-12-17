@@ -10,7 +10,6 @@ library(here)
 library(tidyverse)
 library(patchwork)
 library(ggrepel)
-
 ```
 
 ```{r medium TERM}
@@ -20,9 +19,8 @@ traits$habitat_density[traits$habitat_density == "semiopen"] <- 2
 traits$habitat_density[traits$habitat_density == "open"] <- 3
 traits <- traits %>% 
       select(-any_tree_nest, -live_tree_nest) %>% 
-  mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
-    habitat_density = as.numeric(habitat_density))
-traits2 <- traits
+  mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0), habitat_density = as.numeric(habitat_density))
+bc <- traits
 
 positive_medium <- c("Alder Flycatcher", "American Kestrel", "American Robin", "American Three-toed Woodpecker", 
 "Black-capped Chickadee", "Black-throated Gray Warbler", "Brewer's Blackbird", "Brewer's Sparrow", 
@@ -37,7 +35,6 @@ positive_medium <- c("Alder Flycatcher", "American Kestrel", "American Robin", "
 "Veery", "Warbling Vireo", "Western Screech-Owl", "Western Tanager", "Western Wood-Pewee", 
 "White-breasted Nuthatch", "White-crowned Sparrow", 
 "White-throated Sparrow", "Winter Wren", "Yellow-bellied Sapsucker", "Yellow-rumped Warbler") 
-#"Eastern Bluebird","White-headed Woodpecker", 
 missing_names <- positive_medium[!(positive_medium %in% traits$common_name)] #do all these names appear in the BC list?
 
 negative_medium <- c("Alder Flycatcher", "Barred Owl", "Black-headed Grosbeak", "Black-throated Gray Warbler", 
@@ -69,11 +66,10 @@ null_medium <- c("American Goldfinch", "American Robin", "American Wigeon", "Bla
 "Wilson's Warbler", "Williamson's Sapsucker", "Winter Wren", "Yellow Warbler", 
 "Yellow-bellied Flycatcher", "Yellow-rumped Warbler")
 missing_names <- null_medium[!(null_medium %in% traits$common_name)] #do all these names appear in the BC list?
-#"Greater Scaup", "Spotted Sandpiper",
+
 traits$positive_medium <- ifelse(traits$common_name %in% positive_medium, 1, NA)
 traits$negative_medium <- ifelse(traits$common_name %in% negative_medium, 1, NA)
 traits$null_medium <- ifelse(traits$common_name %in% null_medium, 1, NA)
-
 
 traits <- traits %>%
     filter(!if_all(c(positive_medium, negative_medium, null_medium), is.na)) %>% 
@@ -84,13 +80,11 @@ traits <- traits %>%
 trait.pca <- traits %>% 
   select(common_name, where(is.numeric), -elevational_range,-positive_medium, -negative_medium, -null_medium,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb)
 
-pca_result <- prcomp(trait.pca[,-1], scale = T) #scale the variables!
+pca_result <- prcomp(trait.pca[,-1], scale = T)
 ##
 pca_result$rotation
 pca_result$x
-
 biplot(pca_result)
-
 pca_loadings <- as.data.frame(pca_result$rotation) %>% select(1:10)
 
 summary(pca_result)
@@ -100,8 +94,7 @@ PVE <- round(PVE, 2)
 
 pve_df <- data.frame(
   PC = 1:length(PVE),
-  PVE = PVE
-)
+  PVE = PVE)
 
 (scree <- ggplot(pve_df, aes(x = PC, y = PVE)) +
   geom_col() +
@@ -112,7 +105,6 @@ pve_df <- data.frame(
     theme_bw()+
   scale_x_continuous(breaks = 1:length(PVE)))
 ggsave(here("Figures", "PCA", "scree plot.medium.png"), plot = scree, width = 8, height =8)
-
 
 ##
 pca_df <- as.data.frame(pca_result$x) %>%
@@ -144,7 +136,6 @@ pca_scores$common_name <- traits$common_name
 pca_scores$positive <- traits$positive
 pca_scores$negative <- traits$negative
 pca_scores$null <- traits$null
-
 ```
 
 ```{r}
@@ -161,8 +152,8 @@ loadings_long <- loadings %>%
   filter(PC %in% paste0("PC", 1:2))   # keep only PCs 1-5
 
 (loadings.bar <- ggplot(loadings_long, aes(x = trait, y = loading, fill = PC)) +
-  geom_col(position = "dodge") +   # side-by-side bars per PC
-  coord_flip() +                   # horizontal bars
+  geom_col(position = "dodge") + 
+  coord_flip() + 
   labs(x = "Trait", y = "Loading") +
   theme_bw(base_size = 14) +
   scale_y_continuous(limits = c(-0.5, 0.5), breaks = seq(-0.5, 0.5, 0.25)) +  # set range and breaks
@@ -173,35 +164,20 @@ loadings_long <- loadings %>%
 ggsave(here("Figures", "PCA", "loadings bar plot.medium.png"), plot = loadings.bar, width = 6, height =5, dpi = 300)
 
 loadings %>%  arrange(desc(abs(PC1)))
-
-
 ```
-# Highest absolute loadings for PC! Positive - associated with negative responses, negative, associated with positive responses
-habitat_density	-0.31424517		(lower number for habitat density indicates a density habitat, so dense? habitats contribute to postitive/null responses)
-lifespan	-0.29169478	(lower lifespans are more positive/null responses)
-live_tree_nesting_use	0.27513849	(higher live tree nesting associated with negative responses)
-average_mass	-0.27241232	(lower mass are more positive/null responses)
-ground_nester	-0.25813459	(ground nesters are associated with postitve responses)
+
 ```{r}
-bc <- traits2 %>%  
+bc <- bc %>%  
   select(common_name, where(is.numeric), -elevational_range,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb) %>% 
-  # mutate(null = NA,
-  #        positive = NA,
-  #        negative = NA) %>% 
   drop_na()  
 
-
-#plotting all spp on this pca:
-bc_scaled <- scale(bc[,-1],
-                    center = (pca_result$center),
-                    scale = (pca_result$scale))
+#plotting all bc spp on this pca:
+bc_scaled <- scale(bc[,-1], center = (pca_result$center), scale = (pca_result$scale))
 
 bc_scores <- as.data.frame(as.matrix(bc_scaled) %*% pca_result$rotation)
-
 ```
 
 ```{r}
-
 bc_scores$common_name <- bc$common_name
 centers <- data.frame(
   group = c("positive", "mixed", "negative", "neutral"),
@@ -291,7 +267,6 @@ loadings <- loadings %>%
   labs(x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
     y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")))
 
-
 (medium <- with.mix/f2+  
   plot_layout(guides = "collect") +
   plot_annotation(theme = theme(legend.position = "bottom"), tag_levels = "A")&
@@ -303,5 +278,4 @@ loadings <- loadings %>%
     legend.text = element_text(size = 16),
     legend.title= element_text(size = 18)))
 ggsave(here("Figures", "PCA", "PCA_end fig medium.png"), plot = medium,width = 10, height =13, dpi = 1000)
-
 ```

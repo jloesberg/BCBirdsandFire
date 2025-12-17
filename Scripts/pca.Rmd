@@ -23,7 +23,7 @@ traits <- traits %>%
     mutate(cavity_nester = ifelse(nest_category == "cavity", 1, 0),
     habitat_density = as.numeric(habitat_density)) 
 
-traits2 <- traits
+bc <- traits #making a copy
 
 ##
 positive <- c("American Crow", "American Goldfinch", "American Kestrel", "American Robin", "American Three-toed Woodpecker", "Baltimore Oriole", "Black-backed Woodpecker", "Black-billed Magpie", "Black-capped Chickadee", "Black-headed Grosbeak", "Black-throated Gray Warbler", "Brewer's Blackbird", "Brewer's Sparrow", "Brown Creeper", "Brown-headed Cowbird", "Canada Goose", "Canada Jay", "Cassin's Finch", "Cedar Waxwing", "Chestnut-backed Chickadee", "Chipping Sparrow", "Clay-colored Sparrow", "Common Yellowthroat", "Connecticut Warbler", "Dark-eyed Junco", "Downy Woodpecker", "Dusky Flycatcher", "Eastern Kingbird", "Evening Grosbeak", "Fox Sparrow", "Golden-crowned Kinglet", "Great Horned Owl", "Hairy Woodpecker", "Hammond's Flycatcher", "Hermit Thrush", "Lazuli Bunting", "Least Flycatcher", "Lewis's Woodpecker", "Lincoln's Sparrow", "MacGillivray's Warbler", "Mountain Bluebird", "Mountain Chickadee", "Nashville Warbler", "Northern Flicker", "Northern Hawk Owl", "Northern House Wren", "Northern Pygmy-Owl", "Olive-sided Flycatcher", "Pacific Wren", "Palm Warbler", "Pine Siskin", "Red-breasted Nuthatch", "Red-winged Blackbird", "Rock Wren", "Rufous Hummingbird", "Savannah Sparrow", "Say's Phoebe", "Song Sparrow", "Spotted Towhee", "Steller's Jay", "Swamp Sparrow", "Tennessee Warbler", "Townsend's Solitaire", "Tree Swallow", "Turkey Vulture", "Veery", "Warbling Vireo", "Western Bluebird", "Western Screech-Owl", "Western Tanager", "Western Wood-Pewee", "White-breasted Nuthatch", "White-crowned Sparrow", "White-throated Sparrow", "Winter Wren", "Yellow-bellied Sapsucker", "Yellow-rumped Warbler")
@@ -41,7 +41,6 @@ traits$positive <- ifelse(traits$common_name %in% positive, 1, NA)
 traits$negative <- ifelse(traits$common_name %in% negative, 1, NA)
 traits$null <- ifelse(traits$common_name %in% null, 1, NA)
 
-
 traits <- traits %>%
     filter(!if_all(c(positive, negative, null), is.na)) %>% 
     mutate(across(c(positive, negative, null), ~replace_na(.x, 0)))
@@ -51,7 +50,7 @@ traits <- traits %>%
 trait.pca <- traits %>% 
   select(common_name, where(is.numeric), -elevational_range,-positive, -negative, -null,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb)
 
-pca_result <- prcomp(trait.pca[,-1], scale = T) #scale the variables!
+pca_result <- prcomp(trait.pca[,-1], scale = T) 
 pca_result$rotation
 pca_result$x
 biplot(pca_result)
@@ -148,7 +147,7 @@ ggsave(here("Figures", "PCA", "loadings bar plot_all.png"), plot = loadings.bar,
 ```
 
 ```{r}
-bc <- traits2 %>%  
+bc <- bc %>%  
   select(common_name, where(is.numeric), -elevational_range,  -kipps_distance, -repro_age, -clutches_per_year, -lifespan, -eco_spec_index, -ends_with("_id"), -fstimb) %>% 
   drop_na()  
 #plotting all spp on this pca:
@@ -157,7 +156,6 @@ bc_scaled <- scale(bc[,-1],
                     scale = (pca_result$scale))
 
 bc_scores <- as.data.frame(as.matrix(bc_scaled) %*% pca_result$rotation)
-
 ```
 
 
@@ -182,8 +180,7 @@ centers <- data.frame(
     mean(pca_scores$PC2[pca_scores$positive == 1 & pca_scores$negative == 1], na.rm = TRUE),
     mean(pca_scores$PC2[pca_scores$negative == 1 & pca_scores$positive != 1], na.rm = TRUE),
     mean(pca_scores$PC2[pca_scores$null == 1 & pca_scores$positive == 0 & pca_scores$negative == 0], na.rm = TRUE)
-  )
-)
+  ))
 
 # Original PCA points
 orig_df <- pca_scores
@@ -192,7 +189,6 @@ orig_df$type <- "PCA"
 # New projected points
 new_df <- bc_scores
 new_df$common_name <- bc$common_name[complete.cases(bc)]
-
 
 # Combine
 plot_df <- left_join(new_df,orig_df)
@@ -218,39 +214,23 @@ TukeyHSD(anova_pc3)
 
 ```{r}
 (with.mix <- ggplot() +
-   geom_point(data = new_df, aes(PC1, PC2),
-             shape = 1, color = "grey", alpha = 0.85, size = 3) +
-  geom_point(data = pca_scores,
-             aes(PC1, PC2, color = fire_response),
-             size = 4, alpha = 0.8) +
-  geom_point(data = centers, aes(PC1, PC2, color = group),
-             size = 13, shape = 8) +
- 
-  scale_color_manual(
-    values = c(
-      "positive" = "#0072B2",
-      "negative" = "#D55E00",
-      "mixed" = "darkmagenta",
-      "neutral" = "grey50"
-    )
-  ) +
+   geom_point(data = new_df, aes(PC1, PC2), shape = 1, color = "grey", alpha = 0.85, size = 3) +
+  geom_point(data = pca_scores, aes(PC1, PC2, color = fire_response), size = 4, alpha = 0.8) +
+  geom_point(data = centers, aes(PC1, PC2, color = group), size = 13, shape = 8) +
+  scale_color_manual(values = c("positive" = "#0072B2", "negative" = "#D55E00", "mixed" = "darkmagenta", "neutral" = "grey50")) +
   theme_bw() +
-     scale_x_continuous(breaks = seq(floor(min(pca_scores$PC1)), 
-                                  ceiling(max(pca_scores$PC1)), 
-                                  by = 2))+
+  scale_x_continuous(breaks = seq(floor(min(pca_scores$PC1)), ceiling(max(pca_scores$PC1)), by = 2))+
   theme(legend.position = "bottom") +
   labs(color = "All Species Fire Response",
        title = "",x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
     y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")))
+
 arrow_multiplier <- 5  # adjust to make arrows visible
 loadings <- loadings %>%
   mutate(PC1_arrow = PC1 * arrow_multiplier,
          PC2_arrow = PC2 * arrow_multiplier)
 (f2 <- ggplot() +
-  geom_segment(data = loadings,
-               aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow),
-               arrow = arrow(length = unit(0.3, "cm")),
-               color = "black") +
+  geom_segment(data = loadings, aes(x = 0, y = 0, xend = PC1_arrow, yend = PC2_arrow), arrow = arrow(length = unit(0.3, "cm")), color = "black") +
   geom_text_repel(data = loadings,
                   aes(x = PC1_arrow, y = PC2_arrow, label = trait),
                   color = "black",
@@ -265,7 +245,7 @@ loadings <- loadings %>%
                   max.overlaps = 22) +
   geom_point(data = centers, aes(PC1, PC2, color = group), size = 10, shape = 8) +
   theme_bw() +
-    theme(legend.position = "none")+
+  theme(legend.position = "none")+
   scale_color_manual(values = c("darkmagenta", "#D55E00","grey50","#0072B2")) +
   labs(x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
     y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)")))
@@ -273,13 +253,11 @@ loadings <- loadings %>%
 (end <- with.mix/f2+  
   plot_layout(guides = "collect") +
   plot_annotation(theme = theme(legend.position = "bottom"), tag_levels = "A")&
-  theme(
-    text        = element_text(size = 20),
-    axis.text   = element_text(size = 18),
-    axis.title  = element_text(size = 20),
-    strip.text  = element_text(size = 20),
+  theme(text = element_text(size = 20),
+    axis.text = element_text(size = 18),
+    axis.title = element_text(size = 20),
+    strip.text = element_text(size = 20),
     legend.text = element_text(size = 16),
-    legend.title= element_text(size = 18))
-)
+    legend.title= element_text(size = 18)))
 ggsave(here("Figures", "PCA", "PCA_final_all.png"), plot = end, width = 10, height =13, dpi = 1000)
 ```

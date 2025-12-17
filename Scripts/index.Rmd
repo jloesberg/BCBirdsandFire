@@ -11,18 +11,18 @@ library(patchwork)
 library(ggrepel)
 ```
 
-```{r}
+```{r read in trait data}
 bctraits.all <- read.csv(here("Data", "cleaned", "BC_bird_traits.csv"))
 ```
 
 
 ```{r Fire Index}
+#building index:
 index <- bctraits.all %>% 
   mutate(index_primary_lifestyle = ifelse(primary_lifestyle=="Insessorial"|for_hawking>51, 1, 0),
          index_primary_habitat = ifelse(primary_habitat == "Forest"|primary_habitat == "Woodland", -1, ifelse(primary_habitat == "Shrub"|primary_habitat == "Grassland"|primary_habitat == "Plains", 1, 0)),
          index_habitat_density = ifelse(habitat_density == "dense", -1, ifelse(habitat_density == "sparse", 1, 0)),
          index_forest_use = ifelse(forest_use == 1, -1, 0),
-         #index_eco_spec_index = ifelse(eco_spec_index >1, -1,0),
          index_foraging_location = ifelse(most_common_foraging_location=="canopy", -1, ifelse(most_common_foraging_location=="ground"|most_common_foraging_location == "understory", 1, 0)),
          index_trophic_niche = ifelse(trophic_niche == "Invertivore"|trophic_niche == "Nectarivore"|trophic_niche == "Granivore"|trophic_niche=="Frugivore", 1, 0),
          # #20th percentile for range size will be considered "small"
@@ -39,9 +39,7 @@ index <- bctraits.all %>%
 ```{r}
 index.save <- index %>% 
 select(family, common_name, starts_with("index_"))
-
 write.csv(index.save, here("Data", "cleaned", "index_for_appendix.csv"), row.names = FALSE)
-
 ```
 
 
@@ -54,29 +52,21 @@ write.csv(index.save, here("Data", "cleaned", "index_for_appendix.csv"), row.nam
   geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
                linewidth = 0.5, alpha = 0.7) +
   geom_point(size = 2.5) +
-  scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
-                        midpoint = 0, name = "Index Score") +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", midpoint = 0, name = "Index Score") +
   labs(x = "Fire Vulnerability Index Score", y = "Species") +
   theme_classic(base_size = 12) +
    facet_wrap(~family, scales = "free_y")+
-  theme(plot.title = element_text(face = "bold", hjust = 0.5),
-    plot.subtitle = element_text(hjust = 0.5),
-    axis.text.y = element_text(size = 8), 
-    panel.grid.major.y = element_blank(),
-    legend.position = "bottom"
-  ))
+  theme(plot.title = element_text(face = "bold", hjust = 0.5), plot.subtitle = element_text(hjust = 0.5), axis.text.y = element_text(size = 8), panel.grid.major.y = element_blank(),legend.position = "bottom"))
+
 #Picidae
 
 (woodpeckers <- index %>% filter(family == "Picidae") %>% 
-    ggplot(aes(x = index_sum, 
-                  y = reorder(common_name, index_sum), 
-                  color = index_sum)) +
+    ggplot(aes(x = index_sum, y = reorder(common_name, index_sum), color = index_sum)) +
   geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
                linewidth = 0.5, alpha = 0.7) +
     scale_x_continuous(limits = c(-3, 4))+
   geom_point(size = 2.5) +
-  scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
-                        midpoint = 0, name = "Index Score") +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", midpoint = 0, name = "Index Score") +
   labs(title = "Picidae", x = "Fire Vulnerability Index Score", y = "Species") +
   theme_classic(base_size = 12) +
   theme(plot.title = element_text(face = "bold", hjust = 0.5),
@@ -89,30 +79,24 @@ write.csv(index.save, here("Data", "cleaned", "index_for_appendix.csv"), row.nam
 #Tyrannidae
 
 (tyran <- index %>% filter(family == "Tyrannidae") %>% 
-    ggplot(aes(x = index_sum, 
-                  y = reorder(common_name, index_sum), 
-                  color = index_sum)) +
+    ggplot(aes(x = index_sum, y = reorder(common_name, index_sum), color = index_sum)) +
   geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
                linewidth = 0.5, alpha = 0.7) +
   geom_point(size = 2.5) +
-        scale_x_continuous(limits = c(-3, 4))+
-  scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
-                        midpoint = 0, name = "Index Score") +
+  scale_x_continuous(limits = c(-3, 4))+
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", midpoint = 0, name = "Index Score") +
   labs(title = "Tyrannidae", x = "Fire Vulnerability Index Score", y = "Species") +
   theme_classic(base_size = 12) +
   theme(plot.title = element_text(face = "bold", hjust = 0.5),
     plot.subtitle = element_text(hjust = 0.5),
     axis.text.y = element_text(size = 8),
     panel.grid.major.y = element_blank(),
-    legend.position = "none"
-  ))
+    legend.position = "none"))
 
 ##	Anatidae
 
 (ana <- index %>% filter(family == "Anatidae") %>% 
-    ggplot(aes(x = index_sum, 
-                  y = reorder(common_name, index_sum), 
-                  color = index_sum)) +
+    ggplot(aes(x = index_sum,  y = reorder(common_name, index_sum), color = index_sum)) +
   geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
                linewidth = 0.5, alpha = 0.7) +
   geom_point(size = 2.5) +
@@ -130,8 +114,7 @@ write.csv(index.save, here("Data", "cleaned", "index_for_appendix.csv"), row.nam
 (f1 <- woodpeckers/tyran  +
   plot_layout(axis_titles = "collect") +
   plot_annotation(theme = theme(legend.position = "right"), tag_levels = "A")&
-  theme(
-    text        = element_text(size = 20),
+  theme(text        = element_text(size = 20),
     axis.text   = element_text(size = 20),
     axis.title  = element_text(size = 20),
     strip.text  = element_text(size = 20),
@@ -142,68 +125,44 @@ ggsave(here("Figures", "index.png"), plot = index1, width = 40, height =20)
 ggsave(here("Figures", "index.picidae.png"), plot = woodpeckers, width = 8, height =6)
 ggsave(here("Figures", "index.tyrannidae.png"), plot = tyran, width = 8, height =6)
 ggsave(here("Figures", "index.typi.png"), plot = f1, width = 8, height =8)
-
-
 ```
 
 ```{r}
 family_summary <- index %>%
   group_by(family) %>%
-  summarise(mean_index = mean(index_sum, na.rm = TRUE),
-            sd_index = sd(index_sum, na.rm = TRUE),
-            .groups = "drop") %>% 
+  summarise(mean_index = mean(index_sum, na.rm = TRUE), sd_index = sd(index_sum, na.rm = TRUE), .groups = "drop") %>% 
   arrange(family)
 
-(family <- ggplot(family_summary, aes(x = mean_index, 
-                           y = reorder(family, mean_index))) +
+(family <- ggplot(family_summary, aes(x = mean_index, y = reorder(family, mean_index))) +
   geom_vline(xintercept = 0, color = "black", linewidth = 0.75) +
-  geom_errorbarh(aes(xmin = mean_index - sd_index, 
-                     xmax = mean_index + sd_index),
-                 color = "gray30", height = 0.4, linewidth = 0.8) +
+  geom_errorbarh(aes(xmin = mean_index - sd_index, xmax = mean_index + sd_index), color = "gray30", height = 0.4, linewidth = 0.8) +
   geom_point(aes(color = mean_index), size = 3) +
-  scale_color_gradient2(low = "red", mid = "gray", high = "blue",
-                        midpoint = 0, name = "Mean Index") +
-  labs(x = "Fire Vulnerability Index Score",
-       y = "Family") +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", midpoint = 0, name = "Mean Index") +
+  labs(x = "Fire Vulnerability Index Score", y = "Family") +
   theme_classic(base_size = 12) +
   theme(plot.title = element_text(face = "bold", hjust = 0.5),
         axis.text.y = element_text(size = 10),
         legend.position = "bottom"))
 
 ggsave(here("Figures", "index.familt errorbars.png"), plot = family, width = 8, height =8)
-
 ```
+
 ```{r}
-# Select top 5 and bottom 5 species by index_sum
+# Select top 10 and bottom 10 species by index_sum
 top_bottom <- index %>%
   arrange(desc(index_sum)) %>%
   slice_head(n = 10) %>%
-  bind_rows(
-    index %>%
-      arrange(index_sum) %>%
-      slice_head(n = 10)
-  )
+  bind_rows(index %>%
+  arrange(index_sum) %>%
+  slice_head(n = 10))
 
 # Plot
-(most <- ggplot(top_bottom, aes(
-  x = reorder(common_name, index_sum),
-  y = index_sum,
-  fill = index_sum)) +
+(most <- ggplot(top_bottom, aes(x = reorder(common_name, index_sum), y = index_sum, fill = index_sum)) +
   geom_col() +
   coord_flip() +
-  scale_fill_gradient2(
-    low = "red",
-    mid = "gray",
-    high = "blue",
-    midpoint = 0,
-    name = "Index Score"
-  ) +
+  scale_fill_gradient2(low = "red", mid = "gray", high = "blue", midpoint = 0, name = "Index Score") +
   theme_bw(base_size = 14) +
-  labs(
-    x = "Species",
-    y = "Index",
-    title = "Most affected species",
-    fill = "Index"
+  labs(x = "Species", y = "Index", title = "Most affected species", fill = "Index"
   ))
 ggsave(here("Figures", "index.most10.png"), plot = most, width = 8, height =8)
 
@@ -212,21 +171,15 @@ ggsave(here("Figures", "index.most10.png"), plot = most, width = 8, height =8)
 ```{r}
 (spp <- index %>% 
    filter(family == "Anatidae"|family == "Picidae"|family == "Tyrannidae"| family == "Turdidae"| family == "Parulidae") %>%
-  ggplot(aes(x = index_sum, 
-                  y = reorder(common_name, index_sum), 
-                  color = index_sum)) +
+  ggplot(aes(x = index_sum, y = reorder(common_name, index_sum), color = index_sum)) +
   geom_segment(aes(x = 0, xend = index_sum, y = reorder(common_name, index_sum), yend = reorder(common_name, index_sum)),
                linewidth = 0.5, alpha = 0.7) +
   geom_point(size = 2.5) +
-  scale_color_gradient2(low = "red", mid = "gray", high = "blue", 
-                        midpoint = 0, name = "Index Score") +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", midpoint = 0, name = "Index Score") +
   labs( x = "Fire Vulnerability Index Score", y = "Species") +
   theme_bw(base_size = 12) +
   facet_wrap(~family, scales = "free_y")+
-  theme(
-  axis.text.y = element_text(size = 9),
-  legend.position = c(0.9, 0.05),   # 
-  legend.justification = c("right", "bottom")
+  theme(axis.text.y = element_text(size = 9), legend.position = c(0.9, 0.05), legend.justification = c("right", "bottom")
   ))
 ggsave(here("Figures", "selectfamilies.png"), plot = spp, width = 10, height =8)
 
