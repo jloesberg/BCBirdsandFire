@@ -133,7 +133,7 @@ family_summary <- index %>%
   summarise(mean_index = mean(index_sum, na.rm = TRUE), sd_index = sd(index_sum, na.rm = TRUE), .groups = "drop") %>% 
   arrange(family)
 
-(family <- ggplot(family_summary, aes(x = mean_index, y = reorder(family, mean_index))) +
+(family <- ggplot(family_summary, aes(x = mean_index, y = factor(family, levels = rev(sort(unique(family)))))) +
   geom_vline(xintercept = 0, color = "black", linewidth = 0.75) +
   geom_errorbarh(aes(xmin = mean_index - sd_index, xmax = mean_index + sd_index), color = "gray30", height = 0.4, linewidth = 0.8) +
   geom_point(aes(color = mean_index), size = 3) +
@@ -144,7 +144,7 @@ family_summary <- index %>%
         axis.text.y = element_text(size = 10),
         legend.position = "bottom"))
 
-ggsave(here("Figures", "index.familt errorbars.png"), plot = family, width = 8, height =8)
+ggsave(here("Figures", "index.family errorbars.png"), plot = family, width = 8, height =8)
 ```
 
 ```{r}
@@ -181,6 +181,22 @@ ggsave(here("Figures", "index.most10.png"), plot = most, width = 8, height =8)
   facet_wrap(~family, scales = "free_y")+
   theme(axis.text.y = element_text(size = 9), legend.position = c(0.9, 0.05), legend.justification = c("right", "bottom")
   ))
+#same figure but with spp name alphabetized:
+(spp <- index %>% 
+  filter(family %in% c("Anatidae", "Picidae", "Tyrannidae", "Turdidae", "Parulidae")) %>% 
+  group_by(family) %>% 
+  mutate(common_name = factor(common_name, levels = sort(unique(common_name), decreasing = T))) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = index_sum, y = common_name, color = index_sum)) +
+  geom_segment(aes(x = 0, xend = index_sum, yend = common_name), linewidth = 0.5, alpha = 0.7) +
+  geom_point(size = 2.5) +
+  scale_color_gradient2(low = "red", mid = "gray", high = "blue", midpoint = 0, name = "Index Score") +
+  labs(x = "Fire Vulnerability Index Score", y = "Species") +
+  theme_bw(base_size = 12) +
+  facet_wrap(~family, scales = "free_y") +
+  theme(axis.text.y = element_text(size = 9), legend.position = c(0.9, 0.05), legend.justification = c("right", "bottom")))
+
+
 ggsave(here("Figures", "selectfamilies.png"), plot = spp, width = 10, height =8)
 
 ```
