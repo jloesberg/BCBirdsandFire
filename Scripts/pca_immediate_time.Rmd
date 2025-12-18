@@ -244,3 +244,16 @@ loadings <- loadings %>%
 ggsave(here("Figures", "PCA", "PCA_end fig immediate.png"), plot = immediate,width = 10, height =13, dpi = 1000)
 
 ```
+```{r}
+#table for spp responses:
+sp <- pca_scores %>% 
+  select(common_name, fire_response)
+sp_collapsed <- sp %>%
+  group_by(fire_response) %>%
+  summarise(
+    ImmediateResponse = paste(sort(common_name), collapse = ", "),
+    .groups = "drop"
+  )
+write.csv(sp_collapsed, here("Data", "cleaned", "species.fire.response.immediate.csv"), row.names = FALSE)
+
+```

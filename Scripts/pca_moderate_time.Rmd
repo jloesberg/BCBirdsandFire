@@ -279,3 +279,17 @@ loadings <- loadings %>%
     legend.title= element_text(size = 18)))
 ggsave(here("Figures", "PCA", "PCA_end fig medium.png"), plot = medium,width = 10, height =13, dpi = 1000)
 ```
+
+```{r}
+#table for spp responses:
+sp <- pca_scores %>% 
+  select(common_name, fire_response)
+sp_collapsed <- sp %>%
+  group_by(fire_response) %>%
+  summarise(
+    ModeratelResponse = paste(sort(common_name), collapse = ", "),
+    .groups = "drop"
+  )
+write.csv(sp_collapsed, here("Data", "cleaned", "species.fire.response.moderate.csv"), row.names = FALSE)
+
+```
