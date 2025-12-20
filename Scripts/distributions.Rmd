@@ -7,11 +7,9 @@ output: html_document
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-library(tiff)
 library(terra)
 library(here)
 library(bcmaps)
-library(tidyterra)
 ```
 
 ```{r FWI}
@@ -373,51 +371,4 @@ lines(bc, col = "black", lwd = 1.5)
 ```
 
 
-
-###
-```{r}
-ci <- rast(here("Data", "distributionExamples", "CIJV_all-bird-groups_all-species-priority_all-species-conservation_richness_annual-max.tif"))
-plot(ci)
-#add bc boundary
-bc <- bcmaps::bc_bound() %>%
-  vect()
-# 
-bc_proj<- project(bc, ci)
-ci.bc <- mask(crop(ci, bc_proj), bc_proj)
-ci_final <- project(ci.bc, crs(bc))
-climate_layer <- t.26bc[[1]] 
-climate_aligned <- resample(climate_layer, ci_final, method = "near") 
-risk_map <- ci_final * climate_aligned
-# 
-png(here("Maps", "try.cijv.png"), width = 3000, height = 1000, pointsize = 24)
-
-plot(ci_final,
-     main = "Priority CIJV",  	col = viridis::viridis(100, option = "D"))
-lines(bc,
-      col = "black",
-      lwd = 2)
-
-par(mfrow = c(1, 3)) 
-# Plot Map 2: Climate Data
-plot(climate_aligned, 
-     main = "FWI RCP8.5 2021-2050",
-     col = hcl.colors(100, "Inferno") # Use a strong heat palette for FWI
-)
-lines(bc, col = "black", lwd = 1.5)
-# Plot Map 1: Bird Abundance (using your preferred colors)
-plot(ci_final, 
-     main = "CIJV Priority",
-     col = rev(hcl.colors(100, "Blues")) 
-)
-lines(bc, col = "black", lwd = 1.5)
-
-# Plot the resulting composite map
-plot(risk_map, 
-     main = "FWI * Abundance",
-     col = rev(hcl.colors(100, "Reds"))
-)
-lines(bc, col = "black", lwd = 1.5)
-
-
-```
 

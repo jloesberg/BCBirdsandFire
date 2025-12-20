@@ -7,10 +7,8 @@ output: html_document
 ```{r}
 library(here)
 library(tidyverse)
-library(patchwork)
-library(ggrepel)
-library(corrplot)
-library(GGally)
+library(patchwork) #for putting ggplots together
+library(ggrepel) #for adjusting lines in PCA figure
 ```
 
 ```{r}
